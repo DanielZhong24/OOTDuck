@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"; // required for App Router to use hooks
 
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [clothes, setClothes] = useState<any[]>([]);
-
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     async function fetchClothes() {
@@ -15,30 +16,61 @@ export default function Home() {
         setClothes(data);
       } catch (err) {
         console.error(err);
-      } 
+      }
     }
-
 
     fetchClothes();
   }, []);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentFile: File | null = e.target.files?.[0] || null;
+    if (currentFile) setFile(currentFile);
+  };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData: FormData = new FormData();
+    if (file) formData.append("file", file);
+
+    try {
+      const response: Response = await fetch("/api/clothes", {
+        method: "POST",
+        body: formData,
+      });
+      const data: Response = await response.json();
+      console.log("Upload response:", data);
+    } catch (error: any) {
+      console.error("Error uploading file:", error);
+    }
+  };
 
   return (
-    <div className="text-center p-6">
-      <h1 className="text-xl font-bold mb-4">Clothes List</h1>
+    <div className="p-6 text-center">
+      <h1 className="mb-4 text-xl font-bold">Clothes List</h1>
 
       <div className="space-y-2">
         <pre>{JSON.stringify(clothes, null, 2)}</pre>
-
       </div>
 
       <br />
-      <input className="bg-white text-black w-sm text-center" type="file" />
-      <br />
-      <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-        Upload
-      </button>
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        method="POST"
+        action={"/api/clothes"}
+      >
+        <input
+          onChange={handleFileChange}
+          className="w-sm bg-white text-center text-black"
+          type="file"
+        />
+        <button
+          type="submit"
+          className="mt-4 rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        >
+          Upload
+        </button>
+      </form>
     </div>
   );
 }
