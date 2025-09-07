@@ -20,6 +20,7 @@ export async function GET() {
   }
 }
 
+// this has some bullshit error i cant figure out
 export async function POST(request: Request) {
   try {
     const apiCall: string = backendRoute + "clothes";
@@ -27,13 +28,10 @@ export async function POST(request: Request) {
 
     const response: Response = await fetch(apiCall, {
       method: "POST",
-      headers: {
-        "Content-Type": request.headers.get("Content-Type") || "",
-      },
       body: body,
     });
 
-    const data: Response = await response.json();
+    const data: any = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("Error in POST /api/clothes:", error);

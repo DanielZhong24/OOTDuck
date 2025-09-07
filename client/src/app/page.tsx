@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [clothes, setClothes] = useState<any[]>([]);
-  const [file, setFile] = useState<File | null>(null);
+  const [image, setImage] = useState<any | null>(null);
 
   useEffect(() => {
     async function fetchClothes() {
@@ -23,21 +23,21 @@ export default function Home() {
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentFile: File | null = e.target.files?.[0] || null;
-    if (currentFile) setFile(currentFile);
+    const currentImage: any | null = e.target.files?.[0] || null;
+    if (currentImage) setImage(currentImage);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: FormData = new FormData();
-    if (file) formData.append("file", file);
+    if (image) formData.append("image", image);
 
     try {
       const response: Response = await fetch("/api/clothes", {
         method: "POST",
         body: formData,
       });
-      const data: Response = await response.json();
+      const data: any = await response.json();
       console.log("Upload response:", data);
     } catch (error: any) {
       console.error("Error uploading file:", error);
@@ -53,15 +53,11 @@ export default function Home() {
       </div>
 
       <br />
-      <form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        method="POST"
-        action={"/api/clothes"}
-      >
+      <form onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
         <input
           onChange={handleFileChange}
           className="w-sm bg-white text-center text-black"
+          name="image"
           type="file"
         />
         <button
