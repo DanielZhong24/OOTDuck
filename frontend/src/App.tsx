@@ -1,12 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import Home from './pages/Home';
 function App() {
   return (
-    <h1 className="text-3xl text-sky-400 font-bold underline">
-      Hello world!
-    </h1>
+    <div className="min-w-screen min-h-screen bg-gradient-to-t from-zinc-900 via-zinc-900/95 to-zinc-900/90 justify-center px-3 py-5">
+      <Home/>
+    </div>
   );
 }
 
