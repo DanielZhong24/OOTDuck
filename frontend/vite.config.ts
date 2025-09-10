@@ -1,8 +1,10 @@
-import { defineConfig } from 'vite';
+import { defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import Icons from 'unplugin-icons/vite';
 import {VitePWA} from 'vite-plugin-pwa';
+
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -34,6 +36,15 @@ export default defineConfig({
         ]},
     })
   ],
+  root:'../frontend',
+  server: {
+    proxy: {
+      '/api': {
+        // target: ,
+        changeOrigin: true, 
+      },
+    },
+  }
 
 });
 
