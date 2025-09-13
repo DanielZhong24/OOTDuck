@@ -14,6 +14,38 @@ import torchvision.transforms as transforms
 from collections import OrderedDict
 from options import opt
 
+from transformers import CLIPProcessor, CLIPModel
+
+
+
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model = CLIPModel.from_pretrained("patrickjohncyh/fashion-clip").to(device)
+processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip",use_fast=False)
+
+CLOTHING_CLASSES = [
+    "t-shirt", "shirt", "crop top", "hoodie", "sweater", "cardigan",
+    "tank top", "jacket", "jeans", "trousers", "skirt", "shorts",
+    "leggings", "dress", "coat", "leather jacket", "denim jacket",
+    "puffer jacket", "bomber jacket", "jumpsuit", "romper", "suit", 
+    "activewear"
+]
+
+#too lazy to train a new model, this api allows us to get a percentage of likelyhood base on text prompt
+def predict_clothing_type_fashionclip(cropped_img: Image.Image):
+    inputs = processor(
+        text=CLOTHING_CLASSES,
+        images=cropped_img,
+        return_tensors="pt",
+        padding=True
+    ).to(device)
+    
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits_per_image = outputs.logits_per_image
+        predicted_idx = logits_per_image.argmax().item()
+    
+    return CLOTHING_CLASSES[predicted_idx]
 
 def load_checkpoint(model, checkpoint_path):
     if not os.path.exists(checkpoint_path):
@@ -101,7 +133,6 @@ def apply_transform(img):
 
 def generate_mask(input_image, net, palette, device = 'cpu'):
 
-    #img = Image.open(input_image).convert('RGB')
     img = input_image
     img_size = img.size
     img = img.resize((768, 768), Image.BICUBIC)
@@ -145,6 +176,40 @@ def generate_mask(input_image, net, palette, device = 'cpu'):
 
 
 
+def rgb_to_color_name(rgb):
+    """
+    Map an (R,G,B) tuple to a simple color name using HSV hue ranges.
+    """
+    r, g, b = [x/255.0 for x in rgb]
+    import colorsys
+    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+
+    if v < 0.2:
+        return "black"
+    elif v > 0.9 and s < 0.2:
+        return "white"
+    elif s < 0.25:
+        return "gray"
+    else:
+        h_deg = h * 360
+        if h_deg < 15 or h_deg >= 345:
+            return "red"
+        elif h_deg < 45:
+            return "orange"
+        elif h_deg < 70:
+            return "yellow"
+        elif h_deg < 160:
+            return "green"
+        elif h_deg < 260:
+            return "blue"
+        elif h_deg < 310:
+            return "purple"
+        else:
+            return "pink"
+
+
+
+
 def check_or_download_model(file_path):
     if not os.path.exists(file_path):
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -179,39 +244,6 @@ def main(args):
     cloth_seg = generate_mask(img, net=model, palette=palette, device=device)
 
 
-def preprocess_lighting(pil_img: Image.Image, gamma: float = 1.2) -> Image.Image:
-    """
-    Normalize brightness and contrast to reduce the effect of bright lighting.
-    
-    Args:
-        pil_img: Input PIL Image
-        gamma: Gamma value (>1 makes image darker, <1 makes image brighter)
-    
-    Returns:
-        PIL Image (processed)
-    """
-    # Convert PIL → OpenCV (BGR)
-    img = np.array(pil_img.convert("RGB"))
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-
-    # --- Apply CLAHE on L-channel ---
-    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-    l, a, b = cv2.split(lab)
-
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-    l_clahe = clahe.apply(l)
-
-    lab = cv2.merge((l_clahe, a, b))
-    img_clahe = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
-
-    # --- Apply Gamma Correction ---
-    img_float = img_clahe / 255.0
-    img_gamma = np.power(img_float, 1.0 / gamma)  # gamma correction
-    img_gamma = np.clip(img_gamma * 255, 0, 255).astype(np.uint8)
-
-    # Back to PIL (RGB)
-    img_rgb = cv2.cvtColor(img_gamma, cv2.COLOR_BGR2RGB)
-    return Image.fromarray(img_rgb)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Help to set arguments for Cloth Segmentation.')

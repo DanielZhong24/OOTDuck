@@ -18,15 +18,15 @@ function Photo() {
 
  
 
-  console.log(clothes[0].img);
-
 
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-white underline">This is the photo page!</h1>
 
-      <img src={"http://localhost:5000/"+clothes[11].img_path} alt="" />
+      <ul>
+        {clothes.map( index=> (<li>{JSON.stringify(index)}</li>) )}
+      </ul>
 
 
       <div className='fixed bottom-20 right-10 bg-gray-700 rounded-full p-1'>
