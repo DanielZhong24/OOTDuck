@@ -1,29 +1,28 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
-import Icons from 'unplugin-icons/vite';
-import {VitePWA} from 'vite-plugin-pwa';
-
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import Icons from "unplugin-icons/vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
-
   plugins: [
-    react(), 
+    react(),
     tailwindcss(),
-    Icons({compiler:"jsx"}),
+    Icons({ compiler: "jsx" }),
     VitePWA({
       registerType: "autoUpdate",
-      devOptions:{
-        enabled:true
+      devOptions: {
+        enabled: true,
       },
       manifest: {
         name: "Dressify",
         short_name: "Dressify",
         start_url: "/",
-        id:"/",
+        id: "/",
         display: "standalone",
-        background_color: "#ffffff",
+        background_color: "#F8F8FF",
+        theme_color: "#F8F8FF",
         icons: [
           {
             src: "src/assets/192x192.png",
@@ -34,29 +33,25 @@ export default defineConfig({
             src: "src/assets/512x512.png",
             sizes: "512x512",
             type: "image/png",
-          }
+          },
         ],
-        "screenshots": [
+        screenshots: [
           {
-            "src": "src/assets/sc.png",
-            "sizes": "1400x900",
-            "type": "image/png",
-            "form_factor": "wide",
+            src: "src/assets/sc.png",
+            sizes: "1400x900",
+            type: "image/png",
+            form_factor: "wide",
           },
           {
-            "src": "src/assets/512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-          }
-        ]
+            src: "src/assets/512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
       },
-    })
+    }),
   ],
   server: {
-    allowedHosts:true
-  }
-  
-
-
+    allowedHosts: true,
+  },
 });
-

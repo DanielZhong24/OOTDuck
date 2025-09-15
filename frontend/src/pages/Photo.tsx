@@ -29,7 +29,7 @@ function Photo() {
       </ul>
 
 
-      <div className='fixed bottom-20 right-10 bg-gray-700 rounded-full p-1'>
+      <div className='fixed bottom-30 right-10 bg-gray-700 rounded-full p-1'>
         <div
             className={`bg-gray-700 rounded-full gap-5 flex flex-col items-center transition-all duration-300 overflow-hidden
             ${isOpen ? 'h-50 opacity-100' : 'h-0 opacity-0'}`}
