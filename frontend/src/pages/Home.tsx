@@ -8,7 +8,9 @@ function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:5000/api/clothes/random/2");
+        const response = await axios.get(
+          "http://10.45.202.185:5000/api/clothes/random/3",
+        );
         setRandomFit(response.data);
       } catch (err) {
         console.error(err);
@@ -28,13 +30,13 @@ function Home() {
       <h1 className="text-3xl font-bold text-black underline">This is the home page!</h1>
       <div className="flex flex-col items-center justify-center">
         <img
-          src={"http://localhost:5000/" + randomFit.randomTop.img_path}
+          src={"http://10.45.202.185:5000/" + randomFit.randomTop.img_path}
           alt=""
           width={150}
           height={200}
         />
         <img
-          src={"http://localhost:5000/" + randomFit.randomBottom.img_path}
+          src={"http://10.45.202.185:5000/" + randomFit.randomBottom.img_path}
           alt=""
           width={150}
           height={50}
