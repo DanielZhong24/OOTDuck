@@ -8,9 +8,7 @@ function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          "http://10.45.202.185:5000/api/clothes/random/3",
-        );
+        const response = await axios.get("http://localhost:6767/api/clothes/random/3");
         setRandomFit(response.data);
       } catch (err) {
         console.error(err);
