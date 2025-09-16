@@ -11,7 +11,7 @@ function Photo() {
   const[clothes,setClothes] = useState([]);
 
   useEffect(()=>{
-    axios.get("http://localhost:5000/api/clothes").then((response)=>{
+    axios.get("http://localhost:5000/api/clothes/3").then((response)=>{
       setClothes(response.data);
     })
   },[]);

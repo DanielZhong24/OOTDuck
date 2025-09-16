@@ -59,6 +59,7 @@ async def predict(file: UploadFile = File(...)):
 
         mask = rgba_array[:, :, 3] > 0  # only non-transparent pixels
 
+        #color recongnition needs to be improved, maybe more categories of colors
         if np.any(mask):
             rgb_pixels = rgba_array[mask][:, :3]
             dominant_rgb = np.mean(rgb_pixels, axis=0).astype(int)
