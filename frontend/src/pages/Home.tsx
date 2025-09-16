@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function Home() {
-  const[randomFit,setRandomFit] = useState<any>();
+  const [randomFit, setRandomFit] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -18,20 +18,28 @@ function Home() {
     }
     fetchData();
   }, []);
-  
-  if(isLoading){
-    return <div>Still Loading...</div>
+
+  if (isLoading) {
+    return <div>Still Loading...</div>;
   }
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-black underline">This is the home page!</h1>
-      <div className='flex items-center flex-col justify-center'>
-        <img src={"http://localhost:5000/"+randomFit.randomTop.img_path} alt="" width={150} height={200}/>
-        <img src={"http://localhost:5000/"+randomFit.randomBottom.img_path} alt="" width={150} height={50} />
+      <div className="flex flex-col items-center justify-center">
+        <img
+          src={"http://localhost:5000/" + randomFit.randomTop.img_path}
+          alt=""
+          width={150}
+          height={200}
+        />
+        <img
+          src={"http://localhost:5000/" + randomFit.randomBottom.img_path}
+          alt=""
+          width={150}
+          height={50}
+        />
       </div>
-
-
     </div>
   );
 }
