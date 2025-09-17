@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 import numpy as np
 import torch
-from process import load_seg_model, get_palette, generate_mask,predict_clothing_type_fashionclip,rgb_to_color_name
+from process import load_seg_model, get_palette, generate_mask,predict_clothing_type_fashionclip,rgb_to_color_name, predict_if_top_or_bottom, determine_season
 
 app = FastAPI()
 
@@ -56,6 +56,8 @@ async def predict(file: UploadFile = File(...)):
 
 
         pred_type = predict_clothing_type_fashionclip(img_rgba)
+        is_top = predict_if_top_or_bottom(pred_type)
+        season = determine_season(pred_type)
 
         mask = rgba_array[:, :, 3] > 0  # only non-transparent pixels
 
@@ -76,6 +78,8 @@ async def predict(file: UploadFile = File(...)):
         print("Dominant RGB:", dominant_rgb)
         print("Dominant color name:", dominant_color_name)
         print("Prediction type:",pred_type)
+        print("Is top:", is_top)
+        print("Season:", season)
         print("Mask unique values:", np.unique(binary_mask))
         print("Alpha channel min/max:", rgba_array[:, :, 3].min(), rgba_array[:, :, 3].max())
         print("RGB channel mean:", rgba_array[:, :, :3].mean())
@@ -88,7 +92,9 @@ async def predict(file: UploadFile = File(...)):
 
         headers = {
             "Clothing-Type":pred_type,
-            "Clothing-Color":dominant_color_name
+            "Clothing-Color":dominant_color_name,
+            "Is-Top": is_top,
+            "Season": season
         }
 
         return Response(content=buf.getvalue(), media_type="image/WEBP",headers=headers)
