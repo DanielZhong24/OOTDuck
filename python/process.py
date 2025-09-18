@@ -52,9 +52,9 @@ def predict_if_top_or_bottom(typed_clothing: str):
     TOP_CLASSES = ['t-shirt', 'shirt', 'crop top', 'hoodie', 'sweater', 'cardigan', 'tank top', 'suit', 'denim jacket', 'leather jacket', 'jacket', 'coat', 'puffer jacket', 'bomber jacket']
 
     if typed_clothing in TOP_CLASSES:
-        return True
+        return "True"
     else:
-        return False
+        return "False"
     
 def determine_season(typed_clothing: str):
     SEASON_MAP = {

@@ -18,6 +18,7 @@ function Navbar() {
     let bodyData = new FormData();
     bodyData.append('season','summer');
     if(e.target.files){
+
       bodyData.append('image',e.target.files[0]);
     }else{
       console.log("error, image is not support or wrong file");
@@ -25,7 +26,7 @@ function Navbar() {
     }
 
     bodyData.append("userId","3");
-    axios.post("http://10.45.202.185:5000/api/clothes",bodyData).then((response)=>{
+    axios.post("http://localhost:6767/api/clothes",bodyData).then((response)=>{
       console.log(response);
     }).catch(e =>{
       console.log("Error:",e);
