@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import Icons from 'unplugin-icons/vite';
 import {VitePWA} from 'vite-plugin-pwa';
+import svgr from 'vite-plugin-svgr' 
 
 
 // https://vite.dev/config/
@@ -51,7 +52,8 @@ export default defineConfig({
           }
         ]
       },
-    })
+    }),
+    svgr()
   ],
   server: {
     allowedHosts:true
