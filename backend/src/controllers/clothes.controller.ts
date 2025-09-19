@@ -1,4 +1,4 @@
-import { getAllClothes, createClothes,getAllTops,getAllBottoms } from '../models/clothes.model.js';
+import { getAllClothes, createClothes,getAllTops,getAllBottoms,deleteClothes } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
@@ -100,9 +100,28 @@ const getRandomAssOutfit = async (req: Request, res: Response)=>{
   }
 
 };
+
+
+const removeClothesById = async(req:Request,res:Response)=>{
+  try{
+    if(!req.params.id || isNaN(+req.params.id)){
+      return{"error":"Id not valid"};
+    }
+
+    const id = Number(req.params.id)
+    const response = await deleteClothes(id);
+
+    res.status(204).json({message:"204 No Content success deletion"});
+
+  }catch(error){
+    console.log("Error deleting clohes:",error);
+    res.status(500).json({"error":"Failed to delete data"});
+  }
+}
 export default {
   listAllClothes,
   addClothes,
   listClothesByUser,
-  getRandomAssOutfit
+  getRandomAssOutfit,
+  removeClothesById
 };
