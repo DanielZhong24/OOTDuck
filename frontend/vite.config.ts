@@ -3,8 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import Icons from 'unplugin-icons/vite';
 import {VitePWA} from 'vite-plugin-pwa';
-import svgr from 'vite-plugin-svgr' 
-
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -53,11 +52,15 @@ export default defineConfig({
         ]
       },
     }),
-    svgr()
   ],
   server: {
     allowedHosts:true
-  }
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   
 
 
