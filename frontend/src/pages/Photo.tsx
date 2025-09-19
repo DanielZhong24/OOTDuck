@@ -17,14 +17,14 @@ function Photo() {
     });
   }, []);
 
-  const handleDelete = async(id:number)=>{
-    try{
-      axios.delete(`${port}api/clothes/delete/${id}`).then((res)=>{
-        console.log("clothes deleted succesfully",res.status);
+  const handleDelete = async (id: number) => {
+    try {
+      axios.delete(`${port}api/clothes/delete/${id}`).then((res) => {
+        console.log("clothes deleted succesfully", res.status);
         location.reload();
       });
-    }catch(error){
-      console.log("error",error);
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -41,7 +41,7 @@ function Photo() {
               type={item.type}
               color={item.color}
               season={item.season}
-              imageUrl={port+item.img_path}
+              imageUrl={port + item.img_path}
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
