@@ -7,10 +7,11 @@ function Home() {
   const [randomFit, setRandomFit] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
 
+  const port = import.meta.env.VITE_BACKEND_ROUTE;
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:6767/api/clothes/random/5");
+        const response = await axios.get(`${port}api/clothes/random/5`);
         setRandomFit(response.data);
       } catch (err) {
         console.error(err);
@@ -37,7 +38,7 @@ function Home() {
         <div className="w-90 ">
 
           <ImageLoader
-            src={"http://localhost:6767/" + randomFit.randomTop.img_path}
+            src={ port + randomFit.randomTop.img_path}
             alt="Top"
             className="object-contain"
           />
@@ -45,7 +46,7 @@ function Home() {
 
         <div className={"w-90 " + (["shorts", "skirt"].includes(randomFit.randomBottom.type) ? "-mt-37" : "-mt-15")}>
           <ImageLoader
-            src={"http://localhost:6767/" + randomFit.randomBottom.img_path}
+            src={port + randomFit.randomBottom.img_path}
             alt="Bottom"
             className="object-contain"
           />

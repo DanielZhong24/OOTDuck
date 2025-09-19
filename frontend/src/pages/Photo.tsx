@@ -10,16 +10,16 @@ import ClothingCard from "../components/ClothingCard";
 function Photo() {
   const [isOpen, setOpen] = useState(false);
   const [clothes, setClothes] = useState([]);
-
+  const port = import.meta.env.VITE_BACKEND_ROUTE;
   useEffect(() => {
-    axios.get("http://localhost:6767/api/clothes/5").then((response: AxiosResponse) => {
+    axios.get(`${port}api/clothes/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
     });
   }, []);
 
   const handleDelete = async(id:number)=>{
     try{
-      axios.delete(`http://localhost:6767/api/clothes/delete/${id}`).then((res)=>{
+      axios.delete(`${port}api/clothes/delete/${id}`).then((res)=>{
         console.log("clothes deleted succesfully",res.status);
         location.reload();
       });
@@ -41,7 +41,7 @@ function Photo() {
               type={item.type}
               color={item.color}
               season={item.season}
-              imageUrl={`http://localhost:6767/${item.img_path}`}
+              imageUrl={port+item.img_path}
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
