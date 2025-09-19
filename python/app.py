@@ -1,11 +1,17 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import Response
-from PIL import Image
+from PIL import Image,ImageOps
 from io import BytesIO
 import numpy as np
 import torch
-from process import load_seg_model, get_palette, generate_mask,predict_clothing_type_fashionclip,rgb_to_color_name, predict_if_top_or_bottom, determine_season
-
+from process import (load_seg_model, 
+                     get_palette, 
+                     generate_mask,
+                     predict_clothing_type_fashionclip,
+                     rgb_to_color_name, 
+                     predict_if_top_or_bottom, 
+                     determine_season,
+                     resize_clothing)
 app = FastAPI()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -17,9 +23,10 @@ async def root():
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     try:
-        img = Image.open(file.file).convert("RGB")
+        img = Image.open(file.file)
+        img = ImageOps.exif_transpose(img) 
+        img = img.convert("RGB")
         w, h = img.size
-        
         # Generate segmentation mask
         mask_img = generate_mask(img, net=net, palette=palette, device=device)
 
@@ -73,8 +80,14 @@ async def predict(file: UploadFile = File(...)):
 
         buf = BytesIO()
 
+        if is_top == "true":
+            img_rgba = resize_clothing(img_rgba,"top")
+        else:
+            img_rgba = resize_clothing(img_rgba,"bottom")
 
         #debug
+
+        print("Image size:",img_rgba.width,img_rgba.height)
         print("Dominant RGB:", dominant_rgb)
         print("Dominant color name:", dominant_color_name)
         print("Prediction type:",pred_type)

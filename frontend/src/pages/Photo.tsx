@@ -12,13 +12,13 @@ function Photo() {
   const [clothes, setClothes] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:6767/api/clothes/3").then((response: AxiosResponse) => {
+    axios.get("http://localhost:6767/api/clothes/5").then((response: AxiosResponse) => {
       setClothes(response.data);
     });
   }, []);
 
   return (
-    <div>
+    <div className="mb-20">
       <h1 className="mb-8 text-3xl font-bold text-white underline">
         This is the photo page!
       </h1>

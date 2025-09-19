@@ -6,7 +6,7 @@ import cv2
 import gdown
 import argparse
 import numpy as np
-
+from PIL import Image
 import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
@@ -31,6 +31,30 @@ CLOTHING_CLASSES = [
     "activewear"
 ]
 
+def resize_clothing(img: Image.Image, clothing_type: str) -> Image.Image:
+    bbox = img.getbbox()
+    if bbox:
+        img = img.crop(bbox)
+
+    if clothing_type.lower() == "top":
+        canvas_w, canvas_h = 400, 400
+        target_height_ratio = 0.9 
+    elif clothing_type.lower() == "bottom":
+        canvas_w, canvas_h = 400, 500
+        target_height_ratio = 0.95
+
+    w, h = img.size
+    target_h = int(canvas_h * target_height_ratio)
+    ratio = target_h / h
+    new_w = int(w * ratio)
+    img = img.resize((new_w, target_h))
+
+    canvas = Image.new("RGBA", (canvas_w, canvas_h), (255, 255, 255, 0))
+    x = (canvas_w - new_w) // 2
+    y = (canvas_h - target_h) // 2
+    canvas.paste(img, (x, y), img)
+
+    return canvas
 #too lazy to train a new model, this api allows us to get a percentage of likelyhood base on text prompt
 def predict_clothing_type_fashionclip(cropped_img: Image.Image):
     inputs = processor(
@@ -52,9 +76,9 @@ def predict_if_top_or_bottom(typed_clothing: str):
     TOP_CLASSES = ['t-shirt', 'shirt', 'crop top', 'hoodie', 'sweater', 'cardigan', 'tank top', 'suit', 'denim jacket', 'leather jacket', 'jacket', 'coat', 'puffer jacket', 'bomber jacket']
 
     if typed_clothing in TOP_CLASSES:
-        return "True"
+        return "true"
     else:
-        return "False"
+        return "false"
     
 def determine_season(typed_clothing: str):
     SEASON_MAP = {

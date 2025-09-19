@@ -14,8 +14,8 @@ function ClothingCard({ type, color, season, imageUrl }: ClothingCardProps) {
 
   return (
     <div className="rounded border px-6 py-4 shadow">
-      <div className="h-64 w-full rounded">
-        <img className="size-full" src={imageUrl} alt={`${color} ${type}`} />
+      <div className="h-64 w-full rounded overflow-hidden">
+        <img className="w-full h-full object-contain"  src={imageUrl} alt={`${color} ${type}`} />
       </div>
       <div className="mt-4 space-y-1">
         <h2 className="text-xl font-semibold">{`${color} ${type}`}</h2>

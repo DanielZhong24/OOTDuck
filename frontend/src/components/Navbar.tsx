@@ -16,7 +16,6 @@ function Navbar() {
 
   const sumbitImage = async(e:React.ChangeEvent<HTMLInputElement>) =>{
     let bodyData = new FormData();
-    bodyData.append('season','summer');
     if(e.target.files){
 
       bodyData.append('image',e.target.files[0]);
@@ -25,7 +24,7 @@ function Navbar() {
       return 
     }
 
-    bodyData.append("userId","3");
+    bodyData.append("userId","5");
     axios.post("http://localhost:6767/api/clothes",bodyData).then((response)=>{
       console.log(response);
     }).catch(e =>{

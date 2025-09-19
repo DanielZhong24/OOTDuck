@@ -20,9 +20,9 @@ export const addClothes = async (req: Request, res: Response) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-    const {season, userId } = req.body;
-    if (!season || !userId) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'Missing user id' });
     }
 
     const userIdNum = Number(userId);
@@ -44,9 +44,11 @@ export const addClothes = async (req: Request, res: Response) => {
     const relPath = path.posix.join('img', filename);
     const color = headers["clothing-color"];
     const type = headers["clothing-type"];
+    const season = headers["season"];
+    let isTop = headers["is-top"] === "true";
 
     // --- Save record in DB first ---
-    const clothes = await createClothes(type, color, season, userIdNum, relPath);
+    const clothes = await createClothes(type, color, season, userIdNum, relPath,isTop);
 
     // --- Only save image if DB insert succeeded ---
     fs.writeFileSync(savePath, processedBuffer);
