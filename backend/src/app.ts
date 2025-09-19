@@ -17,7 +17,6 @@ const __dirname = path.dirname(__filename);
 
 app.use('/img', express.static(path.join(__dirname, 'img')));
 
-
 app.use('/api/clothes', clothesRoutes);
 
 app.use('/api/users', usersRoutes);

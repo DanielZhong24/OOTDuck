@@ -5,5 +5,3 @@ const port: number = 6767; //so we dont interefere local testing with front end 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-app.use(cors());

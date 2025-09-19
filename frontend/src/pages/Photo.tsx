@@ -17,17 +17,16 @@ function Photo() {
     });
   }, []);
 
-  const handleDelete = async(id:number)=>{
-    try{
-      axios.delete(`${port}api/clothes/delete/${id}`).then((res)=>{
-        console.log("clothes deleted succesfully",res.status);
+  const handleDelete = async (id: number) => {
+    try {
+      axios.delete(`${port}api/clothes/delete/${id}`).then((res) => {
+        console.log("clothes deleted succesfully", res.status);
       });
 
       setClothes((prevClothes) => prevClothes.filter((item: any) => item.id !== id));
-    }catch(error){
-      console.log("error",error);
+    } catch (error) {
+      console.log("error", error);
     }
-
   };
 
   const handleEdit = async () => {
@@ -43,7 +42,7 @@ function Photo() {
               type={item.type}
               color={item.color}
               season={item.season}
-              imageUrl={port+item.img_path}
+              imageUrl={port + item.img_path}
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
