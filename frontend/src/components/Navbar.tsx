@@ -3,6 +3,7 @@ import HomeIcon from '~icons/mdi-light/home';
 import CameraIcon from '~icons/mdi-light/camera';
 import BookmarkIcon from '~icons/mdi-light/bookmark';
 import SettingIcon from '~icons/mdi-light/settings';
+import  Wardrobe from "../assets/wardrobe-outline.svg?react";
 // import PlusIcon from '~icons/mdi-light/plus';
 import axios from "axios";
 import { useRef } from "react";
@@ -33,7 +34,7 @@ function Navbar() {
   }
 
   return (
-  
+    
     <div className="fixed bottom-0 left-0 w-full  bg-white pt-5 pb-10 rounded-2xl border-black shadow-2xl p-1">
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-amber-500 rounded-full aspect-square p-3.5" >
           <span className="block px-1" onClick={handleFileClick}>
@@ -59,7 +60,7 @@ function Navbar() {
             className="flex items-end justify-center border-b-2 border-transparent text-center hover:border-gray-500"
           >
             <span className="block px-1">
-              <CameraIcon className="mb-1 block text-3xl text-black transition-colors duration-200 hover:text-gray-500"/>
+              <Wardrobe height={35} className="mb-1 block text-black transition-colors duration-200 hover:text-gray-500"/>
             </span>
           </Link>
         </div>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import RefreshIcon from "~icons/mdi-light/refresh";
+import ImageLoader from '../components/ImageLoader';
 
 function Home() {
   const [randomFit, setRandomFit] = useState<any>();
@@ -23,23 +25,29 @@ function Home() {
     return <div>Still Loading...</div>;
   }
 
+
+
   return (
     <div>
-      <h1 className="text-3xl font-bold text-black underline">This is the home page!</h1>
-      <div className="flex flex-col items-center justify-center space-y-0">
-        <div className="w-70">
-          <img
+      <div className="rounded-full bg-amber-500 w-8 h-8 flex items-center justify-center">
+        <RefreshIcon onClick={() => location.reload()} className="text-2xl cursor-pointer" />
+      </div>
+
+      <div className="flex flex-col items-center justify-center">
+        <div className="w-90 ">
+
+          <ImageLoader
             src={"http://localhost:6767/" + randomFit.randomTop.img_path}
             alt="Top"
-            className="w-70 object-contain"
+            className="object-contain"
           />
         </div>
 
-        <div className="w-70">
-          <img
+        <div className={"w-90 " + (["shorts", "skirt"].includes(randomFit.randomBottom.type) ? "-mt-37" : "-mt-15")}>
+          <ImageLoader
             src={"http://localhost:6767/" + randomFit.randomBottom.img_path}
             alt="Bottom"
-            className="w-70 object-contain"
+            className="object-contain"
           />
         </div>
       </div>

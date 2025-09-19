@@ -17,19 +17,33 @@ function Photo() {
     });
   }, []);
 
+  const handleDelete = async(id:number)=>{
+    try{
+      axios.delete(`http://localhost:6767/api/clothes/delete/${id}`).then((res)=>{
+        console.log("clothes deleted succesfully",res.status);
+        location.reload();
+      });
+    }catch(error){
+      console.log("error",error);
+    }
+  }
+
+  const handleEdit = async()=>{
+    console.log("Edit item");
+  }
   return (
     <div className="mb-20">
-      <h1 className="mb-8 text-3xl font-bold text-white underline">
-        This is the photo page!
-      </h1>
       <ul className="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {clothes.map((item: any) => (
           <li key={item.id}>
             <ClothingCard
+              id={item.id}
               type={item.type}
               color={item.color}
               season={item.season}
               imageUrl={`http://localhost:6767/${item.img_path}`}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
             />
           </li>
         ))}
