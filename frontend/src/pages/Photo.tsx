@@ -21,8 +21,9 @@ function Photo() {
     try {
       axios.delete(`${port}api/clothes/delete/${id}`).then((res) => {
         console.log("clothes deleted succesfully", res.status);
-        location.reload();
       });
+
+      setClothes((prevClothes) => prevClothes.filter((item: any) => item.id !== id));
     } catch (error) {
       console.log("error", error);
     }
