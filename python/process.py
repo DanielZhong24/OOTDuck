@@ -24,27 +24,48 @@ model = CLIPModel.from_pretrained("patrickjohncyh/fashion-clip").to(device)
 processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip",use_fast=False)
 
 CLOTHING_CLASSES = [
-    "t-shirt", "shirt", "crop top", "hoodie", "sweater", "cardigan",
-    "tank top", "jacket", "jeans", "trousers", "skirt", "shorts",
-    "leggings", "dress", "coat", "leather jacket", "denim jacket",
-    "puffer jacket", "bomber jacket", "jumpsuit", "romper", "suit", 
-    "activewear"
+    {"name": "t-shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
+    {"name": "shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
+    {"name": "crop top", "category": "top", "height_ratio": 0.65, "season": "spring/summer"},
+    {"name": "hoodie", "category": "top", "height_ratio": 0.75, "season": "fall/winter"},
+    {"name": "sweater", "category": "top", "height_ratio": 0.75, "season": "fall/winter"},
+    {"name": "cardigan", "category": "top", "height_ratio": 0.7, "season": "fall/winter"},
+    {"name": "tank top", "category": "top", "height_ratio": 0.6, "season": "spring/summer"},
+    {"name": "jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "jeans", "category": "bottom", "height_ratio": 0.85, "season": "all seasons"},
+    {"name": "trousers", "category": "bottom", "height_ratio": 0.8, "season": "all seasons"},
+    {"name": "skirt", "category": "bottom", "height_ratio": 0.65, "season": "spring/summer"},
+    {"name": "shorts", "category": "bottom", "height_ratio": 0.5, "season": "spring/summer"},
+    {"name": "leggings", "category": "bottom", "height_ratio": 0.8, "season": "all seasons"},
+    {"name": "dress", "category": "onepiece", "height_ratio": 0.9, "season": "spring/summer"},
+    {"name": "coat", "category": "outerwear", "height_ratio": 0.85, "season": "fall/winter"},
+    {"name": "leather jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "denim jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "puffer jacket", "category": "outerwear", "height_ratio": 0.85, "season": "fall/winter"},
+    {"name": "bomber jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "jumpsuit", "category": "onepiece", "height_ratio": 0.9, "season": "spring/summer"},
+    {"name": "romper", "category": "onepiece", "height_ratio": 0.7, "season": "spring/summer"},
+    {"name": "suit", "category": "onepiece", "height_ratio": 0.9, "season": "all seasons"},
+    {"name": "activewear", "category": "activewear", "height_ratio": 0.75, "season": "spring/summer"}
 ]
 
-def resize_clothing(img: Image.Image, clothing_type: str) -> Image.Image:
+def resize_clothing(img: Image.Image, pred_type: str) -> Image.Image:
     bbox = img.getbbox()
     if bbox:
         img = img.crop(bbox)
 
-    if clothing_type.lower() == "top":
-        canvas_w, canvas_h = 400, 400
-        target_height_ratio = 0.9 
-    elif clothing_type.lower() == "bottom":
+    metadata = next((c for c in CLOTHING_CLASSES if c["name"] == pred_type), None)
+    if metadata is None:
+        metadata = {"category": "top", "height_ratio": 0.7}  # default
+
+    if metadata["category"] in ["bottom", "activewear"]:
         canvas_w, canvas_h = 400, 500
-        target_height_ratio = 0.95
+    else:  
+        canvas_w, canvas_h = 400, 400
+
+    target_h = int(canvas_h * metadata["height_ratio"])
 
     w, h = img.size
-    target_h = int(canvas_h * target_height_ratio)
     ratio = target_h / h
     new_w = int(w * ratio)
     img = img.resize((new_w, target_h))
@@ -58,7 +79,7 @@ def resize_clothing(img: Image.Image, clothing_type: str) -> Image.Image:
 #too lazy to train a new model, this api allows us to get a percentage of likelyhood base on text prompt
 def predict_clothing_type_fashionclip(cropped_img: Image.Image):
     inputs = processor(
-        text=CLOTHING_CLASSES,
+        text=[c["name"] for c in CLOTHING_CLASSES],
         images=cropped_img,
         return_tensors="pt",
         padding=True
@@ -68,17 +89,10 @@ def predict_clothing_type_fashionclip(cropped_img: Image.Image):
         outputs = model(**inputs)
         logits_per_image = outputs.logits_per_image
         predicted_idx = logits_per_image.argmax().item()
-
     
-    return CLOTHING_CLASSES[predicted_idx]
+    return CLOTHING_CLASSES[predicted_idx]["name"]
 
-def predict_if_top_or_bottom(typed_clothing: str):
-    TOP_CLASSES = ['t-shirt', 'shirt', 'crop top', 'hoodie', 'sweater', 'cardigan', 'tank top', 'suit', 'denim jacket', 'leather jacket', 'jacket', 'coat', 'puffer jacket', 'bomber jacket']
 
-    if typed_clothing in TOP_CLASSES:
-        return "true"
-    else:
-        return "false"
     
 def determine_season(typed_clothing: str):
     SEASON_MAP = {

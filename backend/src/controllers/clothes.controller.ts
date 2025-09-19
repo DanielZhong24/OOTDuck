@@ -44,11 +44,11 @@ export const addClothes = async (req: Request, res: Response) => {
     const relPath = path.posix.join('img', filename);
     const color = headers["clothing-color"];
     const type = headers["clothing-type"];
-    const season = headers["season"];
-    let isTop = headers["is-top"] === "true";
+    const season = headers["clothing-season"];
+    const category = headers["clothing-category"];
 
     // --- Save record in DB first ---
-    const clothes = await createClothes(type, color, season, userIdNum, relPath,isTop);
+    const clothes = await createClothes(type, color, season, userIdNum, relPath,category);
 
     // --- Only save image if DB insert succeeded ---
     fs.writeFileSync(savePath, processedBuffer);
