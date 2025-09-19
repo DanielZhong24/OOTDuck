@@ -17,20 +17,23 @@ function Photo() {
     });
   }, []);
 
-  const handleDelete = async(id:number)=>{
-    try{
-      axios.delete(`http://localhost:6767/api/clothes/delete/${id}`).then((res)=>{
-        console.log("clothes deleted succesfully",res.status);
-        location.reload();
-      });
-    }catch(error){
-      console.log("error",error);
-    }
-  }
+  const handleDelete = async (id: number) => {
+    try {
+      const response: AxiosResponse = await axios.delete(
+        `http://localhost:6767/api/clothes/delete/${id}`,
+      );
 
-  const handleEdit = async()=>{
+      if (response.status === 204) {
+        setClothes((prevClothes) => prevClothes.filter((item: any) => item.id !== id));
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleEdit = async () => {
     console.log("Edit item");
-  }
+  };
   return (
     <div className="mb-20">
       <ul className="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
