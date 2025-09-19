@@ -29,14 +29,13 @@ function Home() {
 
 
   return (
-    <div>
+    <div className="">
       <div className="rounded-full bg-amber-500 w-8 h-8 flex items-center justify-center">
         <RefreshIcon onClick={() => location.reload()} className="text-2xl cursor-pointer" />
       </div>
 
       <div className="flex flex-col items-center justify-center">
-        <div className="w-90 ">
-
+        <div className="w-90">
           <ImageLoader
             src={ port + randomFit.randomTop.img_path}
             alt="Top"
