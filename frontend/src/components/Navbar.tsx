@@ -8,7 +8,7 @@ import  Wardrobe from "../assets/wardrobe-outline.svg?react";
 import axios from "axios";
 import { useRef } from "react";
 function Navbar() {
-
+  const port = import.meta.env.VITE_BACKEND_ROUTE;
   const fileInputReferance = useRef<HTMLInputElement>(null);
 
   const handleFileClick =() =>{
@@ -26,7 +26,7 @@ function Navbar() {
     }
 
     bodyData.append("userId","5");
-    axios.post("http://localhost:6767/api/clothes",bodyData).then((response)=>{
+    axios.post(`${port}api/clothes`,bodyData).then((response)=>{
       console.log(response);
     }).catch(e =>{
       console.log("Error:",e);
