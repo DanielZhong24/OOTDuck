@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import {Shirt,UserRound,Bookmark,House,Camera} from 'lucide-react';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
 import axios from "axios";
@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 function Navbar() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
   const fileInputReferance = useRef<HTMLInputElement>(null);
-
+  let locataion = useLocation();
 
   const [loading,setLoading] = useState(false);
   const handleFileClick =() =>{
@@ -53,7 +53,7 @@ function Navbar() {
       <div className="fixed bottom-0 left-0 w-full  bg-white pt-5 pb-10 rounded-2xl border-black shadow-2xl p-1">
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-amber-500 rounded-full aspect-square p-3.5 hover:bg-amber-600" >
             <span className="block px-1" onClick={handleFileClick}>
-                <Camera strokeWidth="1" color={"black"} size={32} className="mb-1 block"/>
+                <Camera strokeWidth="1"  color="black" size={32} className="mb-1 block"/>
             </span>
             <input type="file" accept="image/*" className="hidden" onChange={sumbitImage} ref={fileInputReferance} capture/>
     
@@ -62,20 +62,26 @@ function Navbar() {
           <div className="group flex-1">
             <Link
               to="/"
-              className="flex items-end justify-center border-b-2 border-transparent text-center hover:border-gray-500"
+              className="flex items-end justify-center text-center"
             >
-              <span className="block px-1">
-                <House strokeWidth="1" color={"black"} size={32} className="mb-1 block transition-colors duration-200 hover:text-gray-500"/>
+              <span className="block px-1 border-b-2 border-transparent hover:border-amber-500">
+                <House strokeWidth="1" 
+                color={locataion.pathname === "/" ? "oklch(76.9% 0.188 70.08)" : "black"} 
+                fill={locataion.pathname === "/" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32} 
+               className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 "/>
               </span>
             </Link>
           </div>
           <div className="group flex-1">
             <Link
               to="/photo"
-              className="flex items-end justify-center border-b-2 border-transparent text-center hover:border-gray-500"
+              className="flex items-end justify-center text-center"
             >
-              <span className="block px-1">
-                <Shirt strokeWidth="1" color={"black"} size={32} className="mb-1 block transition-colors duration-200 hover:text-gray-500"/>
+              <span className="block px-1 border-b-2 border-transparent hover:border-amber-500">
+                <Shirt strokeWidth="1"  
+                color={locataion.pathname === "/photo" ? "oklch(76.9% 0.188 70.08)" : "black"} 
+                fill={locataion.pathname === "/photo" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32} 
+               className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 "/>
               </span>
             </Link>
           </div>
@@ -83,20 +89,26 @@ function Navbar() {
           <div className="group flex-1">
             <Link
               to="/outfits"
-              className="flex items-end justify-center border-b-2 border-transparent text-center hover:border-gray-500"
+              className="flex items-end justify-center text-center"
             >
-              <span className="block px-1">
-                <Bookmark strokeWidth="1" color={"black"} size={32} className="mb-1 block transition-colors duration-200 hover:text-gray-500"/>
+              <span className="block px-1 border-b-2 border-transparent hover:border-amber-500">
+                <Bookmark strokeWidth="1"  
+                color={locataion.pathname === "/outfits" ? "oklch(76.9% 0.188 70.08)" : "black"} 
+                fill={locataion.pathname === "/outfits" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32} 
+               className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 "/>
               </span>
             </Link>
           </div>
           <div className="group flex-1">
             <Link
               to="/login"
-              className="flex items-end justify-center border-b-2 border-transparent text-center hover:border-gray-500"
+              className="flex items-end justify-center text-center"
             >
-              <span className="block px-1">
-                <UserRound strokeWidth="1" color={"black"} size={32} className="mb-1 block transition-colors duration-200 hover:text-gray-500"/>
+              <span className="block px-1 border-b-2 border-transparent hover:border-amber-500">
+                <UserRound strokeWidth="1"  
+                color={locataion.pathname === "/login" ? "oklch(76.9% 0.188 70.08)" : "black"} 
+                fill={locataion.pathname === "/login" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32} 
+               className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 "/>
               </span>
             </Link>
           </div>

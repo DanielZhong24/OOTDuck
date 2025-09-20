@@ -8,21 +8,27 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   const port = import.meta.env.VITE_BACKEND_ROUTE;
-  useEffect(() => {
+
     async function fetchData() {
-      try {
-        const response = await axios.get(`${port}api/clothes/random/5`);
-        setRandomFit(response.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
+      setIsLoading(true);
+    try {
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await axios.get(`${port}api/clothes/random/5`);
+      setRandomFit(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
+  }
+  useEffect(() => {
+ 
     fetchData();
   }, []);
 
   if (isLoading) {
+    //potential loading animation - prob want to do something flashy
     return <div>Still Loading...</div>;
   }
 
@@ -30,7 +36,7 @@ function Home() {
     <div>
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500">
         <RefreshIcon
-          onClick={() => location.reload()}
+          onClick={fetchData}
           className="cursor-pointer text-2xl"
         />
       </div>
