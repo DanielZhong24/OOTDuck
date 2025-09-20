@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Photo from "./pages/Photo";
