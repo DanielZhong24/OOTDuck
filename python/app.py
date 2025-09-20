@@ -62,6 +62,9 @@ async def predict(file: UploadFile = File(...)):
 
 
         pred_type = predict_clothing_type_fashionclip(img_rgba)
+
+        if not pred_type:
+            return Response("Error: the image submitted is not recongnized",404)
         img_rgba = resize_clothing(img_rgba,pred_type)
 
         mask = rgba_array[:, :, 3] > 0  # only non-transparent pixels

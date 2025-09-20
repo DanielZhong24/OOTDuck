@@ -88,8 +88,11 @@ def predict_clothing_type_fashionclip(cropped_img: Image.Image):
     with torch.no_grad():
         outputs = model(**inputs)
         logits_per_image = outputs.logits_per_image
-        predicted_idx = logits_per_image.argmax().item()
+        probability = logits_per_image.softmax(dim=1)
+        max_prob,predicted_idx = probability.max(dim=1)
     
+    if max_prob.item() < 0.5:
+        return None 
     return CLOTHING_CLASSES[predicted_idx]["name"]
 
 
