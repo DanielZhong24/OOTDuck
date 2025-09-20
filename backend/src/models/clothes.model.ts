@@ -8,6 +8,13 @@ export const getAllTops = (userId:number) =>{
   return db.any("SELECT color,type,img_path FROM cloth WHERE user_id = ($1) AND category = 'top'",[userId]);
 }
 
+export const getClohtesBydUserId= (userId:number)=>{
+
+}
+
+export const getClothesById= (id:number)=>{
+  return db.one("SELECT * FROM cloth where id = $1",[id]);
+}
 
 export const getAllBottoms = (userId:number) =>{
   return db.any("SELECT color,type,img_path FROM cloth WHERE user_id = ($1) AND category = 'bottom'",[userId]);

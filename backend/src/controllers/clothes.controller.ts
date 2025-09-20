@@ -1,4 +1,4 @@
-import { getAllClothes, createClothes,getAllTops,getAllBottoms,deleteClothes } from '../models/clothes.model.js';
+import { getAllClothes, createClothes,getAllTops,getAllBottoms,deleteClothes,getClothesById} from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
@@ -108,8 +108,12 @@ const removeClothesById = async(req:Request,res:Response)=>{
       return{"error":"Id not valid"};
     }
 
-    const id = Number(req.params.id)
+    const id = Number(req.params.id);
+    const fetchData = await getClothesById(id);
+    const relpath = fetchData["img_path"];
     const response = await deleteClothes(id);
+    const deletePath = path.join(process.cwd(), 'src', relpath);
+    fs.unlinkSync(deletePath);
 
     res.status(204).json({message:"204 No Content success deletion"});
 
