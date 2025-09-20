@@ -8,6 +8,7 @@ type ClothingCardProps = {
   color: string;
   season: string;
   imageUrl: string;
+  name?: string;
   onDelete?: (id: number) => void;
   onEdit?: (id: number, name: string) => void;
 };
@@ -18,6 +19,7 @@ function ClothingCard({
   color,
   season,
   imageUrl,
+  name,
   onDelete,
   onEdit,
 }: ClothingCardProps) {
@@ -47,7 +49,9 @@ function ClothingCard({
       </div>
 
       <div className="mt-4 space-y-1">
-        <h2 className="text-xl font-semibold">{`${color} ${type}`}</h2>
+        <h2 className="text-xl font-semibold">
+          {name === null ? `${color} ${type}` : name}
+        </h2>
         <p>Season: {season}</p>
       </div>
 
