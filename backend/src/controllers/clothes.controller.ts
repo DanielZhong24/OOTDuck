@@ -31,10 +31,12 @@ export const addClothes = async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', req.file.buffer, 'input.png');
 
+
     const aiResponse = await axios.post('http://localhost:8000/predict', formData, {
       responseType: 'arraybuffer',
       headers: formData.getHeaders ? formData.getHeaders() : {},
     });
+  
 
     const processedBuffer = Buffer.from(aiResponse.data);
     const headers = aiResponse.headers;
@@ -46,6 +48,7 @@ export const addClothes = async (req: Request, res: Response) => {
     const type = headers["clothing-type"];
     const season = headers["clothing-season"];
     const category = headers["clothing-category"];
+
 
     // --- Save record in DB first ---
     const clothes = await createClothes(type, color, season, userIdNum, relPath,category);
@@ -63,8 +66,12 @@ export const addClothes = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    console.error('Error adding clothes:', error);
-    res.status(500).json({ error: 'Failed to add clothes' });
+   if(axios.isAxiosError(error)){
+    if(error.response){
+      return res.status(error.response.status).json({error: error.response.data?.error || "AI counldn't recongize clothing"});
+    }
+   }
+   return res.status(500).json({error:"Failed to add new clothes"});
   }
 };
 const listClothesByUser = async (
@@ -95,9 +102,10 @@ const getRandomAssOutfit = async (req: Request, res: Response)=>{
 
     res.status(200).json({randomTop,randomBottom});
   }catch(error){
-    console.log('Error fetching clothes:', error);
-    res.status(500).json({ error: 'Failed to fetch data' });
+    return res.status(500).json({error:"Fail to add to clothes"});
+
   }
+
 
 };
 
