@@ -40,29 +40,31 @@ function Home() {
           className="cursor-pointer text-2xl"
         />
       </div>
-
       <div className="flex flex-col items-center justify-center">
-        <div className="w-90">
-          <ImageLoader
-            src={port + randomFit.randomTop.img_path}
-            alt="Top"
-            className="object-contain"
-          />
+        <div className="w-70 md:w-90 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+          {randomFit.randomTop && (
+            <ImageLoader
+              src={port + randomFit.randomTop.img_path}
+              alt="Top"
+              className="object-contain w-full h-full"
+            />
+          )}
         </div>
 
         <div
-          className={
-            "w-90 " +
-            (["shorts", "skirt"].includes(randomFit.randomBottom.type)
-              ? "-mt-37"
-              : "-mt-15")
-          }
+          className={`w-70 md:w-90 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden ${
+            ["shorts", "skirt"].includes(randomFit.randomBottom.type)
+              ? "-mt-10 md:-mt-12"
+              : "-mt-4 md:-mt-6"
+          }`}
         >
-          <ImageLoader
-            src={port + randomFit.randomBottom.img_path}
-            alt="Bottom"
-            className="object-contain"
-          />
+          {randomFit.randomBottom && (
+            <ImageLoader
+              src={port + randomFit.randomBottom.img_path}
+              alt="Bottom"
+              className="object-contain w-full h-full"
+            />
+          )}
         </div>
       </div>
     </div>
