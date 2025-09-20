@@ -9,13 +9,13 @@ import ClothingCard from "../components/ClothingCard";
 
 function Photo() {
   const [isOpen, setOpen] = useState(false);
-  const [clothes, setClothes] = useState([]);
+  const [clothes, setClothes] = useState<any>([]);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
   useEffect(() => {
     axios.get(`${port}api/clothes/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
     });
-  }, []);
+  }, [port]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -23,14 +23,33 @@ function Photo() {
         console.log("clothes deleted succesfully", res.status);
       });
 
-      setClothes((prevClothes) => prevClothes.filter((item: any) => item.id !== id));
+      setClothes((prevClothes: any) => prevClothes.filter((item: any) => item.id !== id));
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  const handleEdit = async () => {
-    console.log("Edit item");
+  const handleEdit = async (id: number, name: string): Promise<void> => {
+    try {
+      const response: AxiosResponse = await axios.put(
+        `${port}api/clothes/${id}`,
+        {
+          name: name,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      if (response.status === 200) {
+        setClothes((prevClothes: any) =>
+          prevClothes.map((item: any) =>
+            item.id === id ? { ...item, name: name } : item,
+          ),
+        );
+      }
+    } catch (error: any) {
+      console.error("error updating clothes", error.message);
+    }
   };
   return (
     <div className="mb-20">
@@ -42,6 +61,7 @@ function Photo() {
               type={item.type}
               color={item.color}
               season={item.season}
+              name={item.name}
               imageUrl={port + item.img_path}
               onDelete={handleDelete}
               onEdit={handleEdit}
