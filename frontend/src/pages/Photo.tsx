@@ -15,7 +15,7 @@ function Photo() {
     axios.get(`${port}api/clothes/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
     });
-  }, []);
+  }, [port]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -29,8 +29,21 @@ function Photo() {
     }
   };
 
-  const handleEdit = async () => {
-    console.log("Edit item");
+  const handleEdit = async (id: number, name: string) => {
+    try {
+      const response: AxiosResponse = await axios.put(
+        `${port}api/clothes/${id}`,
+        {
+          name: name,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+      console.log(response);
+    } catch (error: any) {
+      console.error("error updating clothes", error.message);
+    }
   };
   return (
     <div className="mb-20">
