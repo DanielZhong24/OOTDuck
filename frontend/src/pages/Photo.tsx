@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import PlusIcon from "~icons/mdi-light/plus";
 import PencilIcon from "~icons/mdi-light/pencil";
 import InboxIcon from "~icons/mdi-light/inbox";
+import { Funnel } from "lucide-react";
 import axios, { type AxiosResponse } from "axios";
 import ClothingCard from "../components/ClothingCard";
+import FilterSidebar from "@/components/FilterSidebar";
 
 function Photo() {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
   const [clothes, setClothes] = useState<any>([]);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
   useEffect(() => {
@@ -51,6 +53,11 @@ function Photo() {
       console.error("error updating clothes", error.message);
     }
   };
+
+  const toggleOpen: () => void = () => {
+    setOpen(!isOpen);
+  };
+
   return (
     <div className="mb-20">
       <ul className="grid grid-cols-1 gap-6 p-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
@@ -70,21 +77,31 @@ function Photo() {
         ))}
       </ul>
       <div className="fixed right-10 bottom-30 rounded-full bg-gray-700 p-1">
-        <div
-          className={`flex flex-col items-center gap-5 overflow-hidden rounded-full bg-gray-700 transition-all duration-300 ${isOpen ? "h-50 opacity-100" : "h-0 opacity-0"}`}
-        >
-          {isOpen && (
-            <>
-              <PlusIcon className="text-3xl" color="white" />
-              <InboxIcon className="text-3xl" color="white" />
-              <PencilIcon className="text-3xl" color="white" />
-            </>
-          )}
-        </div>
-        <Hamburger color="white" toggled={isOpen} toggle={setOpen} />
+        <Funnel
+          onClick={toggleOpen}
+          className="box-content size-6 cursor-pointer p-2.5 text-white"
+        />
       </div>
+      {<FilterSidebar isOpen={isOpen} onClick={toggleOpen} />}
     </div>
   );
 }
 
+/*
+function tempHolder({ isOpen }: { isOpen: boolean }) {
+  return (
+    <div
+      className={`flex flex-col items-center gap-5 overflow-hidden rounded-full bg-gray-700 transition-all duration-300 ${isOpen ? "h-50 opacity-100" : "h-0 opacity-0"}`}
+    >
+      {isOpen && (
+        <>
+          <PlusIcon className="text-3xl" color="white" />
+          <InboxIcon className="text-3xl" color="white" />
+          <PencilIcon className="text-3xl" color="white" />
+        </>
+      )}
+    </div>
+  );
+}
+*/
 export default Photo;
