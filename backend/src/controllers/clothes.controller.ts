@@ -37,15 +37,6 @@ export const addClothes = async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', req.file.buffer, 'input.png');
 
-
-    const aiResponse = await axios.post(
-      'http://localhost:8000/predict',
-      formData,
-      {
-        responseType: 'arraybuffer',
-        headers: formData.getHeaders ? formData.getHeaders() : {},
-      }
-    );
     const aiResponse = await axios.post('http://localhost:8000/predict', formData, {
       responseType: 'arraybuffer',
       headers: formData.getHeaders ? formData.getHeaders() : {},
@@ -62,12 +53,6 @@ export const addClothes = async (req: Request, res: Response) => {
     const type = headers["clothing-type"];
     const season = headers["clothing-season"];
     const category = headers["clothing-category"];
-
-    const color = headers['clothing-color'];
-    const type = headers['clothing-type'];
-    const season = headers['clothing-season'];
-    const category = headers['clothing-category'];
-
     // --- Save record in DB first ---
     const clothes = await createClothes(
       type,
@@ -128,11 +113,6 @@ const getRandomAssOutfit = async (req: Request, res: Response) => {
     res.status(200).json({randomTop,randomBottom});
   }catch(error){
     return res.status(500).json({error:"Fail to add to clothes"});
-
-    res.status(200).json({ randomTop, randomBottom });
-  } catch (error) {
-    console.log('Error fetching clothes:', error);
-    res.status(500).json({ error: 'Failed to fetch data' });
   }
 };
 
@@ -155,15 +135,6 @@ const updateClothesById = async (req: Request, res: Response) => {
     return res.status(500).json({ error: error });
   }
 };
-
-const removeClothesById = async (req: Request, res: Response) => {
-  try {
-    if (!req.params.id || isNaN(+req.params.id)) {
-      return { error: 'Id not valid' };
-
-
-};
-
 
 const removeClothesById = async(req:Request,res:Response)=>{
   try{
