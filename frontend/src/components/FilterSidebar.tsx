@@ -67,8 +67,8 @@ function FilterSidebar({ onClick, isOpen }: { onClick?: () => void; isOpen?: boo
           <SidebarItem array={seasons} value="Season" />
         </Accordion>
       </div>
-      <div className="mb-4 w-full">
-        <Button className="w-full">Confirm</Button>
+      <div className="mb-10 w-full">
+        <Button className="w-full rounded-full p-5 bg-amber-500 hover:bg-amber-700">Confirm</Button>
       </div>
     </aside>
   );

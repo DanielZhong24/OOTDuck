@@ -23,8 +23,8 @@ export default defineConfig({
         start_url: "/",
         id:"/",
         display: "standalone",
-        background_color: "#F8F8FF",
-        theme_color: "#F8F8FF",     
+        background_color: "#f3f4f6", // Tailwind gray-100
+        theme_color: "#f3f4f6",    
         icons: [
           {
             src: "src/assets/192x192.png",

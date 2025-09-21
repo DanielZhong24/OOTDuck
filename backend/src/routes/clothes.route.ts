@@ -7,8 +7,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', clothesController.listAllClothes);
 router.post('/', upload.single('image'), clothesController.addClothes);
-router.get('/:id', clothesController.listClothesByUser);
-router.get('/random/:id', clothesController.getRandomAssOutfit);
+router.get('/random/:id', clothesController.getRandomSlotOutfit);
+router.get('/user/:id', clothesController.listClothesByUser);
 router.delete('/delete/:id', clothesController.removeClothesById);
 router.put('/:id', clothesController.updateClothesById);
 export default router;

@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Hamburger from "hamburger-react";
 import { useState, useEffect } from "react";
-import PlusIcon from "~icons/mdi-light/plus";
-import PencilIcon from "~icons/mdi-light/pencil";
-import InboxIcon from "~icons/mdi-light/inbox";
 import { Funnel } from "lucide-react";
 import axios, { type AxiosResponse } from "axios";
 import ClothingCard from "../components/ClothingCard";
@@ -14,7 +10,7 @@ function Photo() {
   const [clothes, setClothes] = useState<any>([]);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
   useEffect(() => {
-    axios.get(`${port}api/clothes/5`).then((response: AxiosResponse) => {
+    axios.get(`${port}api/clothes/user/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
     });
   }, [port]);
