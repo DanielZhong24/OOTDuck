@@ -16,6 +16,8 @@ function Photo() {
     });
   }, [port]);
 
+  console.log(clothes);
+
   const handleDelete = async (id: number) => {
     try {
       axios.delete(`${port}api/clothes/delete/${id}`).then((res) => {
@@ -79,7 +81,14 @@ function Photo() {
           className="box-content size-6 cursor-pointer p-2.5 text-white"
         />
       </div>
-      {<FilterSidebar isOpen={isOpen} clothes={clothes} onClick={toggleOpen} />}
+      {
+        <FilterSidebar
+          isOpen={isOpen}
+          clothes={clothes}
+          onClick={toggleOpen}
+          toggleOpen={toggleOpen}
+        />
+      }
     </div>
   );
 }
