@@ -14,6 +14,7 @@ type FilterSidebarProps = {
   onClick?: () => void;
   isOpen?: boolean;
   clothes?: any;
+  toggleOpen: () => void;
 };
 
 type CheckboxProps = {
@@ -39,7 +40,7 @@ type SidebarItemProps = {
   selectedFilters: { [category: string]: string[] };
 };
 
-function FilterSidebar({ onClick, isOpen, clothes }: FilterSidebarProps) {
+function FilterSidebar({ onClick, isOpen, clothes, toggleOpen }: FilterSidebarProps) {
   const [selectedFilters, setSelectedFilters] = useState<{
     [category: string]: string[];
   }>({
@@ -81,7 +82,8 @@ function FilterSidebar({ onClick, isOpen, clothes }: FilterSidebarProps) {
       return typeMatch && colourMatch && seasonMatch;
     });
 
-    return filteredClothes;
+    console.log(filteredClothes);
+    toggleOpen();
   };
 
   const clothingTypes: string[] = [
@@ -160,7 +162,10 @@ function FilterSidebar({ onClick, isOpen, clothes }: FilterSidebarProps) {
         </Accordion>
       </div>
       <div className="mb-4 w-full">
-        <Button onClick={submitFilters} className="w-full">
+        <Button
+          onClick={submitFilters}
+          className="w-full rounded-lg p-6 text-lg md:p-5 md:text-base"
+        >
           Confirm
         </Button>
       </div>
