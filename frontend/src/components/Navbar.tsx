@@ -68,8 +68,8 @@ function Navbar() {
 
       )
 :
-      <div className="fixed bottom-0 left-0 w-full  bg-white pt-5 pb-10 rounded-2xl border-black shadow-2xl p-1">
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-amber-500 rounded-full aspect-square p-3.5 hover:bg-amber-600" >
+      <div className="fixed bottom-0 left-0 w-full  bg-white pt-5 pb-5 rounded-2xl border-black shadow-2xl p-1">
+        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-amber-500 rounded-full aspect-square p-3.5 hover:bg-amber-600" >
             <span className="block px-1" onClick={handleFileClick}>
                 <Camera strokeWidth="1"  color="black" size={32} className="mb-1 block"/>
             </span>

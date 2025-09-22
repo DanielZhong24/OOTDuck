@@ -6,6 +6,7 @@ import {
   deleteClothes,
   getClothesById,
   updateClothes,
+  getAllOnepieces
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -98,23 +99,33 @@ const listClothesByUser = async (
   }
 };
 
-const getRandomAssOutfit = async (req: Request, res: Response) => {
+
+export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
-    if (!req.params.id) {
-      return { error: 'id is not valid' };
-    }
-    const id = parseInt(req.params.id);
-    const tops = await getAllTops(id);
-    const bottoms = await getAllBottoms(id);
+  const userIdParam = req.params.id;
+  const userId = userIdParam ? parseInt(userIdParam, 10) : NaN;
+  if (isNaN(userId)) return res.status(400).json({ error: "Invalid user ID" });
 
-    let randomTop = tops[Math.floor(Math.random() * tops.length)];
-    let randomBottom = bottoms[Math.floor(Math.random() * bottoms.length)];
+    const tops = await getAllTops(userId);
+    const bottoms = await getAllBottoms(userId);
+    const onepieces = await getAllOnepieces(userId);
 
-    res.status(200).json({randomTop,randomBottom});
-  }catch(error){
-    return res.status(500).json({error:"Fail to add to clothes"});
+    const randomTop = tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
+    const randomBottom = bottoms.length > 0 ? bottoms[Math.floor(Math.random() * bottoms.length)] : null;
+
+    res.status(200).json({
+      tops,
+      bottoms,
+      onepieces,
+      randomTop,
+      randomBottom
+    });
+  } catch (error) {
+    console.error("Error fetching random slot outfit:", error);
+    res.status(500).json({ error: "Failed to pick random outfit" });
   }
 };
+
 
 const updateClothesById = async (req: Request, res: Response) => {
   try {
@@ -159,7 +170,7 @@ export default {
   listAllClothes,
   addClothes,
   listClothesByUser,
-  getRandomAssOutfit,
+  getRandomSlotOutfit,
   removeClothesById,
   updateClothesById,
 };

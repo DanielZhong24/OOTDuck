@@ -127,3 +127,32 @@ html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+
+.slot-reel {
+  will-change: transform;
+  transition: transform 2s cubic-bezier(0.1, 0.0, 0.2, 1.0);
+  transform: translateZ(0);
+}
+
+.slot-container {
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+.slot-image {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .slot-reel {
+    transition: transform 1.8s cubic-bezier(0.1, 0.0, 0.2, 1.0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot-reel {
+    transition: transform 0.3s ease-out;
+  }
+}

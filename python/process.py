@@ -25,6 +25,7 @@ processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip",use_fast
 
 CLOTHING_CLASSES = [
     {"name": "t-shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
+    {"name": "sweat pants", "category": "bottom", "height_ratio": 0.85, "season": "all seasons"},
     {"name": "shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
     {"name": "crop top", "category": "top", "height_ratio": 0.65, "season": "spring/summer"},
     {"name": "hoodie", "category": "top", "height_ratio": 0.75, "season": "fall/winter"},
@@ -91,8 +92,8 @@ def predict_clothing_type_fashionclip(cropped_img: Image.Image):
         probability = logits_per_image.softmax(dim=1)
         max_prob,predicted_idx = probability.max(dim=1)
     
-    if max_prob.item() < 0.5:
-        return None 
+    if max_prob.item() < 0.7:
+        raise TypeError("Not a valid cloth",max_prob.item())
     return CLOTHING_CLASSES[predicted_idx]["name"]
 
 
