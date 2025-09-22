@@ -13,6 +13,7 @@ function Photo() {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [clothes, setClothes] = useState<any>([]);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
+
   useEffect(() => {
     axios.get(`${port}api/clothes/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
@@ -82,7 +83,7 @@ function Photo() {
           className="box-content size-6 cursor-pointer p-2.5 text-white"
         />
       </div>
-      {<FilterSidebar isOpen={isOpen} onClick={toggleOpen} />}
+      {<FilterSidebar isOpen={isOpen} clothes={clothes} onClick={toggleOpen} />}
     </div>
   );
 }

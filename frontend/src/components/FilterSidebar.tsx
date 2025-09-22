@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, type ChangeEvent } from "react";
 import { Button } from "./ui/button";
 import {
   Accordion,
@@ -8,10 +10,82 @@ import {
 import { Input } from "./ui/input";
 import { X } from "lucide-react";
 
-function FilterSidebar({ onClick, isOpen }: { onClick?: () => void; isOpen?: boolean }) {
+type FilterSidebarProps = {
+  onClick?: () => void;
+  isOpen?: boolean;
+  clothes?: any;
+};
+
+type CheckboxProps = {
+  value: string;
+  type: string;
+  handleCheckboxChange: (
+    e: ChangeEvent<HTMLInputElement>,
+    category: string,
+    value: string,
+  ) => void;
+  checked: boolean;
+};
+
+type SidebarItemProps = {
+  arr: string[];
+  value: string;
+  type: string;
+  handleCheckboxChange: (
+    e: ChangeEvent<HTMLInputElement>,
+    category: string,
+    value: string,
+  ) => void;
+  selectedFilters: { [category: string]: string[] };
+};
+
+function FilterSidebar({ onClick, isOpen, clothes }: FilterSidebarProps) {
+  const [selectedFilters, setSelectedFilters] = useState<{
+    [category: string]: string[];
+  }>({
+    Type: [],
+    Colour: [],
+    Season: [],
+  });
+
+  const handleCheckboxChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    category: string,
+    value: string,
+  ): void => {
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setSelectedFilters((prevFilters) => ({
+        ...prevFilters,
+        [category]: [...prevFilters[category].concat(value.toLowerCase())],
+      }));
+    } else {
+      setSelectedFilters((prevFilters) => ({
+        ...prevFilters,
+        [category]: prevFilters[category].filter((item) => item !== value.toLowerCase()),
+      }));
+    }
+  };
+
+  const submitFilters = () => {
+    const clothingType = [...selectedFilters.Type];
+    const colour = [...selectedFilters.Colour];
+    const season = [...selectedFilters.Season];
+
+    const filteredClothes = clothes.filter((item: any) => {
+      const typeMatch = clothingType.length ? clothingType.includes(item.type) : item;
+      const colourMatch = colour.length ? colour.includes(item.colour) : item;
+      const seasonMatch = season.length ? season.includes(item.season) : item;
+
+      return typeMatch && colourMatch && seasonMatch;
+    });
+
+    return filteredClothes;
+  };
+
   const clothingTypes: string[] = [
     "T-SHIRT",
-    "SHIRT",
     "CROP TOP",
     "HOODIE",
     "SWEATER",
@@ -50,7 +124,7 @@ function FilterSidebar({ onClick, isOpen }: { onClick?: () => void; isOpen?: boo
     "BEIGE",
   ];
 
-  const seasons: string[] = ["SPRING/SUMMER", "FALL/WINTER"];
+  const seasons: string[] = ["SPRING/SUMMER", "FALL/WINTER", "ALL SEASONS"];
 
   return (
     <aside
@@ -62,29 +136,60 @@ function FilterSidebar({ onClick, isOpen }: { onClick?: () => void; isOpen?: boo
           <X onClick={onClick} className="size-7 cursor-pointer" />
         </div>
         <Accordion type="single" collapsible>
-          <SidebarItem array={clothingTypes} value="Type" />
-          <SidebarItem array={colours} value="Colour" />
-          <SidebarItem array={seasons} value="Season" />
+          <SidebarItem
+            selectedFilters={selectedFilters}
+            handleCheckboxChange={handleCheckboxChange}
+            arr={clothingTypes}
+            value="Type"
+            type="Type"
+          />
+          <SidebarItem
+            selectedFilters={selectedFilters}
+            handleCheckboxChange={handleCheckboxChange}
+            arr={colours}
+            value="Colour"
+            type="Colour"
+          />
+          <SidebarItem
+            selectedFilters={selectedFilters}
+            handleCheckboxChange={handleCheckboxChange}
+            arr={seasons}
+            value="Season"
+            type="Season"
+          />
         </Accordion>
       </div>
       <div className="mb-4 w-full">
-        <Button className="w-full">Confirm</Button>
+        <Button onClick={submitFilters} className="w-full">
+          Confirm
+        </Button>
       </div>
     </aside>
   );
 }
 
-function SidebarItem({ array, value }: { array: string[]; value: string }) {
+function SidebarItem({
+  arr,
+  value,
+  type,
+  handleCheckboxChange,
+  selectedFilters,
+}: SidebarItemProps) {
   return (
     <AccordionItem value={value}>
       <AccordionTrigger>{value}</AccordionTrigger>
       <AccordionContent className="grid max-h-60 grid-cols-2 gap-2 overflow-y-scroll">
-        {array.map((item: string) => (
+        {arr.map((item: any, index: number) => (
           <div
-            key={item}
+            key={index}
             className="md:text-md ml-2 inline-flex items-center space-x-4 text-sm"
           >
-            <CheckBox value={item} />
+            <CheckBox
+              handleCheckboxChange={handleCheckboxChange}
+              checked={selectedFilters[type]?.includes(item.toLowerCase())}
+              value={item}
+              type={type}
+            />
           </div>
         ))}
       </AccordionContent>
@@ -92,17 +197,19 @@ function SidebarItem({ array, value }: { array: string[]; value: string }) {
   );
 }
 
-function CheckBox({ value }: { value: string }) {
+function CheckBox({ value, type, handleCheckboxChange, checked }: CheckboxProps) {
   return (
     <>
       <Input
         className="size-auto accent-black"
         type="checkbox"
         value={value}
-        id={value}
-        name={value}
+        checked={checked}
+        onChange={(e) => handleCheckboxChange(e, type, value)}
+        id={`${type}-${value}`}
+        name={`${type}-${value}`}
       />
-      <label htmlFor={value}>{value}</label>
+      <label htmlFor={`${type}-${value}`}>{value}</label>
     </>
   );
 }
