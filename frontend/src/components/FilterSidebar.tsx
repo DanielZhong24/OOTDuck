@@ -162,7 +162,10 @@ function FilterSidebar({ onClick, isOpen, clothes, toggleOpen }: FilterSidebarPr
         </Accordion>
       </div>
       <div className="mb-4 w-full">
-        <Button onClick={submitFilters} className="w-full rounded-lg p-6 text-lg">
+        <Button
+          onClick={submitFilters}
+          className="w-full rounded-lg p-6 text-lg md:p-5 md:text-base"
+        >
           Confirm
         </Button>
       </div>

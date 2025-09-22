@@ -32,29 +32,28 @@ function ClothingCard({
   season = capitalizeLetter(season);
 
   return (
-    <div className="relative rounded-4xl border border-none bg-white px-6 py-4 shadow-2xl/30">
+    <div className="relative flex h-full flex-col">
       <div
         className="absolute top-2 right-2 cursor-pointer"
         onClick={() => setShowBottomSheet(true)}
       >
-        <MoreIcon className="text-3xl text-black" />
+        <MoreIcon className="text-black sm:text-2xl md:text-xl lg:text-3xl" />
       </div>
-
-      <div className="mt-5 h-64 w-full rounded-2xl bg-gray-100">
+      <div className="flex-1 bg-gray-200 p-4">
         <img
-          className="h-full w-full object-contain"
-          src={imageUrl}
+          className="size-full object-contain"
           alt={`${color} ${type}`}
-        />
+          src={imageUrl}
+        ></img>
       </div>
-
-      <div className="mt-4 space-y-1">
-        <h2 className="text-xl font-semibold">
-          {name === null ? `${color} ${type}` : name}
+      <div className="mt-2">
+        <h2 className="text-xs text-nowrap md:text-sm lg:text-base">
+          {name === null
+            ? `${color.toUpperCase()} ${type.toUpperCase()}`
+            : name?.toUpperCase()}
         </h2>
-        <p>Season: {season}</p>
+        <p className="text-xs md:text-sm lg:text-base">{season.toUpperCase()}</p>
       </div>
-
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <EditInput
@@ -66,7 +65,6 @@ function ClothingCard({
           />
         </div>
       )}
-
       {showBottomSheet && (
         <div
           className="fixed inset-0 z-40 bg-black opacity-65"
