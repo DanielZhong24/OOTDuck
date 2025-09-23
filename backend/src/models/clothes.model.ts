@@ -17,7 +17,6 @@ export const getClothesById = (id: number) => {
   return db.one('SELECT * FROM cloth where id = $1', [id]);
 };
 
-
 export const getAllBottoms = (userId: number) => {
   return db.any(
     "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom'",
@@ -43,7 +42,7 @@ export const createClothes = (
 ): Promise<null> => {
   return db.none(
     `INSERT INTO cloth (type,color,season,user_id,img_path,category, name) VALUES ($1,$2,$3,$4,$5,$6, $7)`,
-    [type, color, season, userId, imagePath, category, color + type]
+    [type, color, season, userId, imagePath, category, `${color} ${type}`]
   );
 };
 
@@ -53,4 +52,34 @@ export const deleteClothes = (id: number): Promise<null> => {
 
 export const updateClothes = (id: number, name: string): Promise<null> => {
   return db.none(`UPDATE cloth SET name = $1 WHERE id = $2`, [name, id]);
+};
+
+export const filterClothes = (
+  userId: number,
+  type: string[],
+  colour: string[],
+  season: string[]
+) => {
+  let query = `SELECT * FROM cloth WHERE user_id = $1`;
+  const params: any[] = [userId];
+  let paramIndex = 2;
+  if (type.length > 0) {
+    query += ` AND (type = ANY($${paramIndex}))`;
+    params.push(type);
+    paramIndex++;
+  }
+
+  if (colour.length > 0) {
+    query += ` AND (color = ANY($${paramIndex}))`;
+    params.push(colour);
+    paramIndex++;
+  }
+
+  if (season.length > 0) {
+    query += ` AND (season = ANY($${paramIndex}))`;
+    params.push(season);
+    paramIndex++;
+  }
+
+  return db.any(query, params);
 };

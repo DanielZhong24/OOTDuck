@@ -6,7 +6,8 @@ import {
   deleteClothes,
   getClothesById,
   updateClothes,
-  getAllOnepieces
+  getAllOnepieces,
+  filterClothes,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -38,11 +39,14 @@ export const addClothes = async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', req.file.buffer, 'input.png');
 
-    const aiResponse = await axios.post('http://localhost:8000/predict', formData, {
-      responseType: 'arraybuffer',
-      headers: formData.getHeaders ? formData.getHeaders() : {},
-    });
-  
+    const aiResponse = await axios.post(
+      'http://localhost:8000/predict',
+      formData,
+      {
+        responseType: 'arraybuffer',
+        headers: formData.getHeaders ? formData.getHeaders() : {},
+      }
+    );
 
     const processedBuffer = Buffer.from(aiResponse.data);
     const headers = aiResponse.headers;
@@ -50,10 +54,10 @@ export const addClothes = async (req: Request, res: Response) => {
     const filename = `DA${Date.now()}-${Math.round(Math.random() * 10000)}.png`;
     const savePath = path.join(process.cwd(), 'src', 'img', filename);
     const relPath = path.posix.join('img', filename);
-    const color = headers["clothing-color"];
-    const type = headers["clothing-type"];
-    const season = headers["clothing-season"];
-    const category = headers["clothing-category"];
+    const color = headers['clothing-color'];
+    const type = headers['clothing-type'];
+    const season = headers['clothing-season'];
+    const category = headers['clothing-category'];
     // --- Save record in DB first ---
     const clothes = await createClothes(
       type,
@@ -77,12 +81,15 @@ export const addClothes = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-   if(axios.isAxiosError(error)){
-    if(error.response){
-      return res.status(error.response.status).json({error: error.response.data?.error || "AI counldn't recongize clothing"});
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        return res.status(error.response.status).json({
+          error:
+            error.response.data?.error || "AI counldn't recongize clothing",
+        });
+      }
     }
-   }
-   return res.status(500).json({error:"Failed to add new clothes"});
+    return res.status(500).json({ error: 'Failed to add new clothes' });
   }
 };
 const listClothesByUser = async (
@@ -99,33 +106,36 @@ const listClothesByUser = async (
   }
 };
 
-
 export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
-  const userIdParam = req.params.id;
-  const userId = userIdParam ? parseInt(userIdParam, 10) : NaN;
-  if (isNaN(userId)) return res.status(400).json({ error: "Invalid user ID" });
+    const userIdParam = req.params.id;
+    const userId = userIdParam ? parseInt(userIdParam, 10) : NaN;
+    if (isNaN(userId))
+      return res.status(400).json({ error: 'Invalid user ID' });
 
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
     const onepieces = await getAllOnepieces(userId);
 
-    const randomTop = tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
-    const randomBottom = bottoms.length > 0 ? bottoms[Math.floor(Math.random() * bottoms.length)] : null;
+    const randomTop =
+      tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
+    const randomBottom =
+      bottoms.length > 0
+        ? bottoms[Math.floor(Math.random() * bottoms.length)]
+        : null;
 
     res.status(200).json({
       tops,
       bottoms,
       onepieces,
       randomTop,
-      randomBottom
+      randomBottom,
     });
   } catch (error) {
-    console.error("Error fetching random slot outfit:", error);
-    res.status(500).json({ error: "Failed to pick random outfit" });
+    console.error('Error fetching random slot outfit:', error);
+    res.status(500).json({ error: 'Failed to pick random outfit' });
   }
 };
-
 
 const updateClothesById = async (req: Request, res: Response) => {
   try {
@@ -147,10 +157,10 @@ const updateClothesById = async (req: Request, res: Response) => {
   }
 };
 
-const removeClothesById = async(req:Request,res:Response)=>{
-  try{
-    if(!req.params.id || isNaN(+req.params.id)){
-      return{"error":"Id not valid"};
+const removeClothesById = async (req: Request, res: Response) => {
+  try {
+    if (!req.params.id || isNaN(+req.params.id)) {
+      return { error: 'Id not valid' };
     }
 
     const id = Number(req.params.id);
@@ -166,6 +176,47 @@ const removeClothesById = async(req:Request,res:Response)=>{
     res.status(500).json({ error: 'Failed to delete data' });
   }
 };
+
+function toArray(query: string | string[] | undefined) {
+  if (query === undefined) return [];
+  if (Array.isArray(query)) return query;
+
+  return [query];
+}
+
+const filterClothesByUser = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  try {
+    const queries = req.query;
+    const userId: string | undefined = req.params.id;
+
+    if (!userId || isNaN(+userId)) {
+      return res.status(400).json({ error: 'User ID not valid' });
+    }
+
+    const typeQuery = toArray(queries.type as string | string[] | undefined);
+    const colourQuery = toArray(
+      queries.colour as string | string[] | undefined
+    );
+    const seasonQuery = toArray(
+      queries.season as string | string[] | undefined
+    );
+
+    const filteredClothes: any[] = await filterClothes(
+      Number(userId),
+      typeQuery,
+      colourQuery,
+      seasonQuery
+    );
+
+    return res.status(200).json(filteredClothes);
+  } catch (error: any) {
+    console.error('Error filtering clothes:', error.message);
+    return res.status(500).json({ error: 'Failed to filter clothes' });
+  }
+};
 export default {
   listAllClothes,
   addClothes,
@@ -173,4 +224,5 @@ export default {
   getRandomSlotOutfit,
   removeClothesById,
   updateClothesById,
+  filterClothesByUser,
 };

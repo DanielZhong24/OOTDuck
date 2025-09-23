@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, type ChangeEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "./ui/button";
 import {
   Accordion,
@@ -9,12 +10,13 @@ import {
 } from "./ui/accordion";
 import { Input } from "./ui/input";
 import { X } from "lucide-react";
+import axios, { type AxiosResponse } from "axios";
 
 type FilterSidebarProps = {
   onClick?: () => void;
   isOpen?: boolean;
-  clothes?: any;
   toggleOpen: () => void;
+  setClothes: React.Dispatch<any>;
 };
 
 type CheckboxProps = {
@@ -40,7 +42,7 @@ type SidebarItemProps = {
   selectedFilters: { [category: string]: string[] };
 };
 
-function FilterSidebar({ onClick, isOpen, clothes, toggleOpen }: FilterSidebarProps) {
+function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSidebarProps) {
   const [selectedFilters, setSelectedFilters] = useState<{
     [category: string]: string[];
   }>({
@@ -48,6 +50,8 @@ function FilterSidebar({ onClick, isOpen, clothes, toggleOpen }: FilterSidebarPr
     Colour: [],
     Season: [],
   });
+  const [, setSearchParams] = useSearchParams(); // not sure if we should keep using this but its there just to update the url lmao
+  const PORT = import.meta.env.VITE_BACKEND_ROUTE;
 
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -69,21 +73,41 @@ function FilterSidebar({ onClick, isOpen, clothes, toggleOpen }: FilterSidebarPr
     }
   };
 
-  const submitFilters = () => {
-    const clothingType = [...selectedFilters.Type];
-    const colour = [...selectedFilters.Colour];
-    const season = [...selectedFilters.Season];
+  const submitFilters = async () => {
+    const clothingType: string[] = [...selectedFilters.Type];
 
-    const filteredClothes = clothes.filter((item: any) => {
-      const typeMatch = clothingType.length ? clothingType.includes(item.type) : item;
-      const colourMatch = colour.length ? colour.includes(item.colour) : item;
-      const seasonMatch = season.length ? season.includes(item.season) : item;
+    const colour: string[] = [...selectedFilters.Colour];
+    const season: string[] = [...selectedFilters.Season];
 
-      return typeMatch && colourMatch && seasonMatch;
-    });
+    const params: URLSearchParams = new URLSearchParams();
 
-    console.log(filteredClothes);
+    if (clothingType.length) {
+      clothingType.forEach((type) => params.append("type", type));
+    }
+
+    if (colour.length) {
+      colour.forEach((col) => params.append("colour", col));
+    }
+
+    if (season.length) {
+      season.forEach((sea) => params.append("season", sea));
+    }
+
+    setSearchParams(params);
+    const newUrl = `${PORT}api/clothes/user/5/filter?${params.toString()}`;
+    await fetchFilteredClothes(newUrl);
     toggleOpen();
+  };
+
+  const fetchFilteredClothes = async (url: string) => {
+    try {
+      const response: AxiosResponse = await axios.get(url, {
+        headers: { "Content-Type": "application/json" },
+      });
+      setClothes(response.data);
+    } catch (error: any) {
+      console.error("error fetching filtered clothes", error);
+    }
   };
 
   const clothingTypes: string[] = [

@@ -7,16 +7,16 @@ import FilterSidebar from "@/components/FilterSidebar";
 
 function Photo() {
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clothes, setClothes] = useState<any>([]);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
 
   useEffect(() => {
     axios.get(`${port}api/clothes/user/5`).then((response: AxiosResponse) => {
       setClothes(response.data);
+      setIsLoading(false);
     });
   }, [port]);
-
-  console.log(clothes);
 
   const handleDelete = async (id: number) => {
     try {
@@ -57,6 +57,29 @@ function Photo() {
     setOpen(!isOpen);
   };
 
+  if (clothes.length === 0 && isLoading === false) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <h1 className="text-xl font-bold lg:text-2xl xl:text-3xl">No clothes found</h1>
+
+        <div className="fixed right-10 bottom-30 rounded-full bg-gray-700 p-1">
+          <Funnel
+            onClick={toggleOpen}
+            className="box-content size-6 cursor-pointer p-2.5 text-white"
+          />
+        </div>
+        {
+          <FilterSidebar
+            isOpen={isOpen}
+            onClick={toggleOpen}
+            toggleOpen={toggleOpen}
+            setClothes={setClothes}
+          />
+        }
+      </div>
+    );
+  }
+
   return (
     <div className="mb-20 bg-white">
       <ul className="grid grid-cols-2 gap-7 p-8 sm:grid-cols-2 sm:gap-10 md:grid-cols-4 md:gap-15">
@@ -84,9 +107,9 @@ function Photo() {
       {
         <FilterSidebar
           isOpen={isOpen}
-          clothes={clothes}
           onClick={toggleOpen}
           toggleOpen={toggleOpen}
+          setClothes={setClothes}
         />
       }
     </div>
