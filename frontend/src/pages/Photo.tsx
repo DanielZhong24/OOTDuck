@@ -98,7 +98,7 @@ function Photo() {
           </li>
         ))}
       </ul>
-      <div className="fixed right-10 bottom-30 rounded-full bg-gray-700 p-1">
+      <div className="fixed right-10 bottom-30 rounded-full bg-amber-500 p-1 transition-colors duration-200 hover:bg-amber-700">
         <Funnel
           onClick={toggleOpen}
           className="box-content size-6 cursor-pointer p-2.5 text-white"

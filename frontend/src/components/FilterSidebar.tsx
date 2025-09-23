@@ -53,6 +53,15 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
   const [, setSearchParams] = useSearchParams(); // not sure if we should keep using this but its there just to update the url lmao
   const PORT = import.meta.env.VITE_BACKEND_ROUTE;
 
+  const clearAll: () => void = () => {
+    setSelectedFilters({
+      Type: [],
+      Colour: [],
+      Season: [],
+    });
+    setSearchParams(new URLSearchParams());
+  };
+
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
     category: string,
@@ -185,12 +194,19 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
           />
         </Accordion>
       </div>
-      <div className="mb-4 w-full">
+      <div className="mb-4 flex w-full items-center justify-evenly gap-4">
         <Button
           onClick={submitFilters}
-          className="w-full rounded-lg p-6 text-lg md:p-5 md:text-base"
+          className="w-[45%] cursor-pointer rounded-lg text-sm md:p-5 md:text-base"
         >
           Confirm
+        </Button>
+        <Button
+          className="w-[45%] cursor-pointer rounded-lg text-sm md:p-5 md:text-base"
+          variant="secondary"
+          onClick={clearAll}
+        >
+          Clear All
         </Button>
       </div>
     </aside>
@@ -211,7 +227,7 @@ function SidebarItem({
         {arr.map((item: any, index: number) => (
           <div
             key={index}
-            className="md:text-md ml-2 inline-flex items-center space-x-4 text-sm"
+            className="md:text-md mb-3 ml-2 inline-flex items-center space-x-4 text-sm"
           >
             <CheckBox
               handleCheckboxChange={handleCheckboxChange}
@@ -230,7 +246,7 @@ function CheckBox({ value, type, handleCheckboxChange, checked }: CheckboxProps)
   return (
     <>
       <Input
-        className="size-auto accent-black"
+        className="size-5 accent-black"
         type="checkbox"
         value={value}
         checked={checked}
