@@ -141,8 +141,8 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
               .status(400)
               .json({ error: 'User does not have enough pieces' });
           }
-          randomTop = outfit.randomTop;
-          randomBottom = outfit.randomBottom;
+          randomTop = outfit.randomTop[0];
+          randomBottom = outfit.randomBottom[0];
           break;
       }
     } else {
@@ -153,6 +153,7 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           ? bottoms[Math.floor(Math.random() * bottoms.length)]
           : null;
     }
+
     res.status(200).json({
       tops,
       bottoms,
