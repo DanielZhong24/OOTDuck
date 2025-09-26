@@ -88,7 +88,7 @@ const selectValidColour: (userId: number) => Promise<any> = async (
   userId: number
 ) => {
   const colours = await db.any(
-    `SELECT color FROM cloth WHERE user_id = $1 AND category = 'bottom' INTERSECT SELECT color FROM cloth WHERE user_id = $1 AND category = 'top`,
+    `SELECT color FROM cloth WHERE user_id = $1 AND category = 'bottom' INTERSECT SELECT color FROM cloth WHERE user_id = $1 AND category = 'top'`,
     [userId]
   );
 
@@ -97,6 +97,7 @@ const selectValidColour: (userId: number) => Promise<any> = async (
   }
 
   const colorArr: string[] = colours.map((obj) => obj.color);
+
   const randomColour = colorArr[
     Math.floor(Math.random() * colorArr.length)
   ] as string;
@@ -111,12 +112,12 @@ export const getMatchingColourOutfit: (userId: number) => Promise<{
   const colour: string = await selectValidColour(userId);
 
   const randomTop: any[] = await db.any(
-    "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top' AND color = $2 ORDER BY RANDOM() LIMIT 1",
+    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top' AND color = $2 ORDER BY RANDOM() LIMIT 1`,
     [userId, colour]
   );
 
   const randomBottom: any[] = await db.any(
-    "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom' AND color = $2 ORDER BY RANDOM() LIMIT 1",
+    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom' AND color = $2 ORDER BY RANDOM() LIMIT 1`,
     [userId, colour]
   );
 

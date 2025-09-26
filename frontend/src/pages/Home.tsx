@@ -30,7 +30,7 @@ export default function Home() {
     colors: [],
     seasons: [],
     colorMode: "harmony",
-    colorHarmony: "complementary",
+    colorHarmony: null,
   });
 
   const touchStartRef = useRef(0);
@@ -57,10 +57,9 @@ export default function Home() {
 
       console.log(params);
 
-      const response = await axios.get<OutfitData>(
-        `${port}api/clothes/random/5`,
-        { params }
-      );
+      const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, {
+        params,
+      });
 
       setOutfitData(response.data);
 
@@ -70,7 +69,7 @@ export default function Home() {
     } catch (err) {
       console.error("Failed to fetch outfit data:", err);
       setError(
-        "Failed to load outfit. Please check your network connection and try again."
+        "Failed to load outfit. Please check your network connection and try again.",
       );
       setIsSpinning(false);
     }
@@ -94,7 +93,9 @@ export default function Home() {
 
   const getBottomMargin = () => {
     const type = outfitData?.randomBottom?.type;
-    return ["shorts", "skirt"].includes(type || "") ? "-mt-24 md:-mt-28" : "-mt-16 md:-mt-20";
+    return ["shorts", "skirt"].includes(type || "")
+      ? "-mt-24 md:-mt-28"
+      : "-mt-16 md:-mt-20";
   };
 
   const getTopReel = () => {
@@ -113,11 +114,11 @@ export default function Home() {
 
   if (error)
     return (
-      <div className="flex flex-col items-center justify-center h-screen text-lg text-red-500 p-4 text-center">
+      <div className="flex h-screen flex-col items-center justify-center p-4 text-center text-lg text-red-500">
         {error}
         <button
           onClick={() => fetchData()}
-          className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-md"
+          className="mt-4 rounded-md bg-amber-500 px-4 py-2 text-white"
         >
           Try Again
         </button>
@@ -126,7 +127,7 @@ export default function Home() {
 
   if (!outfitData)
     return (
-      <div className="flex justify-center items-center h-screen text-lg text-gray-700">
+      <div className="flex h-screen items-center justify-center text-lg text-gray-700">
         Loading your outfit...
       </div>
     );
@@ -137,49 +138,52 @@ export default function Home() {
   const finalBottomIndex = bottomReel.length - 1;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 relative">
-      
-      <FilterComponent
-        onFiltersChange={handleFiltersChange}
-        isSpinning={isSpinning}
-      />
+    <div className="relative flex min-h-screen flex-col items-center justify-center p-4">
+      <FilterComponent onFiltersChange={handleFiltersChange} isSpinning={isSpinning} />
 
-      <div className="hidden sm:flex sm:h-0 fixed bottom-50 right-10 z-10 md:absolute md:bottom-60 md:right-10">
+      <div className="fixed right-10 bottom-50 z-10 hidden sm:flex sm:h-0 md:absolute md:right-10 md:bottom-60">
         <div
-          className="flex h-16 w-16 md:h-13 md:w-13 items-center justify-center rounded-full bg-amber-500 shadow-lg cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-95"
+          className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-amber-500 shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95 md:h-13 md:w-13"
           onClick={() => fetchData(filters)}
         >
           <RefreshIcon
-            className={`text-4xl md:text-3xl text-white ${isSpinning ? "animate-spin" : ""}`}
+            className={`text-4xl text-white md:text-3xl ${isSpinning ? "animate-spin" : ""}`}
           />
         </div>
       </div>
 
-      <div className="block md:hidden text-center text-gray-600 text-sm mb-2">
+      <div className="mb-2 block text-center text-sm text-gray-600 md:hidden">
         Swipe up on the clothes to get a new outfit!
       </div>
 
       {/* Top Reel */}
       <div
-        className="w-full max-w-sm md:max-w-md lg:max-w-lg flex flex-col items-center overflow-hidden p-2"
+        className="flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="relative w-full overflow-hidden slot-container" style={{ height: itemHeight }}>
+        <div
+          className="slot-container relative w-full overflow-hidden"
+          style={{ height: itemHeight }}
+        >
           <div
-            className="absolute top-0 left-0 w-full slot-reel"
+            className="slot-reel absolute top-0 left-0 w-full"
             style={{
               transform: shouldAnimate
                 ? `translateY(-${finalTopIndex * itemHeight}px) translateZ(0)`
-                : "translateY(0px) translateZ(0)"
+                : "translateY(0px) translateZ(0)",
             }}
           >
             {topReel.map((item, index) => (
-              <div key={`${item.id}-${index}`} style={{ height: itemHeight }} className="w-full flex-shrink-0">
+              <div
+                key={`${item.id}-${index}`}
+                style={{ height: itemHeight }}
+                className="w-full flex-shrink-0"
+              >
                 <img
                   src={`${port}${item.img_path}`}
                   alt="Top"
-                  className="w-full h-full object-contain slot-image"
+                  className="slot-image h-full w-full object-contain"
                 />
               </div>
             ))}
@@ -189,17 +193,20 @@ export default function Home() {
 
       {/* Bottom Reel */}
       <div
-        className={`w-full max-w-sm md:max-w-md lg:max-w-lg flex flex-col items-center overflow-hidden p-2 ${getBottomMargin()}`}
+        className={`flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg ${getBottomMargin()}`}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="relative w-full overflow-hidden slot-container" style={{ height: bottomItemHeight }}>
+        <div
+          className="slot-container relative w-full overflow-hidden"
+          style={{ height: bottomItemHeight }}
+        >
           <div
-            className="absolute top-0 left-0 w-full slot-reel"
+            className="slot-reel absolute top-0 left-0 w-full"
             style={{
               transform: shouldAnimate
                 ? `translateY(-${finalBottomIndex * bottomItemHeight}px) translateZ(0)`
-                : "translateY(0px) translateZ(0)"
+                : "translateY(0px) translateZ(0)",
             }}
           >
             {bottomReel.map((item, index) => (
@@ -211,7 +218,7 @@ export default function Home() {
                 <img
                   src={`${port}${item.img_path}`}
                   alt="Bottom"
-                  className="w-full h-full object-contain slot-image"
+                  className="slot-image h-full w-full object-contain"
                 />
               </div>
             ))}
