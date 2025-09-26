@@ -8,6 +8,7 @@ import {
   updateClothes,
   getAllOnepieces,
   filterClothes,
+  getMatchingColourOutfit
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -106,6 +107,14 @@ const listClothesByUser = async (
   }
 };
 
+const randomizeMatchingColour = async(id:number) => {
+  const randomOutfit: { randomTop: any[]; randomBottom: any[] } = await getMatchingColourOutfit(id);
+  if (!randomOutfit.randomTop || !randomOutfit.randomBottom) {
+    return null;
+  }
+  return randomOutfit;
+};
+
 export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
     const userIdParam = req.params.id;
@@ -115,19 +124,32 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
 
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
-    const onepieces = await getAllOnepieces(userId);
 
-    const randomTop =
+    let randomTop;
+    let randomBottom;
+    if(req.params.colorHarmony){
+      let colorHarmony = req.params.colorHarmony;
+      switch(colorHarmony){
+        case "matching":
+          let outfit = await randomizeMatchingColour(userId);
+          if(!outfit){
+            return res.status(400).json({error:"User does not have enough pieces"});
+          }
+          randomTop=outfit.randomTop;
+          randomBottom=outfit.randomBottom;
+      }   
+    }
+    else{
+     randomTop =
       tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
-    const randomBottom =
+     randomBottom =
       bottoms.length > 0
         ? bottoms[Math.floor(Math.random() * bottoms.length)]
         : null;
-
+    }
     res.status(200).json({
       tops,
       bottoms,
-      onepieces,
       randomTop,
       randomBottom,
     });
