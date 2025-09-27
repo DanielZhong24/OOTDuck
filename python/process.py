@@ -50,6 +50,8 @@ CLOTHING_CLASSES = [
     {"name": "activewear", "category": "activewear", "height_ratio": 0.75, "season": "spring/summer"}
 ]
 
+
+#casual, streetwear, minimalistic, formal
 def resize_clothing(img: Image.Image, pred_type: str) -> Image.Image:
     bbox = img.getbbox()
     if bbox:
