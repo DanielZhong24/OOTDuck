@@ -5,8 +5,8 @@ import FilterPanel from "./FilterPanel";
 export interface FilterState {
   colors: string[];
   seasons: string[];
-  colorMode: 'specific' | 'harmony'| null;
-  colorHarmony: 'matching' | 'complementary' | 'neutral' | null;
+  colorMode: "specific" | "harmony" | null;
+  colorHarmony: "matching" | "complementary" | "neutral" | null;
 }
 
 const colors = [
@@ -25,43 +25,66 @@ const colors = [
 ];
 
 const seasons = [
-  { name: "Spring", value: "spring" },
-  { name: "Summer", value: "summer" },
-  { name: "Fall", value: "fall" },
-  { name: "Winter", value: "winter" }
+  { name: "Spring/Summer", value: "spring/summer" },
+  { name: "Fall/Winter", value: "fall/winter" },
+  { name: "All Seasons", value: "all seasons" },
 ];
 
-export default function FilterComponent({ onFiltersChange, isSpinning }: { onFiltersChange: (filters: FilterState) => void; isSpinning?: boolean }) {
-  const [filters, setFilters] = useState<FilterState>({ colors: [], seasons: [], colorMode: "harmony", colorHarmony: null });
+export default function FilterComponent({
+  onFiltersChange,
+  isSpinning,
+}: {
+  onFiltersChange: (filters: FilterState) => void;
+  isSpinning?: boolean;
+}) {
+  const [filters, setFilters] = useState<FilterState>({
+    colors: [],
+    seasons: [],
+    colorMode: "harmony",
+    colorHarmony: null,
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   const hasActive =
     filters.colors.length > 0 ||
     filters.seasons.length > 0 ||
-    (filters.colorMode === 'harmony' && filters.colorHarmony !== null);
+    (filters.colorMode === "harmony" && filters.colorHarmony !== null);
 
   const activeCount =
     filters.colors.length +
     filters.seasons.length +
-    (filters.colorMode === 'harmony' && filters.colorHarmony !== null ? 1 : 0);
+    (filters.colorMode === "harmony" && filters.colorHarmony !== null ? 1 : 0);
 
   const handleFiltersChange = (newFilters: FilterState) => {
     const cleanedFilters = {
       ...newFilters,
       colorMode:
-        newFilters.colorMode === 'harmony' && newFilters.colorHarmony === null
+        newFilters.colorMode === "harmony" && newFilters.colorHarmony === null
           ? null
           : newFilters.colorMode,
     };
 
     setFilters(newFilters);
     onFiltersChange(cleanedFilters);
-};
+  };
 
   return (
     <>
-      <FilterButton hasActive={hasActive} activeCount={activeCount} isSpinning={isSpinning} onClick={() => setIsOpen(!isOpen)} />
-      {isOpen && <FilterPanel filters={filters} setFilters={handleFiltersChange} colors={colors} seasons={seasons} onClose={() => setIsOpen(false)} />}
+      <FilterButton
+        hasActive={hasActive}
+        activeCount={activeCount}
+        isSpinning={isSpinning}
+        onClick={() => setIsOpen(!isOpen)}
+      />
+      {isOpen && (
+        <FilterPanel
+          filters={filters}
+          setFilters={handleFiltersChange}
+          colors={colors}
+          seasons={seasons}
+          onClose={() => setIsOpen(false)}
+        />
+      )}
     </>
   );
 }
