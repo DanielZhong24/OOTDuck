@@ -61,8 +61,6 @@ export default function Home() {
         params,
       });
 
-      console.log(response);
-
       setOutfitData(response.data);
 
       requestAnimationFrame(() => setShouldAnimate(true));

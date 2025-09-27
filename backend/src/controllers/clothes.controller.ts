@@ -9,6 +9,7 @@ import {
   getAllOnepieces,
   filterClothes,
   getMatchingColourOutfit,
+  getNeutralOutfit,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -134,8 +135,7 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
 
       switch (colorHarmony) {
         case 'matching':
-          let outfit = await randomizeMatchingColour(userId);
-          console.log('matching');
+          const outfit = await randomizeMatchingColour(userId);
           if (!outfit) {
             return res
               .status(400)
@@ -143,6 +143,16 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           }
           randomTop = outfit.randomTop[0];
           randomBottom = outfit.randomBottom[0];
+          break;
+        case 'neutral':
+          const neutralOutfit = await getNeutralOutfit(userId);
+          if (!neutralOutfit) {
+            return res
+              .status(400)
+              .json({ error: 'User does not have enough neutral pieces' });
+          }
+          randomTop = neutralOutfit.randomTop[0];
+          randomBottom = neutralOutfit.randomBottom[0];
           break;
       }
     } else {
