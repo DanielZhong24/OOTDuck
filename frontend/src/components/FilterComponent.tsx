@@ -5,7 +5,7 @@ import FilterPanel from "./FilterPanel";
 export interface FilterState {
   colors: string[];
   seasons: string[];
-  colorMode: 'specific' | 'harmony';
+  colorMode: 'specific' | 'harmony'| null;
   colorHarmony: 'matching' | 'complementary' | 'neutral' | null;
 }
 
@@ -33,11 +33,18 @@ const seasons = [
 ];
 
 export default function FilterComponent({ onFiltersChange, isSpinning }: { onFiltersChange: (filters: FilterState) => void; isSpinning?: boolean }) {
-  const [filters, setFilters] = useState<FilterState>({ colors: [], seasons: [], colorMode: 'harmony', colorHarmony: null });
+  const [filters, setFilters] = useState<FilterState>({ colors: [], seasons: [], colorMode: "harmony", colorHarmony: null });
   const [isOpen, setIsOpen] = useState(false);
 
-  const hasActive = filters.colors.length > 0 || filters.seasons.length > 0 || (filters.colorMode==='harmony' && filters.colorHarmony !== null);
-  const activeCount = filters.colors.length + filters.seasons.length + (filters.colorMode==='harmony' && filters.colorHarmony !== null ? 1 : 0);
+  const hasActive =
+    filters.colors.length > 0 ||
+    filters.seasons.length > 0 ||
+    (filters.colorMode === 'harmony' && filters.colorHarmony !== null);
+
+  const activeCount =
+    filters.colors.length +
+    filters.seasons.length +
+    (filters.colorMode === 'harmony' && filters.colorHarmony !== null ? 1 : 0);
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters);

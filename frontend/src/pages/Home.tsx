@@ -29,7 +29,7 @@ export default function Home() {
   const [filters, setFilters] = useState<FilterState>({
     colors: [],
     seasons: [],
-    colorMode: "harmony",
+    colorMode: null,
     colorHarmony: null,
   });
 
