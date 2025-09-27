@@ -84,41 +84,58 @@ export const filterClothes = (
   return db.any(query, params);
 };
 
-const selectValidColour: (userId: number) => Promise<any> = async (
+const selectValidColour: (userId: number) => Promise<string[] | null> = async (
   userId: number
 ) => {
   const colours = await db.any(
-    `SELECT color FROM cloth WHERE user_id = $1 AND category = 'bottom' INTERSECT SELECT color FROM cloth WHERE user_id = $1 AND category = 'top`,
+    `SELECT color FROM cloth WHERE user_id = $1 AND category = 'bottom' INTERSECT SELECT color FROM cloth WHERE user_id = $1 AND category = 'top'`,
     [userId]
   );
 
   if (colours.length === 0) {
-    return '';
+    return null;
   }
 
   const colorArr: string[] = colours.map((obj) => obj.color);
-  const randomColour = colorArr[
-    Math.floor(Math.random() * colorArr.length)
-  ] as string;
 
-  return randomColour;
+  const randomColour = colorArr[Math.floor(Math.random() * colorArr.length)];
+
+  return [randomColour] as string[];
 };
 
 export const getMatchingColourOutfit: (userId: number) => Promise<{
   randomTop: any[];
   randomBottom: any[];
 }> = async (userId: number) => {
-  const colour: string = await selectValidColour(userId);
+  const colour = await selectValidColour(userId);
+
+  const monoChromaticOutfit: { randomTop: any[]; randomBottom: any[] } =
+    await getSuggestedOutfit(userId, colour);
+  return monoChromaticOutfit;
+};
+
+const getSuggestedOutfit = async (userId: number, colour: string[] | null) => {
+  if (!colour || colour.length === 0) {
+    return { randomTop: [], randomBottom: [] };
+  }
 
   const randomTop: any[] = await db.any(
-    "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top' AND color = $2 ORDER BY RANDOM() LIMIT 1",
+    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top' AND color = ANY($2) ORDER BY RANDOM() LIMIT 1`,
     [userId, colour]
   );
 
   const randomBottom: any[] = await db.any(
-    "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom' AND color = $2 ORDER BY RANDOM() LIMIT 1",
+    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom' AND color = ANY($2) ORDER BY RANDOM() LIMIT 1`,
     [userId, colour]
   );
 
   return { randomTop, randomBottom };
+};
+
+export const getNeutralOutfit = async (userId: number) => {
+  const neutrals = ['black', 'white', 'gray', 'brown'];
+  const neutralOutfit: { randomTop: any[]; randomBottom: any[] } =
+    await getSuggestedOutfit(userId, neutrals);
+
+  return neutralOutfit;
 };

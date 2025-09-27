@@ -8,6 +8,8 @@ import {
   updateClothes,
   getAllOnepieces,
   filterClothes,
+  getMatchingColourOutfit,
+  getNeutralOutfit,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -106,6 +108,15 @@ const listClothesByUser = async (
   }
 };
 
+const randomizeMatchingColour = async (id: number) => {
+  const randomOutfit: { randomTop: any[]; randomBottom: any[] } =
+    await getMatchingColourOutfit(id);
+  if (!randomOutfit.randomTop || !randomOutfit.randomBottom) {
+    return null;
+  }
+  return randomOutfit;
+};
+
 export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
     const userIdParam = req.params.id;
@@ -115,19 +126,47 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
 
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
-    const onepieces = await getAllOnepieces(userId);
 
-    const randomTop =
-      tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
-    const randomBottom =
-      bottoms.length > 0
-        ? bottoms[Math.floor(Math.random() * bottoms.length)]
-        : null;
+    let randomTop;
+    let randomBottom;
+
+    if (req.query.colorHarmony) {
+      let colorHarmony = req.query.colorHarmony;
+
+      switch (colorHarmony) {
+        case 'matching':
+          const outfit = await randomizeMatchingColour(userId);
+          if (!outfit) {
+            return res
+              .status(400)
+              .json({ error: 'User does not have enough pieces' });
+          }
+          randomTop = outfit.randomTop[0];
+          randomBottom = outfit.randomBottom[0];
+          break;
+        case 'neutral':
+          const neutralOutfit = await getNeutralOutfit(userId);
+          if (!neutralOutfit) {
+            return res
+              .status(400)
+              .json({ error: 'User does not have enough neutral pieces' });
+          }
+          randomTop = neutralOutfit.randomTop[0];
+          randomBottom = neutralOutfit.randomBottom[0];
+          break;
+      }
+    } else {
+      randomTop =
+        tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
+      randomBottom =
+        bottoms.length > 0
+          ? bottoms[Math.floor(Math.random() * bottoms.length)]
+          : null;
+    }
 
     res.status(200).json({
       tops,
       bottoms,
-      onepieces,
       randomTop,
       randomBottom,
     });
