@@ -47,9 +47,17 @@ export default function FilterComponent({ onFiltersChange, isSpinning }: { onFil
     (filters.colorMode === 'harmony' && filters.colorHarmony !== null ? 1 : 0);
 
   const handleFiltersChange = (newFilters: FilterState) => {
+    const cleanedFilters = {
+      ...newFilters,
+      colorMode:
+        newFilters.colorMode === 'harmony' && newFilters.colorHarmony === null
+          ? null
+          : newFilters.colorMode,
+    };
+
     setFilters(newFilters);
-    onFiltersChange(newFilters);
-  };
+    onFiltersChange(cleanedFilters);
+};
 
   return (
     <>

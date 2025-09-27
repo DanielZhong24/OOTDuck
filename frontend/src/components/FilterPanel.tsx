@@ -39,7 +39,7 @@ export default function FilterPanel({ filters, setFilters, colors, seasons, onCl
     };
 
     const clearAll = () => {
-        setFilters({ colors: [], seasons: [], colorMode: null, colorHarmony: null });
+        setFilters({ colors: [], seasons: [], colorMode: "harmony", colorHarmony: null });
     };
 
     return (
