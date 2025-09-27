@@ -14,8 +14,8 @@ interface OutfitData {
   tops: ClothingItem[];
   bottoms: ClothingItem[];
   onepieces: ClothingItem[];
-  randomTop: ClothingItem;
-  randomBottom: ClothingItem;
+  randomTop: ClothingItem|null;
+  randomBottom: ClothingItem | null;
 }
 
 const itemHeight = 350;
@@ -99,15 +99,15 @@ export default function Home() {
   };
 
   const getTopReel = () => {
-    if (!outfitData) return [];
-    const cycles = [];
+  if (!outfitData || !outfitData.randomTop) return [];    
+  const cycles = [];
     for (let i = 0; i < 20; i++) cycles.push(...outfitData.tops);
     return [...cycles, outfitData.randomTop];
   };
 
   const getBottomReel = () => {
-    if (!outfitData) return [];
-    const cycles = [];
+  if (!outfitData || !outfitData.randomBottom) return [];    
+  const cycles = [];
     for (let i = 0; i < 20; i++) cycles.push(...outfitData.bottoms);
     return [...cycles, outfitData.randomBottom];
   };
@@ -141,8 +141,8 @@ export default function Home() {
     <div className="relative flex min-h-screen flex-col items-center justify-center p-4">
       <FilterComponent onFiltersChange={handleFiltersChange} isSpinning={isSpinning} />
 
-      <div className="fixed right-10 bottom-50 z-10 hidden sm:flex sm:h-0 md:absolute md:right-10 md:bottom-60">
-        <div
+      <div className="fixed right-10 hidden sm:flex" style={{ bottom: 180 }}>
+          <div
           className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-amber-500 shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95 md:h-13 md:w-13"
           onClick={() => fetchData(filters)}
         >
@@ -156,75 +156,83 @@ export default function Home() {
         Swipe up on the clothes to get a new outfit!
       </div>
 
-      {/* Top Reel */}
-      <div
-        className="flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div
-          className="slot-container relative w-full overflow-hidden"
-          style={{ height: itemHeight }}
-        >
-          <div
-            className="slot-reel absolute top-0 left-0 w-full"
-            style={{
-              transform: shouldAnimate
-                ? `translateY(-${finalTopIndex * itemHeight}px) translateZ(0)`
-                : "translateY(0px) translateZ(0)",
-            }}
-          >
-            {topReel.map((item, index) => (
-              <div
-                key={`${item.id}-${index}`}
-                style={{ height: itemHeight }}
-                className="w-full flex-shrink-0"
-              >
-                <img
-                  src={`${port}${item.img_path}`}
-                  alt="Top"
-                  className="slot-image h-full w-full object-contain"
-                />
-              </div>
-            ))}
-          </div>
+      {!outfitData?.randomTop || !outfitData?.randomBottom ? (
+        <div className="flex h-screen flex-col items-center justify-center p-4 text-center text-lg text-gray-700">
+          No outfit combo found. Try again!
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Top Reel */}
+          <div
+            className="flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className="slot-container relative w-full overflow-hidden"
+              style={{ height: itemHeight }}
+            >
+              <div
+                className="slot-reel absolute top-0 left-0 w-full"
+                style={{
+                  transform: shouldAnimate
+                    ? `translateY(-${finalTopIndex * itemHeight}px) translateZ(0)`
+                    : "translateY(0px) translateZ(0)",
+                }}
+              >
+                {topReel.map((item, index) => (
+                  <div
+                    key={`${item.id}-${index}`}
+                    style={{ height: itemHeight }}
+                    className="w-full flex-shrink-0"
+                  >
+                    <img
+                      src={`${port}${item.img_path}`}
+                      alt="Top"
+                      className="slot-image h-full w-full object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-      {/* Bottom Reel */}
-      <div
-        className={`flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg ${getBottomMargin()}`}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div
-          className="slot-container relative w-full overflow-hidden"
-          style={{ height: bottomItemHeight }}
-        >
+          {/* Bottom Reel */}
           <div
-            className="slot-reel absolute top-0 left-0 w-full"
-            style={{
-              transform: shouldAnimate
-                ? `translateY(-${finalBottomIndex * bottomItemHeight}px) translateZ(0)`
-                : "translateY(0px) translateZ(0)",
-            }}
+            className={`flex w-full max-w-sm flex-col items-center overflow-hidden p-2 md:max-w-md lg:max-w-lg ${getBottomMargin()}`}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {bottomReel.map((item, index) => (
+            <div
+              className="slot-container relative w-full overflow-hidden"
+              style={{ height: bottomItemHeight }}
+            >
               <div
-                key={`${item.id}-${index}`}
-                style={{ height: bottomItemHeight }}
-                className="w-full flex-shrink-0"
+                className="slot-reel absolute top-0 left-0 w-full"
+                style={{
+                  transform: shouldAnimate
+                    ? `translateY(-${finalBottomIndex * bottomItemHeight}px) translateZ(0)`
+                    : "translateY(0px) translateZ(0)",
+                }}
               >
-                <img
-                  src={`${port}${item.img_path}`}
-                  alt="Bottom"
-                  className="slot-image h-full w-full object-contain"
-                />
+                {bottomReel.map((item, index) => (
+                  <div
+                    key={`${item.id}-${index}`}
+                    style={{ height: bottomItemHeight }}
+                    className="w-full flex-shrink-0"
+                  >
+                    <img
+                      src={`${port}${item.img_path}`}
+                      alt="Bottom"
+                      className="slot-image h-full w-full object-contain"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

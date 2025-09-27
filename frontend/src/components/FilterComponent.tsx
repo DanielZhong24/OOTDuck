@@ -22,7 +22,6 @@ const colors = [
   { name: "Brown", value: "brown", bg: "bg-amber-800" },
   { name: "Gray", value: "gray", bg: "bg-gray-500" },
   { name: "Beige", value: "beige", bg: "bg-amber-100 border border-amber-200" },
-  { name: "Navy", value: "navy", bg: "bg-blue-900" }
 ];
 
 const seasons = [
