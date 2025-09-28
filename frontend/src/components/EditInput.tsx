@@ -18,20 +18,29 @@ function EditInput({
           e.preventDefault();
           onClick?.(name);
         }}
-        className="flex w-[30%] flex-col space-y-3 rounded-md border-1 bg-gray-100 p-8"
+        className="flex flex-col space-y-3 rounded-md border-1 bg-gray-100 p-5 sm:w-[45%] md:p-6 lg:w-[30%] lg:p-8"
       >
-        <label htmlFor="edit">Edit Name</label>
+        <label className="sm:text-md text-sm md:text-base" htmlFor="edit">
+          Edit Name
+        </label>
         <Input
           onChange={(e) => setName(e.currentTarget.value)}
           id="edit"
           name="edit"
+          className="text-xs sm:text-sm md:text-base"
           placeholder="Edit clothing name"
         />
-        <div className="mt-4 flex justify-end gap-4">
-          <Button onClick={onClose} variant="outline">
+        <div className="mt-4 flex justify-end gap-3 md:gap-4">
+          <Button
+            className="cursor-pointer text-xs sm:text-sm"
+            onClick={onClose}
+            variant="outline"
+          >
             Cancel
           </Button>
-          <Button type="submit">Save</Button>
+          <Button className="cursor-pointer text-xs sm:text-sm" type="submit">
+            Save
+          </Button>
         </div>
       </form>
     </>
