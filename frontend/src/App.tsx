@@ -2,21 +2,20 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Photo from "./pages/Photo";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <BrowserRouter>
-
-      <div className="min-h-screen min-w-screen justify-center bg-white overflow-hidden select-none">
-
+      <div className="min-h-screen min-w-screen justify-center overflow-hidden bg-white select-none">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/photo" element={<Photo />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/signup" element={<Signup />} />
         </Routes>
         <Navbar />
-
       </div>
     </BrowserRouter>
   );
