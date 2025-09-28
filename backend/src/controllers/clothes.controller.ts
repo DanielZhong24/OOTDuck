@@ -44,7 +44,7 @@ export const addClothes = async (req: Request, res: Response) => {
     const numberOfClothes = await getNumberOfClothes(userId);
     console.log(numberOfClothes);
     if(numberOfClothes.count > 30){
-      return res.status(403).json({error:"User forbidden to perform this action: Exceed closet limit"});
+      return res.status(403).json({error:`Exceed closet limit ${numberOfClothes.count}/30`});
     }
 
 
