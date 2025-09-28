@@ -15,8 +15,8 @@ from collections import OrderedDict
 from options import opt
 
 from transformers import CLIPProcessor, CLIPModel
-
-
+from skimage import color
+import math
 
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -94,7 +94,7 @@ def predict_clothing_type_fashionclip(cropped_img: Image.Image):
         probability = logits_per_image.softmax(dim=1)
         max_prob,predicted_idx = probability.max(dim=1)
     
-    if max_prob.item() < 0.7:
+    if max_prob.item() < 0.6:
         raise TypeError("Not a valid cloth",max_prob.item())
     return CLOTHING_CLASSES[predicted_idx]["name"]
 
@@ -261,37 +261,49 @@ def generate_mask(input_image, net, palette, device = 'cpu'):
 
 
 
+
+
+COLOR_MAP = {
+    "BLACK": (51, 51, 51),
+    "WHITE": (255, 255, 255),
+    "RED": (255, 0, 0),
+    "BLUE": (70, 80, 150),   
+    "GREEN": (0, 255, 0),
+    "YELLOW": (255, 255, 0),
+    "PINK": (255, 182, 193),
+    "PURPLE": (128, 0, 128),
+    "ORANGE": (255, 165, 0),
+    "BROWN": (139, 69, 19),
+    "GRAY": (128, 128, 128),
+    "BEIGE": (245, 245, 220)
+}
+
 def rgb_to_color_name(rgb):
     """
-    Map an (R,G,B) tuple to a simple color name using HSV hue ranges.
+    Map an RGB tuple to the closest allowed color in COLOR_MAP,
+    covering perceptual ranges to avoid over-classifying gray.
     """
-    r, g, b = [x/255.0 for x in rgb]
-    import colorsys
-    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+    R, G, B = rgb
+    lab = color.rgb2lab(np.array([[rgb]]) / 255.0)
+    L1, a1, b1 = lab[0,0]
+    
+    min_dist = float("inf")
+    best_match = None
+    wL, wAB = 0.3, 1.0  
 
-    if v < 0.2:
-        return "black"
-    elif v > 0.9 and s < 0.2:
-        return "white"
-    elif s < 0.25:
-        return "gray"
-    else:
-        h_deg = h * 360
-        if h_deg < 15 or h_deg >= 345:
-            return "red"
-        elif h_deg < 45:
-            return "orange"
-        elif h_deg < 70:
-            return "yellow"
-        elif h_deg < 160:
-            return "green"
-        elif h_deg < 260:
-            return "blue"
-        elif h_deg < 310:
-            return "purple"
-        else:
-            return "pink"
+    for name, c_rgb in COLOR_MAP.items():
+        c_lab = color.rgb2lab(np.array([[c_rgb]]) / 255.0)
+        L2, a2, b2 = c_lab[0,0]
+        dist = ((L1-L2)*wL)**2 + ((a1-a2)*wAB)**2 + ((b1-b2)*wAB)**2
+        if dist < min_dist:
+            min_dist = dist
+            best_match = name
 
+    if best_match in ["GRAY", "BLACK"]:
+        if B > max(R, G):
+            best_match = "BLUE"
+
+    return best_match
 
 
 

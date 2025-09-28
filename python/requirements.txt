@@ -8,3 +8,4 @@ uvicorn
 gdown
 python-multipart
 transformers
+scikit-image

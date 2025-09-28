@@ -160,6 +160,54 @@ export const getNeutralOutfit = async (userId: number) => {
   return neutralOutfit;
 };
 
+export const getComplementaryOutfit = async (userId: number) => {
+  const complementaryMap: Record<string, string> = {
+    red: 'green',
+    green: 'red',
+    blue: 'orange',
+    orange: 'blue',
+    yellow: 'purple',
+    purple: 'yellow',
+    pink: 'green',
+    brown: 'blue',
+    gray: 'red',
+    black: 'white',
+    white: 'black',
+    beige: 'blue',
+  };
+
+  const topResult = await db.any(
+    `SELECT id, color, type, img_path 
+     FROM cloth 
+     WHERE user_id = $1 AND category = 'top'
+     ORDER BY RANDOM() LIMIT 1`,
+    [userId]
+  );
+
+  if (!topResult.length) return { randomTop: [], randomBottom: [] };
+
+  const randomTop = topResult[0];
+  const compColor = complementaryMap[randomTop.color];
+  if (!compColor) return { randomTop: [], randomBottom: [] };
+
+  const bottomResult = await db.any(
+    `SELECT id, color, type, img_path
+     FROM cloth
+     WHERE user_id = $1 AND category = 'bottom' AND LOWER(color) = $2
+     ORDER BY RANDOM() LIMIT 1`,
+    [userId, compColor]
+  );
+
+  if (!bottomResult.length) return { randomTop: [], randomBottom: [] };
+
+  const randomBottom = bottomResult[0];
+
+  return {
+    randomTop: [randomTop],
+    randomBottom: [randomBottom],
+  };
+};
+
 export const colourAndSeasonOutfit = async (
   userId: number,
   colours: string[],

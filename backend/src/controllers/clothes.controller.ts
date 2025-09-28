@@ -11,6 +11,7 @@ import {
   getMatchingColourOutfit,
   getNeutralOutfit,
   colourAndSeasonOutfit,
+  getComplementaryOutfit,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -152,8 +153,16 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
               .status(400)
               .json({ error: 'User does not have enough neutral pieces' });
           }
-          randomTop = neutralOutfit.randomTop[0];
-          randomBottom = neutralOutfit.randomBottom[0];
+        case 'complementary':
+          console.log('complementary');
+          const complementaryOutfit = await getComplementaryOutfit(userId);
+          if (!complementaryOutfit) {
+            return res
+              .status(400)
+              .json({ error: 'User does not have enough pieces' });
+          }
+          randomTop = complementaryOutfit.randomTop[0];
+          randomBottom = complementaryOutfit.randomBottom[0];
           break;
         default:
           return res.status(400).json({ error: 'Invalid color harmony' });
