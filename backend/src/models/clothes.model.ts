@@ -217,3 +217,7 @@ export const colourAndSeasonOutfit = async (
     await getSuggestedOutfit(userId, colours, seasons);
   return outfit;
 };
+
+export const getNumberOfClothes = async(userId:number)=>{
+  return db.one(`SELECT COUNT(*) FROM cloth WHERE user_id = $1;`,[userId]);
+};
