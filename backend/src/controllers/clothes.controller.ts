@@ -12,6 +12,7 @@ import {
   getNeutralOutfit,
   colourAndSeasonOutfit,
   getComplementaryOutfit,
+  getNumberOfClothes
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -38,6 +39,15 @@ export const addClothes = async (req: Request, res: Response) => {
     }
 
     const userIdNum = Number(userId);
+
+
+    const numberOfClothes = await getNumberOfClothes(userId);
+    console.log(numberOfClothes);
+    if(numberOfClothes.count > 30){
+      return res.status(403).json({error:"User forbidden to perform this action: Exceed closet limit"});
+    }
+
+
 
     // --- Call AI server ---
     const formData = new FormData();
