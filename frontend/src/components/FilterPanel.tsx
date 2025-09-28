@@ -42,7 +42,7 @@ export default function FilterPanel({
       colorMode: mode,
       colors: mode === "harmony" ? [] : filters.colors,
       seasons: mode === "harmony" ? [] : filters.seasons,
-      colorHarmony: mode === "harmony" ? null : filters.colorHarmony,
+      colorHarmony: mode === "harmony" ? filters.colorHarmony : null,
     });
   };
 

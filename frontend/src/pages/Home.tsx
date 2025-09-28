@@ -14,7 +14,7 @@ interface OutfitData {
   tops: ClothingItem[];
   bottoms: ClothingItem[];
   onepieces: ClothingItem[];
-  randomTop: ClothingItem|null;
+  randomTop: ClothingItem | null;
   randomBottom: ClothingItem | null;
 }
 
@@ -97,15 +97,15 @@ export default function Home() {
   };
 
   const getTopReel = () => {
-  if (!outfitData || !outfitData.randomTop) return [];    
-  const cycles = [];
+    if (!outfitData || !outfitData.randomTop) return [];
+    const cycles = [];
     for (let i = 0; i < 20; i++) cycles.push(...outfitData.tops);
     return [...cycles, outfitData.randomTop];
   };
 
   const getBottomReel = () => {
-  if (!outfitData || !outfitData.randomBottom) return [];    
-  const cycles = [];
+    if (!outfitData || !outfitData.randomBottom) return [];
+    const cycles = [];
     for (let i = 0; i < 20; i++) cycles.push(...outfitData.bottoms);
     return [...cycles, outfitData.randomBottom];
   };
@@ -140,7 +140,7 @@ export default function Home() {
       <FilterComponent onFiltersChange={handleFiltersChange} isSpinning={isSpinning} />
 
       <div className="fixed right-10 hidden sm:flex" style={{ bottom: 180 }}>
-          <div
+        <div
           className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-amber-500 shadow-lg transition-transform duration-200 hover:scale-110 active:scale-95 md:h-13 md:w-13"
           onClick={() => fetchData(filters)}
         >

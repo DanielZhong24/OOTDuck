@@ -146,13 +146,6 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           randomTop = outfit.randomTop[0];
           randomBottom = outfit.randomBottom[0];
           break;
-        case 'neutral':
-          const neutralOutfit = await getNeutralOutfit(userId);
-          if (!neutralOutfit) {
-            return res
-              .status(400)
-              .json({ error: 'User does not have enough neutral pieces' });
-          }
         case 'complementary':
           console.log('complementary');
           const complementaryOutfit = await getComplementaryOutfit(userId);
@@ -163,6 +156,17 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           }
           randomTop = complementaryOutfit.randomTop[0];
           randomBottom = complementaryOutfit.randomBottom[0];
+          break;
+        case 'neutral':
+          const neutralOutfit = await getNeutralOutfit(userId);
+          if (!neutralOutfit) {
+            return res
+              .status(400)
+              .json({ error: 'User does not have enough neutral pieces' });
+          }
+
+          randomTop = neutralOutfit.randomTop[0];
+          randomBottom = neutralOutfit.randomBottom[0];
           break;
         default:
           return res.status(400).json({ error: 'Invalid color harmony' });
