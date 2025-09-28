@@ -40,38 +40,62 @@ export default function Home() {
     setFilters(newFilters);
   };
 
-  async function fetchData(appliedFilters: FilterState = filters) {
-    if (isSpinning) return;
+async function fetchData(appliedFilters: FilterState = filters) {
+  if (isSpinning) return;
 
-    setIsSpinning(true);
-    setShouldAnimate(false);
-    setError(null);
+  setIsSpinning(true);
+  setShouldAnimate(false);
+  setError(null);
 
-    try {
-      const params = {
-        colors: appliedFilters.colors.join(","),
-        seasons: appliedFilters.seasons.join(","),
-        colorMode: appliedFilters.colorMode,
-        colorHarmony: appliedFilters.colorHarmony,
-      };
+  try {
+    const params: any = {};
 
-      const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, {
-        params,
-      });
-
-      setOutfitData(response.data);
-
-      requestAnimationFrame(() => setShouldAnimate(true));
-
-      setTimeout(() => setIsSpinning(false), 1000);
-    } catch (err) {
-      console.error("Failed to fetch outfit data:", err);
-      setError(
-        "Failed to load outfit. Please check your network connection and try again.",
-      );
-      setIsSpinning(false);
+    if (appliedFilters.colors.length > 0) {
+      params.colors = appliedFilters.colors.join(",");
     }
+
+    if (appliedFilters.seasons.length > 0) {
+      params.seasons = appliedFilters.seasons.join(",");
+    }
+
+    if (appliedFilters.colorMode === "specific" && appliedFilters.colors.length > 0) {
+      params.colorMode = "specific";
+    } else if (appliedFilters.colorMode === "harmony" && appliedFilters.colorHarmony) {
+      params.colorMode = "harmony";
+      params.colorHarmony = appliedFilters.colorHarmony;
+    }
+
+    const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, { params });
+
+    const { randomTop, randomBottom } = response.data;
+    setOutfitData({
+      ...response.data,
+      randomTop: randomTop || null,
+      randomBottom: randomBottom || null,
+    });
+
+    requestAnimationFrame(() => setShouldAnimate(true));
+  } catch (err: any) {
+    if (axios.isAxiosError(err) && err.response) {
+      if (err.response.status >= 500) {
+        setError("Server error. Please try again later.");
+      }
+      setOutfitData({
+        tops: [],
+        bottoms: [],
+        onepieces: [],
+        randomTop: null,
+        randomBottom: null,
+      });
+    } else {
+      setError("Network error. Please try again.");
+    }
+  } finally {
+    setIsSpinning(false);
   }
+}
+
+
 
   useEffect(() => {
     fetchData();
@@ -156,7 +180,7 @@ export default function Home() {
 
       {!outfitData?.randomTop || !outfitData?.randomBottom ? (
         <div className="flex h-screen flex-col items-center justify-center p-4 text-center text-lg text-gray-700">
-          No outfit combo found. Try again!
+          No outfit combo found. Try again or change the filter!
         </div>
       ) : (
         <>
