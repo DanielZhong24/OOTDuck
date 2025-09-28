@@ -60,9 +60,9 @@ export const filterClothes = (
   colour: string[],
   season: string[]
 ) => {
-  let query = `SELECT * FROM cloth WHERE user_id = $1`;
+  let query: string = `SELECT * FROM cloth WHERE user_id = $1`;
   const params: any[] = [userId];
-  let paramIndex = 2;
+  let paramIndex: number = 2;
   if (type.length > 0) {
     query += ` AND (type = ANY($${paramIndex}))`;
     params.push(type);
@@ -114,20 +114,40 @@ export const getMatchingColourOutfit: (userId: number) => Promise<{
   return monoChromaticOutfit;
 };
 
-const getSuggestedOutfit = async (userId: number, colour: string[] | null) => {
-  if (!colour || colour.length === 0) {
-    return { randomTop: [], randomBottom: [] };
+const getSuggestedOutfit = async (
+  userId: number,
+  colour?: string[] | null,
+  season?: string | null
+) => {
+  let topQuery: string = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top'`;
+  let bottomQuery: string = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom'`;
+  const params: any[] = [userId];
+  let paramIndex: number = 2;
+
+  if (colour && colour.length > 0) {
+    topQuery += ` AND color = ANY($${paramIndex})`;
+    bottomQuery += ` AND color = ANY($${paramIndex})`;
+    params.push(colour);
+    paramIndex++;
   }
 
-  const randomTop: any[] = await db.any(
-    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top' AND color = ANY($2) ORDER BY RANDOM() LIMIT 1`,
-    [userId, colour]
-  );
+  if (season) {
+    topQuery += ` AND season = $${paramIndex}`;
+    bottomQuery += ` AND season = $${paramIndex}`;
+    params.push(season);
+    paramIndex++;
+  }
 
-  const randomBottom: any[] = await db.any(
-    `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom' AND color = ANY($2) ORDER BY RANDOM() LIMIT 1`,
-    [userId, colour]
-  );
+  topQuery += ` ORDER BY RANDOM() LIMIT 1`;
+  bottomQuery += ` ORDER BY RANDOM() LIMIT 1`;
+
+  const randomTop: any[] = await db.any(topQuery, params);
+
+  const randomBottom: any[] = await db.any(bottomQuery, params);
+
+  if (!randomTop.length || !randomBottom.length) {
+    return { randomTop: [], randomBottom: [] };
+  }
 
   return { randomTop, randomBottom };
 };
@@ -138,4 +158,14 @@ export const getNeutralOutfit = async (userId: number) => {
     await getSuggestedOutfit(userId, neutrals);
 
   return neutralOutfit;
+};
+
+export const colourAndSeasonOutfit = async (
+  userId: number,
+  colours: string[],
+  seasons: string | null
+) => {
+  const outfit: { randomTop: any[]; randomBottom: any[] } =
+    await getSuggestedOutfit(userId, colours, seasons);
+  return outfit;
 };

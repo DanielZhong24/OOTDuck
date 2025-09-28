@@ -55,8 +55,6 @@ export default function Home() {
         colorHarmony: appliedFilters.colorHarmony,
       };
 
-      console.log(params);
-
       const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, {
         params,
       });

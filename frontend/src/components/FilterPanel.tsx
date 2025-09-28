@@ -32,6 +32,7 @@ export default function FilterPanel({
       ...filters,
       seasons: filters.seasons.includes(value) ? [] : [value],
       colorHarmony: null,
+      colorMode: "specific",
     });
   };
 

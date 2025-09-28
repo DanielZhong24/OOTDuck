@@ -10,6 +10,7 @@ import {
   filterClothes,
   getMatchingColourOutfit,
   getNeutralOutfit,
+  colourAndSeasonOutfit,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -127,8 +128,8 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
 
-    let randomTop;
-    let randomBottom;
+    let randomTop: any;
+    let randomBottom: any;
 
     if (req.query.colorHarmony) {
       let colorHarmony = req.query.colorHarmony;
@@ -154,7 +155,24 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           randomTop = neutralOutfit.randomTop[0];
           randomBottom = neutralOutfit.randomBottom[0];
           break;
+        default:
+          return res.status(400).json({ error: 'Invalid color harmony' });
       }
+    } else if (req.query.colorMode === 'specific') {
+      const seasons = req.query.seasons as string;
+      const colorQuery = req.query.colors as string;
+      const colors: string[] = colorQuery ? colorQuery.split(',') : [];
+
+      const outfit: { randomTop: any[]; randomBottom: any[] } =
+        await colourAndSeasonOutfit(userId, colors, seasons);
+      if (!outfit.randomTop.length || !outfit.randomBottom.length) {
+        return res
+          .status(400)
+          .json({ error: 'User does not have enough pieces' });
+      }
+
+      randomTop = outfit.randomTop[0];
+      randomBottom = outfit.randomBottom[0];
     } else {
       randomTop =
         tops.length > 0 ? tops[Math.floor(Math.random() * tops.length)] : null;
