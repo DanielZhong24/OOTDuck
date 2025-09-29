@@ -39,13 +39,17 @@ export default function Home() {
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters);
+    fetchData(newFilters, false);
   };
 
-  async function fetchData(appliedFilters: FilterState = filters) {
+  async function fetchData(
+    appliedFilters: FilterState = filters,
+    animate: boolean = true,
+  ) {
     if (isSpinning) return;
 
     setIsSpinning(true);
-    setShouldAnimate(false);
+    setShouldAnimate(animate ? false : shouldAnimate);
     setError(null);
 
     try {
@@ -78,7 +82,9 @@ export default function Home() {
         randomBottom: randomBottom || null,
       });
 
-      requestAnimationFrame(() => setShouldAnimate(true));
+      if (animate) {
+        requestAnimationFrame(() => setShouldAnimate(true));
+      }
     } catch (err: any) {
       if (axios.isAxiosError(err) && err.response) {
         if (err.response.status >= 500) {
