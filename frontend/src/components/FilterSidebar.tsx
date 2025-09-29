@@ -162,6 +162,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
   const seasons: string[] = ["SPRING/SUMMER", "FALL/WINTER", "ALL SEASONS"];
 
   return (
+
     <aside
       className={`fixed top-0 right-0 z-50 flex h-screen w-full flex-col justify-between bg-white p-4 transition-transform duration-300 sm:w-[45%] lg:w-[30%] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
@@ -197,7 +198,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
       <div className="mb-4 flex w-full items-center justify-evenly gap-4">
         <Button
           onClick={submitFilters}
-          className="w-[45%] cursor-pointer rounded-lg text-sm md:p-5 md:text-base"
+          className=" bg-amber-500 w-[45%] cursor-pointer rounded-lg text-sm md:p-5 md:text-base hover:bg-amber-700"
         >
           Confirm
         </Button>
@@ -246,7 +247,7 @@ function CheckBox({ value, type, handleCheckboxChange, checked }: CheckboxProps)
   return (
     <>
       <Input
-        className="size-5 accent-black"
+        className="size-5 accent-amber-600"
         type="checkbox"
         value={value}
         checked={checked}

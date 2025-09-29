@@ -88,7 +88,7 @@ export default function FilterPanel({
 
         {activeTab === "colors" && (
           <div className="flex flex-col space-y-4">
-            <div className="flex space-x-1 rounded-full p-1">
+            <div className="flex space-x-1 rounded-full p-1 bg-gray-100">
               <button
                 onClick={() => setColorMode("harmony")}
                 className={`flex-1 rounded-full py-1 text-xs font-medium transition-all ${filters.colorMode === "harmony" ? "bg-gray-200 text-gray-800" : "text-gray-500 hover:bg-gray-100"}`}

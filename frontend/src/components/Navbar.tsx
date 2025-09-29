@@ -137,11 +137,11 @@ function Navbar() {
             </Link>
           </div>
           <div className="group flex-1">
-            <Link to="/login" className="flex items-end justify-center text-center">
+            <Link to="/setting" className="flex items-end justify-center text-center">
               <span className="block px-1 border-b-2 border-transparent hover:border-amber-500">
                 <UserRound strokeWidth="1"
-                  color={location.pathname === "/login" ? "oklch(76.9% 0.188 70.08)" : "black"}
-                  fill={location.pathname === "/login" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32}
+                  color={location.pathname === "/setting" ? "oklch(76.9% 0.188 70.08)" : "black"}
+                  fill={location.pathname === "/setting" ? "oklch(76.9% 0.188 70.08)" : "none"} size={32}
                   className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 " />
               </span>
             </Link>
