@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import RefreshIcon from "~icons/mdi-light/refresh";
@@ -40,62 +41,63 @@ export default function Home() {
     setFilters(newFilters);
   };
 
-async function fetchData(appliedFilters: FilterState = filters) {
-  if (isSpinning) return;
+  async function fetchData(appliedFilters: FilterState = filters) {
+    if (isSpinning) return;
 
-  setIsSpinning(true);
-  setShouldAnimate(false);
-  setError(null);
+    setIsSpinning(true);
+    setShouldAnimate(false);
+    setError(null);
 
-  try {
-    const params: any = {};
+    try {
+      const params: any = {};
 
-    if (appliedFilters.colors.length > 0) {
-      params.colors = appliedFilters.colors.join(",");
-    }
-
-    if (appliedFilters.seasons.length > 0) {
-      params.seasons = appliedFilters.seasons.join(",");
-    }
-
-    if (appliedFilters.colorMode === "specific" && appliedFilters.colors.length > 0) {
-      params.colorMode = "specific";
-    } else if (appliedFilters.colorMode === "harmony" && appliedFilters.colorHarmony) {
-      params.colorMode = "harmony";
-      params.colorHarmony = appliedFilters.colorHarmony;
-    }
-
-    const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, { params });
-
-    const { randomTop, randomBottom } = response.data;
-    setOutfitData({
-      ...response.data,
-      randomTop: randomTop || null,
-      randomBottom: randomBottom || null,
-    });
-
-    requestAnimationFrame(() => setShouldAnimate(true));
-  } catch (err: any) {
-    if (axios.isAxiosError(err) && err.response) {
-      if (err.response.status >= 500) {
-        setError("Server error. Please try again later.");
+      if (appliedFilters.colors.length > 0) {
+        params.colors = appliedFilters.colors.join(",");
       }
+
+      if (appliedFilters.seasons.length > 0) {
+        params.seasons = appliedFilters.seasons.join(",");
+      }
+
+      if (appliedFilters.colorMode === "specific" && appliedFilters.colors.length > 0) {
+        params.colorMode = "specific";
+      } else if (appliedFilters.colorMode === "harmony" && appliedFilters.colorHarmony) {
+        params.colorMode = "harmony";
+        params.colorHarmony = appliedFilters.colorHarmony;
+      }
+
+      const response = await axios.get<OutfitData>(
+        `${port}api/clothes/random/6bf87d16-ffca-4f6e-bff3-b2a654616acd`,
+        { params },
+      );
+
+      const { randomTop, randomBottom } = response.data;
       setOutfitData({
-        tops: [],
-        bottoms: [],
-        onepieces: [],
-        randomTop: null,
-        randomBottom: null,
+        ...response.data,
+        randomTop: randomTop || null,
+        randomBottom: randomBottom || null,
       });
-    } else {
-      setError("Network error. Please try again.");
+
+      requestAnimationFrame(() => setShouldAnimate(true));
+    } catch (err: any) {
+      if (axios.isAxiosError(err) && err.response) {
+        if (err.response.status >= 500) {
+          setError("Server error. Please try again later.");
+        }
+        setOutfitData({
+          tops: [],
+          bottoms: [],
+          onepieces: [],
+          randomTop: null,
+          randomBottom: null,
+        });
+      } else {
+        setError("Network error. Please try again.");
+      }
+    } finally {
+      setIsSpinning(false);
     }
-  } finally {
-    setIsSpinning(false);
   }
-}
-
-
 
   useEffect(() => {
     fetchData();

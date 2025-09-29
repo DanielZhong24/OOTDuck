@@ -12,10 +12,12 @@ function Photo() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
 
   useEffect(() => {
-    axios.get(`${port}api/clothes/user/5`).then((response: AxiosResponse) => {
-      setClothes(response.data);
-      setIsLoading(false);
-    });
+    axios
+      .get(`${port}api/clothes/user/6bf87d16-ffca-4f6e-bff3-b2a654616acd`)
+      .then((response: AxiosResponse) => {
+        setClothes(response.data);
+        setIsLoading(false);
+      });
   }, [port]);
 
   const handleDelete = async (id: number) => {
