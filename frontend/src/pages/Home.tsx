@@ -38,13 +38,14 @@ export default function Home() {
 
   const handleFiltersChange = (newFilters: FilterState) => {
     setFilters(newFilters);
+    fetchData(newFilters, false);
   };
 
-async function fetchData(appliedFilters: FilterState = filters) {
+async function fetchData(appliedFilters: FilterState = filters, animate: boolean = true) {
   if (isSpinning) return;
 
   setIsSpinning(true);
-  setShouldAnimate(false);
+  setShouldAnimate(animate ? false : shouldAnimate); 
   setError(null);
 
   try {
@@ -65,7 +66,7 @@ async function fetchData(appliedFilters: FilterState = filters) {
       params.colorHarmony = appliedFilters.colorHarmony;
     }
 
-    const response = await axios.get<OutfitData>(`${port}api/clothes/random/5`, { params });
+    const response = await axios.get<OutfitData>(`${port}api/clothes/random/6bf87d16-ffca-4f6e-bff3-b2a654616acd`, { params });
 
     const { randomTop, randomBottom } = response.data;
     setOutfitData({
@@ -74,7 +75,9 @@ async function fetchData(appliedFilters: FilterState = filters) {
       randomBottom: randomBottom || null,
     });
 
-    requestAnimationFrame(() => setShouldAnimate(true));
+    if (animate) {
+      requestAnimationFrame(() => setShouldAnimate(true));
+    }
   } catch (err: any) {
     if (axios.isAxiosError(err) && err.response) {
       if (err.response.status >= 500) {
@@ -94,6 +97,7 @@ async function fetchData(appliedFilters: FilterState = filters) {
     setIsSpinning(false);
   }
 }
+
 
 
 
