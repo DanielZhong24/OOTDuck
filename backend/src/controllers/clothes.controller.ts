@@ -38,7 +38,7 @@ export const addClothes = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Missing user id' });
     }
 
-    const userIdNum = Number(userId);
+    const userIdNum :string = userId;
 
 
     const numberOfClothes = await getNumberOfClothes(userId);
@@ -120,7 +120,7 @@ const listClothesByUser = async (
   }
 };
 
-const randomizeMatchingColour = async (id: number) => {
+const randomizeMatchingColour = async (id: string) => {
   const randomOutfit: { randomTop: any[]; randomBottom: any[] } =
     await getMatchingColourOutfit(id);
   if (!randomOutfit.randomTop || !randomOutfit.randomBottom) {
@@ -132,10 +132,11 @@ const randomizeMatchingColour = async (id: number) => {
 export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
     const userIdParam = req.params.id;
-    const userId = userIdParam ? parseInt(userIdParam, 10) : NaN;
-    if (isNaN(userId))
-      return res.status(400).json({ error: 'Invalid user ID' });
+    if (!userIdParam) {
+    return res.status(400).json({ error: "Missing user ID" });
+    }
 
+    const userId: string = userIdParam; 
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
 
@@ -285,7 +286,7 @@ const filterClothesByUser = async (
     );
 
     const filteredClothes: any[] = await filterClothes(
-      Number(userId),
+      userId,
       typeQuery,
       colourQuery,
       seasonQuery

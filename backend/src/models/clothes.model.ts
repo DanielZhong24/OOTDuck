@@ -4,27 +4,27 @@ export const getAllClothes = (): Promise<any[]> => {
   return db.any('SELECT * FROM cloth');
 };
 
-export const getAllTops = (userId: number) => {
+export const getAllTops = (userId: string) => {
   return db.any(
     "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top'",
     [userId]
   );
 };
 
-export const getClohtesBydUserId = (userId: number) => {};
+export const getClohtesBydUserId = (userId: string) => {};
 
 export const getClothesById = (id: number) => {
   return db.one('SELECT * FROM cloth where id = $1', [id]);
 };
 
-export const getAllBottoms = (userId: number) => {
+export const getAllBottoms = (userId: string) => {
   return db.any(
     "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom'",
     [userId]
   );
 };
 
-export const getAllOnepieces = (userId: number) => {
+export const getAllOnepieces = (userId: string) => {
   return db.any(
     "SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'onepiece'",
     [userId]
@@ -35,7 +35,7 @@ export const createClothes = (
   type: string,
   color: string,
   season: string,
-  userId: number,
+  userId: string,
   imagePath: string,
   category: string,
   name: string
@@ -55,7 +55,7 @@ export const updateClothes = (id: number, name: string): Promise<null> => {
 };
 
 export const filterClothes = (
-  userId: number,
+  userId: string,
   type: string[],
   colour: string[],
   season: string[]
@@ -84,8 +84,8 @@ export const filterClothes = (
   return db.any(query, params);
 };
 
-const selectValidColour: (userId: number) => Promise<string[] | null> = async (
-  userId: number
+const selectValidColour: (userId: string) => Promise<string[] | null> = async (
+  userId: string
 ) => {
   const colours = await db.any(
     `SELECT color FROM cloth WHERE user_id = $1 AND category = 'bottom' INTERSECT SELECT color FROM cloth WHERE user_id = $1 AND category = 'top'`,
@@ -103,10 +103,10 @@ const selectValidColour: (userId: number) => Promise<string[] | null> = async (
   return [randomColour] as string[];
 };
 
-export const getMatchingColourOutfit: (userId: number) => Promise<{
+export const getMatchingColourOutfit: (userId: string) => Promise<{
   randomTop: any[];
   randomBottom: any[];
-}> = async (userId: number) => {
+}> = async (userId: string) => {
   const colour = await selectValidColour(userId);
 
   const monoChromaticOutfit: { randomTop: any[]; randomBottom: any[] } =
@@ -115,7 +115,7 @@ export const getMatchingColourOutfit: (userId: number) => Promise<{
 };
 
 const getSuggestedOutfit = async (
-  userId: number,
+  userId: string,
   colour?: string[] | null,
   season?: string | null
 ) => {
@@ -152,7 +152,7 @@ const getSuggestedOutfit = async (
   return { randomTop, randomBottom };
 };
 
-export const getNeutralOutfit = async (userId: number) => {
+export const getNeutralOutfit = async (userId: string) => {
   const neutrals = ['black', 'white', 'gray', 'brown'];
   const neutralOutfit: { randomTop: any[]; randomBottom: any[] } =
     await getSuggestedOutfit(userId, neutrals);
@@ -160,7 +160,7 @@ export const getNeutralOutfit = async (userId: number) => {
   return neutralOutfit;
 };
 
-export const getComplementaryOutfit = async (userId: number) => {
+export const getComplementaryOutfit = async (userId: string) => {
   const complementaryMap: Record<string, string> = {
     red: 'green',
     green: 'red',
@@ -209,7 +209,7 @@ export const getComplementaryOutfit = async (userId: number) => {
 };
 
 export const colourAndSeasonOutfit = async (
-  userId: number,
+  userId: string,
   colours: string[],
   seasons: string | null
 ) => {

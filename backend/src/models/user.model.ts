@@ -6,6 +6,6 @@ export const getAllUsers = (): Promise<any[]> => {
 };
 
 // Get a single user by ID
-export const getUserById = (id: number): Promise<any> => {
+export const getUserById = (id: string): Promise<any> => {
   return db.one("SELECT * FROM users WHERE id = $1", [id]);
 };
