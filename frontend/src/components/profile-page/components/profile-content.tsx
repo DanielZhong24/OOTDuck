@@ -1,4 +1,5 @@
-import {Key, LogOut  } from "lucide-react";
+import { Key, LogOut } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ProfileContent() {
+  const [showChangePassword, setShowChangePassword] = useState(false);
+
   return (
     <Tabs defaultValue="personal" className="space-y-6">
       <TabsList className="grid w-full grid-cols-2">
@@ -34,10 +37,10 @@ export default function ProfileContent() {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue="john.doe@example.com" />
-              </div>
-          <Button variant="default">Save Changes</Button>
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" defaultValue="john.doe@example.com" />
+            </div>
+            <Button variant="default">Save Changes</Button>
           </CardContent>
         </Card>
       </TabsContent>
@@ -55,13 +58,33 @@ export default function ProfileContent() {
                 <div className="space-y-1">
                   <Label className="text-base">Change Password</Label>
                 </div>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => setShowChangePassword(!showChangePassword)}>
                   <Key className="mr-2 h-4 w-4" />
-                  Change
+                  {showChangePassword ? "Cancel" : "Change"}
                 </Button>
               </div>
+
+              {/* Inline Change Password Form */}
+              {showChangePassword && (
+                <div className="space-y-4 border rounded-lg p-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <Input id="currentPassword" type="password" placeholder="Enter current password" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <Input id="newPassword" type="password" placeholder="Enter new password" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input id="confirmPassword" type="password" placeholder="Re-enter new password" />
+                  </div>
+                  <Button className="w-full">Save Password</Button>
+                </div>
+              )}
             </div>
           </CardContent>
+
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="space-y-1">
