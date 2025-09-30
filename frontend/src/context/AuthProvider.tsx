@@ -6,23 +6,32 @@ import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<AuthContextType["session"]>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate: NavigateFunction = useNavigate();
-
-  console.log("Current session:", session);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setLoading(false);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      if (_event === "SIGNED_OUT") {
+        setSession(null);
+        setLoading(false);
+      } else if (_event === "SIGNED_IN") {
+        setSession(session);
+        setLoading(false);
+      } else if (session) {
+        setSession(session);
+        setLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleSignup: (email: string, password: string) => Promise<any> = async (
     email: string,
@@ -54,7 +63,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.error("Error logging in:", error.message);
-      return { pass: false, error: error.name };
+      return { pass: false, error: error.message };
     }
 
     return { pass: true, data };
@@ -70,13 +79,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     return { pass: true };
   };
 
-  if (!session) {
-    navigate("/login");
-  }
-
   return (
     <AuthContext.Provider
-      value={{ session, setSession, handleSignup, handleLogout, handleLogin }}
+      value={{ session, setSession, handleSignup, handleLogout, handleLogin, loading }}
     >
       {children}
     </AuthContext.Provider>

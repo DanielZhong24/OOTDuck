@@ -8,6 +8,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Transition } from "framer-motion";
 import AuthProvider from "./context/AuthProvider";
+import Protected from "./components/Protected";
+import Error from "./pages/Error";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -39,29 +41,49 @@ function AnimatedRoutes() {
         <Route
           path="/"
           element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Home />
-            </motion.div>
+            <Protected>
+              <motion.div
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+              >
+                <Home />
+              </motion.div>
+            </Protected>
           }
         />
         <Route
           path="/photo"
           element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Photo />
-            </motion.div>
+            <Protected>
+              <motion.div
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+              >
+                <Photo />
+              </motion.div>
+            </Protected>
+          }
+        />
+        <Route
+          path="/setting"
+          element={
+            <Protected>
+              <motion.div
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+              >
+                <Setting />
+              </motion.div>
+            </Protected>
           }
         />
         <Route
@@ -79,7 +101,7 @@ function AnimatedRoutes() {
           }
         />
         <Route
-          path="/setting"
+          path="/signup"
           element={
             <motion.div
               variants={pageVariants}
@@ -88,7 +110,21 @@ function AnimatedRoutes() {
               exit="exit"
               transition={pageTransition}
             >
-              <Setting />
+              <Signup />
+            </motion.div>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Error />
             </motion.div>
           }
         />
@@ -103,9 +139,9 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen min-w-screen justify-center overflow-hidden bg-white select-none">
           <AnimatedRoutes />
-          <Navbar />
-
-          {/* <Signup/> */}
+          <Protected>
+            <Navbar />
+          </Protected>
         </div>
       </AuthProvider>
     </BrowserRouter>

@@ -8,6 +8,7 @@ export type AuthContextType = {
   handleLogin: (email: string, password: string) => Promise<any>;
   handleLogout: () => Promise<any>;
   handleSignup: (email: string, password: string) => Promise<any>;
+  loading?: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -16,6 +17,7 @@ export const AuthContext = createContext<AuthContextType>({
   handleLogin: async () => {},
   handleLogout: async () => {},
   handleSignup: async () => {},
+  loading: true,
 });
 
 export const useAuth = () => {
