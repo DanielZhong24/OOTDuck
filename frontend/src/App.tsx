@@ -6,7 +6,9 @@ import Signup from "./pages/Signup";
 import Setting from "./pages/Settings";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import type {Transition} from "framer-motion";
+import type { Transition } from "framer-motion";
+import AuthProvider from "./context/AuthProvider";
+
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -98,12 +100,14 @@ function AnimatedRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen min-w-screen justify-center overflow-hidden bg-white select-none">
-        <AnimatedRoutes />
-        <Navbar />
+      <AuthProvider>
+        <div className="min-h-screen min-w-screen justify-center overflow-hidden bg-white select-none">
+          <AnimatedRoutes />
+          <Navbar />
 
-        {/* <Signup/> */}
-      </div>
+          {/* <Signup/> */}
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

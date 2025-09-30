@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserForm } from "@/components/user-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useState, type ChangeEvent } from "react";
-import { useNavigate, type NavigateFunction } from "react-router-dom";
-import FormError from "@/components/formError";
+import FormError from "../components/FormError";
 
 type SignupInputsProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -27,12 +25,12 @@ function Signup() {
       setErrorMsg("Passwords do not match");
       return;
     }
-    try {
-      const signup = await handleSignup(email, password);
-      if (signup.pass) setErrorMsg("");
-    } catch (error: any) {
-      setErrorMsg(error.message);
-      console.error("Error during signup:", error);
+
+    const signup = await handleSignup(email, password);
+    if (signup.pass) {
+      setErrorMsg("");
+    } else {
+      setErrorMsg(signup.error);
     }
   };
   return (
