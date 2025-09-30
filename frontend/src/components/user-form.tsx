@@ -11,7 +11,7 @@ export function UserForm({
   ...props
 }: React.ComponentProps<"div"> & {
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-} & { children: React.ReactNode }) {
+} & { children: React.ReactNode } & { errorMsg?: string }) {
   const location: Location = useLocation();
   const url: string = location.pathname;
   return (

@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useContext } from "react";
+import { type Session } from "@supabase/supabase-js";
 
 export type AuthContextType = {
-  session: string | null;
-  setSession: React.Dispatch<React.SetStateAction<string | null>>;
-  handleLogin: (username: string, password: string) => Promise<void>;
-  handleLogout: () => Promise<void>;
+  session: Session | null;
+  setSession: React.Dispatch<React.SetStateAction<Session | null>>;
+  handleLogin: (email: string, password: string) => Promise<any>;
+  handleLogout: () => Promise<any>;
+  handleSignup: (email: string, password: string) => Promise<any>;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -12,6 +15,7 @@ export const AuthContext = createContext<AuthContextType>({
   setSession: () => {},
   handleLogin: async () => {},
   handleLogout: async () => {},
+  handleSignup: async () => {},
 });
 
 export const useAuth = () => {
