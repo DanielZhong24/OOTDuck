@@ -1,7 +1,7 @@
 // import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 // import { Badge } from "@/components/ui/badge";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Mail } from "lucide-react";
 
 export default function ProfileHeader() {
@@ -9,18 +9,12 @@ export default function ProfileHeader() {
     <Card>
       <CardContent className="p-6">
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
-          {/* <div className="relative">
+          <div className="relative">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="https://bundui-images.netlify.app/avatars/08.png" alt="Profile" />
+              <AvatarImage src="src\assets\neutral.png" alt="Profile" />
               <AvatarFallback className="text-2xl">USERNAME</AvatarFallback>
             </Avatar>
-            <Button
-              size="icon"
-              variant="outline"
-              className="absolute -right-2 -bottom-2 h-8 w-8 rounded-full">
-              <Camera />
-            </Button>
-          </div> */}
+          </div>
           <div className="flex-1 space-y-2">
             <div className="flex flex-col gap-2 md:flex-row md:items-center">
               <h1 className="text-2xl font-bold">Username</h1>

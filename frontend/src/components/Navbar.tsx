@@ -8,6 +8,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
+import {motion } from "framer-motion";
 
 function Navbar() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
@@ -33,7 +34,7 @@ function Navbar() {
       return;
     }
 
-    bodyData.append("userId", "5");
+    bodyData.append("userId", "6bf87d16-ffca-4f6e-bff3-b2a654616acd");
 
     try {
       const response = await axios.post(`${port}api/clothes`, bodyData);
@@ -61,34 +62,83 @@ function Navbar() {
   return (
     <div>
       {loading !== "idle" && (
-        <div className="fixed flex items-center justify-center inset-0 bg-black/50">
+        <div className="fixed flex items-center justify-center inset-0 bg-white z-20">
           {loading === "loading" && (
             <Spinner variant="circle" color="orange" size={60} />
           )}
 
+
           {loading === "success" && (
-            <div className="flex flex-col items-center w-full h-full">
+            <div className="flex flex-col items-center w-full h-full px-4">
               <div className="w-full flex justify-center mt-6">
-              <Alert>
-                <CheckCircle2Icon />
-                <AlertTitle>Success! Your changes have been saved</AlertTitle>
-                <AlertDescription>
-                  This is an alert with icon, title and description.
-                </AlertDescription>
-              </Alert>
+                <Alert className="relative max-w-lg w-full">
+                  <CheckCircle2Icon color="Green" />
+                  <AlertTitle>Success! Your changes have been saved</AlertTitle>
+                </Alert>
               </div>
 
               <div className="flex-1 flex items-center justify-center">
-                <Check color="green" size={100} />
+                <div className="flex flex-col items-center justify-center max-w-md">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 15
+                    }}
+                  >
+                    <Check color="green" size={120} className="mb-4 md:mb-6" />
+                  </motion.div>
+
+                  <motion.div
+                    animate={{
+                      y: [0, -15, 0],
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <motion.div
+                      animate={{
+                        scaleY: [1, 1.05, 0.95, 1.02, 1],
+                        scaleX: [1, 0.95, 1.05, 0.98, 1],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <motion.img
+                        src="./src/assets/success-removebg-preview.png"
+                        className="w-48 md:w-64 mx-auto"
+                        alt="Success Mascot"
+                        whileHover={{
+                          scale: 1.15,
+                          rotate: [0, 5, -5, 0],
+                          transition: {
+                            duration: 0.5,
+                            rotate: {
+                              duration: 0.6,
+                              ease: "easeInOut"
+                            }
+                          }
+                        }}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </div>
               </div>
             </div>
-            
           )}
 
           {loading === "fail" && alertMessage && (
-            <div className="flex flex-col items-center w-full h-full">
+            <div className="flex flex-col items-center w-full h-full px-4">
               <div className="w-full flex justify-center mt-6">
-                <Alert variant="destructive" className="w-[90%] max-w-md">
+                <Alert variant="destructive" className="max-w-lg w-full">
                   <AlertCircleIcon className="h-5 w-5" />
                   <AlertTitle>Oops!</AlertTitle>
                   <AlertDescription>
@@ -98,7 +148,59 @@ function Navbar() {
               </div>
 
               <div className="flex-1 flex items-center justify-center">
-                <X color="red" size={100} />
+                <div className="flex flex-col items-center justify-center max-w-md">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 15
+                    }}
+                  >
+                    <X color="red" size={120} className="mb-4 md:mb-6" />
+                  </motion.div>
+
+                  <motion.div
+                    animate={{
+                      y: [0, -15, 0],
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <motion.div
+                      animate={{
+                        scaleY: [1, 1.05, 0.95, 1.02, 1],
+                        scaleX: [1, 0.95, 1.05, 0.98, 1],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <motion.img
+                        src="./src/assets/fail1.png"
+                        className="w-48 md:w-64 mx-auto"
+                        alt="Fail Mascot"
+                        whileHover={{
+                          scale: 1.15,
+                          rotate: [0, 5, -5, 0],
+                          transition: {
+                            duration: 0.5,
+                            rotate: {
+                              duration: 0.6,
+                              ease: "easeInOut"
+                            }
+                          }
+                        }}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           )}
@@ -123,7 +225,7 @@ function Navbar() {
               <span className="block px-1 border-b-2 border-transparent hover:border-amber-500" onClick={handleFileClick}>
                 <Camera strokeWidth="1" size={32} className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 " />
               </span>
-              <input type="file" accept="image/*" className="hidden" onChange={submitImage} ref={fileInputReferance} capture />
+              <input type="file" accept="image/*" className="hidden" onChange={submitImage} ref={fileInputReferance} capture="environment" />
             </div>
           </div>
           <div className="group flex-1">
