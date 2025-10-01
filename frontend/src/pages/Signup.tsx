@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserForm } from "@/components/user-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,33 +20,42 @@ function Signup() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const { handleSignup } = useAuth();
 
   const registerUser: (e: React.FormEvent) => Promise<void> = async (
     e: React.FormEvent,
   ) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setErrorMsg("Passwords do not match");
-      return;
-    }
+    setLoading(true);
+    try {
+      if (password !== confirmPassword) {
+        setErrorMsg("Passwords do not match");
+        return;
+      }
 
-    if (!fullName.includes(" ") || fullName.trim().split(" ").length < 2) {
-      setErrorMsg("Full name must include at least first and last name");
-      return;
-    }
+      if (!fullName.includes(" ") || fullName.trim().split(" ").length < 2) {
+        setErrorMsg("Full name must include at least first and last name");
+        return;
+      }
 
-    const signup = await handleSignup(email, password, fullName);
-    if (signup.pass) {
-      setErrorMsg("");
-    } else {
-      setErrorMsg(signup.error);
+      const signup = await handleSignup(email, password, fullName);
+      if (signup.pass) {
+        setErrorMsg("");
+      } else {
+        setErrorMsg(signup.error);
+      }
+    } catch (error: any) {
+      setErrorMsg("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-50 p-4">
       <UserForm
         onSubmit={registerUser}
+        loading={loading}
         children={
           <SignupInputs
             setEmail={setEmail}

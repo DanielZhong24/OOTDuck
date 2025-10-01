@@ -9,10 +9,11 @@ export function UserForm({
   className,
   onSubmit,
   children,
+  loading,
   ...props
 }: React.ComponentProps<"div"> & {
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-} & { children: React.ReactNode } & { errorMsg?: string }) {
+} & { children: React.ReactNode } & { errorMsg?: string } & { loading?: boolean }) {
   const location: Location = useLocation();
   const url: string = location.pathname;
   const { signInWithGoogle } = useAuth();
@@ -56,11 +57,11 @@ export function UserForm({
           <div className="flex flex-col gap-6">
             <div className="grid gap-3">{children}</div>
             {url === "/login" ? (
-              <Button type="submit" className="w-full cursor-pointer">
+              <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
                 Login
               </Button>
             ) : (
-              <Button type="submit" className="w-full cursor-pointer">
+              <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
                 Create Account
               </Button>
             )}

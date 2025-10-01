@@ -2,12 +2,10 @@
 import { useState, useEffect } from "react";
 import { AuthContext, type AuthContextType } from "./AuthContext";
 import { supabase } from "./supabaseClient";
-import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<AuthContextType["session"]>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -28,7 +26,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, []);
 
   const handleSignup: (
     email: string,
