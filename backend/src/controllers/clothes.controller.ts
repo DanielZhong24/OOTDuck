@@ -275,7 +275,7 @@ const filterClothesByUser = async (
     const queries = req.query;
     const userId: string | undefined = req.params.id;
 
-    if (!userId || isNaN(+userId)) {
+    if (!userId) {
       return res.status(400).json({ error: 'User ID not valid' });
     }
 
