@@ -8,8 +8,10 @@ export type AuthContextType = {
   handleLogin: (email: string, password: string) => Promise<any>;
   handleLogout: () => Promise<any>;
   handleSignup: (email: string, password: string) => Promise<any>;
+  signInWithGoogle: () => Promise<any>; 
   loading?: boolean;
 };
+
 
 export const AuthContext = createContext<AuthContextType>({
   session: null,
@@ -17,6 +19,7 @@ export const AuthContext = createContext<AuthContextType>({
   handleLogin: async () => {},
   handleLogout: async () => {},
   handleSignup: async () => {},
+  signInWithGoogle:async ()=> {},
   loading: true,
 });
 

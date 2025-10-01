@@ -10,10 +10,10 @@ import type { Transition } from "framer-motion";
 import AuthProvider from "./context/AuthProvider";
 import Protected from "./components/Protected";
 import Error from "./pages/Error";
-
+import {useAuth} from "@/context/AuthContext";
 function AnimatedRoutes() {
   const location = useLocation();
-
+  const{session} = useAuth();
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -35,7 +35,10 @@ function AnimatedRoutes() {
     duration: 0.3,
   };
 
+  const showNav = session;
+
   return (
+    <>
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route
@@ -130,6 +133,8 @@ function AnimatedRoutes() {
         />
       </Routes>
     </AnimatePresence>
+    {showNav && <Navbar/>}
+    </>
   );
 }
 
@@ -139,9 +144,6 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen min-w-screen justify-center overflow-hidden bg-white select-none">
           <AnimatedRoutes />
-          <Protected>
-            <Navbar />
-          </Protected>
         </div>
       </AuthProvider>
     </BrowserRouter>
