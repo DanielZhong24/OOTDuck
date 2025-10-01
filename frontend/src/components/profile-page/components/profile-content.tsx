@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Key, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import FormMsg from "@/components/FormMsg";
 import { useEffect } from "react";
 
 export default function ProfileContent() {
-  const [showChangePassword, setShowChangePassword] = useState(false);
+  // const [showChangePassword, setShowChangePassword] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
 
@@ -120,7 +120,7 @@ export default function ProfileContent() {
               Manage your account security and authentication.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          {/* <CardContent className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
@@ -135,7 +135,6 @@ export default function ProfileContent() {
                 </Button>
               </div>
 
-              {/* Inline Change Password Form */}
               {showChangePassword && (
                 <div className="space-y-4 rounded-lg border p-4">
                   <div className="space-y-2">
@@ -166,7 +165,7 @@ export default function ProfileContent() {
                 </div>
               )}
             </div>
-          </CardContent>
+          </CardContent> */}
 
           <CardContent>
             <div className="flex items-center justify-between">
