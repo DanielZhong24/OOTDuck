@@ -6,7 +6,7 @@ import ClothingCard from "../components/ClothingCard";
 import FilterSidebar from "@/components/FilterSidebar";
 import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
-
+import { motion } from "framer-motion";
 function Photo() {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -63,11 +63,25 @@ function Photo() {
 
   if (clothes.length === 0 && isLoading === false) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex flex-col h-screen items-center justify-center">
         <h1 className="text-xl font-bold lg:text-2xl xl:text-3xl">No clothes found</h1>
+        <div>
+          <motion.div
+            animate={{
+              rotate: [-3, 3, -3],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <motion.img src="./src/assets/fail1.png" className="w-32" alt="Mascot" />
+          </motion.div>
+        </div>
 
-        <div className="fixed right-10 bottom-30 rounded-full bg-gray-700 p-1">
-          <Funnel
+        <div className="fixed right-10 bottom-30 rounded-full bg-amber-500 p-1">
+          <Funnel 
             onClick={toggleOpen}
             className="box-content size-6 cursor-pointer p-2.5 text-white"
           />

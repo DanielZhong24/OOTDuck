@@ -96,37 +96,6 @@ def predict_clothing_type_fashionclip(cropped_img: Image.Image):
 
 
     
-def determine_season(typed_clothing: str):
-    SEASON_MAP = {
-        't-shirt': 'spring/summer',
-        'shirt': 'spring/summer',
-        'crop top': 'spring/summer',
-        'hoodie': 'fall/winter',
-        'sweater': 'fall/winter',
-        'cardigan': 'fall/winter',
-        'tank top': 'spring/summer',
-        'jacket': 'fall/winter',
-        'jeans': 'all seasons',
-        'trousers': 'all seasons',
-        'skirt': 'spring/summer',
-        'shorts': 'spring/summer',
-        'leggings': 'all seasons',
-        'dress': 'spring/summer',
-        'coat': 'fall/winter',
-        'leather jacket': 'fall/winter',
-        'denim jacket': 'fall/winter',
-        'puffer jacket': 'fall/winter',
-        'bomber jacket': 'fall/winter',
-        'jumpsuit': 'spring/summer',
-        'romper': 'spring/summer',
-        'suit': 'all seasons',
-        'activewear': 'spring/summer'
-    }
-
-    if typed_clothing in SEASON_MAP:
-        return SEASON_MAP[typed_clothing]
-    else:
-        return 'unknown'
 
 def load_checkpoint(model, checkpoint_path):
     if not os.path.exists(checkpoint_path):

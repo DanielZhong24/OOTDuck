@@ -68,7 +68,7 @@ export const addClothes = async (req: Request, res: Response) => {
     const filename = `DA${Date.now()}-${Math.round(Math.random() * 10000)}.png`;
     const savePath = path.join(process.cwd(), 'src', 'img', filename);
     const relPath = path.posix.join('img', filename);
-    const color = headers['clothing-color'];
+    const color = headers['clothing-color'].toLowerCase();
     const type = headers['clothing-type'];
     const season = headers['clothing-season'];
     const category = headers['clothing-category'];
