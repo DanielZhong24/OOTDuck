@@ -3,30 +3,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useState, type ChangeEvent } from "react";
-import FormError from "../components/FormError";
+import FormMsg from "../components/FormMsg";
 
 type SignupInputsProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
+  setFullName: React.Dispatch<React.SetStateAction<string>>;
   errorMsg: string;
 };
 
 function Signup() {
+  const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const { handleSignup } = useAuth();
 
-  const registerUser = async (e: React.FormEvent) => {
+  const registerUser: (e: React.FormEvent) => Promise<void> = async (
+    e: React.FormEvent,
+  ) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setErrorMsg("Passwords do not match");
       return;
     }
 
-    const signup = await handleSignup(email, password);
+    if (!fullName.includes(" ") || fullName.trim().split(" ").length < 2) {
+      setErrorMsg("Full name must include at least first and last name");
+      return;
+    }
+
+    const signup = await handleSignup(email, password, fullName);
     if (signup.pass) {
       setErrorMsg("");
     } else {
@@ -42,6 +51,7 @@ function Signup() {
             setEmail={setEmail}
             setPassword={setPassword}
             setConfirmPassword={setConfirmPassword}
+            setFullName={setFullName}
             errorMsg={errorMsg}
           />
         }
@@ -54,10 +64,19 @@ function SignupInputs({
   setEmail,
   setPassword,
   setConfirmPassword,
+  setFullName,
   errorMsg,
 }: SignupInputsProps) {
   return (
     <>
+      <Label htmlFor="fullName">Full Name</Label>
+      <Input
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
+        id="fullName"
+        type="text"
+        placeholder="John Doe"
+        required
+      />
       <Label htmlFor="newEmail">Email</Label>
       <Input
         onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -83,7 +102,7 @@ function SignupInputs({
         type="password"
         placeholder="Confirm your password"
       />
-      {errorMsg && <FormError message={errorMsg} />}
+      {errorMsg && <FormMsg className="text-red-500" message={errorMsg} />}
     </>
   );
 }

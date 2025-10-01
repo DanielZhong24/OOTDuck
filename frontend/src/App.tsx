@@ -74,7 +74,7 @@ function AnimatedRoutes() {
           }
         />
         <Route
-          path="/setting"
+          path="/settings"
           element={
             <Protected>
               <motion.div

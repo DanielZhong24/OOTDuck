@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useState, type ChangeEvent, type SetStateAction } from "react";
-import FormError from "../components/FormError";
+import FormMsg from "../components/FormMsg";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 type LoginInputProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -66,7 +66,7 @@ function LoginInputs({ setEmail, setPassword, errorMsg }: LoginInputProps) {
         placeholder="Enter your password"
         required
       />
-      {errorMsg && <FormError message={errorMsg} />}
+      {errorMsg && <FormMsg className="text-red-500" message={errorMsg} />}
     </>
   );
 }

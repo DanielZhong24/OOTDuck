@@ -21,10 +21,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       if (_event === "SIGNED_OUT") {
         setSession(null);
         setLoading(false);
-      } else if (_event === "SIGNED_IN") {
-        setSession(session);
-        setLoading(false);
-      } else if (session) {
+      } else {
         setSession(session);
         setLoading(false);
       }
@@ -33,20 +30,23 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleSignup: (email: string, password: string) => Promise<any> = async (
+  const handleSignup: (
     email: string,
     password: string,
-  ) => {
+    fullName: string,
+  ) => Promise<any> = async (email: string, password: string, fullName: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        data: {
+          display_name: fullName,
+        },
         emailRedirectTo: "http://localhost:5173/",
       },
     });
     if (error) {
-      console.error("Error signing up:", error.name);
-      return { pass: false, error: error.name };
+      return { pass: false, error: error.message };
     }
 
     return { pass: true, data };
@@ -62,7 +62,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     if (error) {
-      console.error("Error logging in:", error.message);
       return { pass: false, error: error.message };
     }
 
@@ -79,25 +78,32 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     return { pass: true };
   };
   const signInWithGoogle = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.origin, 
-    },
-  });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
 
-  if (error) {
-    console.error("Google sign-in error:", error.message);
-    return { pass: false, error: error.message };
-  }
+    if (error) {
+      console.error("Google sign-in error:", error.message);
+      return { pass: false, error: error.message };
+    }
 
-  return { pass: true };
-};
-
+    return { pass: true };
+  };
 
   return (
     <AuthContext.Provider
-      value={{ session, setSession, handleSignup, handleLogout, handleLogin,signInWithGoogle, loading }}
+      value={{
+        session,
+        setSession,
+        handleSignup,
+        handleLogout,
+        handleLogin,
+        signInWithGoogle,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>
