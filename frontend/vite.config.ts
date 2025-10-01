@@ -27,15 +27,10 @@ export default defineConfig({
         theme_color: "#f3f4f6",    
         icons: [
           {
-            src: "src/assets/192x192.png",
-            sizes: "192x192",
+            src: "src/assets/logo.png",
+            sizes: "1024x1024",
             type: "image/png",
-          },
-          {
-            src: "src/assets/512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          }
+          },          
         ],
         "screenshots": [
           {
@@ -43,12 +38,18 @@ export default defineConfig({
             "sizes": "1400x900",
             "type": "image/png",
             "form_factor": "wide",
+          },         {
+            "src": "src/assets/sc2.png",
+            "sizes": "1400x900",
+            "type": "image/png",
+            "form_factor": "wide",
+          },         {
+            "src": "src/assets/sc3.png",
+            "sizes": "1400x900",
+            "type": "image/png",
+            "form_factor": "wide",
           },
-          {
-            "src": "src/assets/512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-          }
+ 
         ]
       },
     }),
