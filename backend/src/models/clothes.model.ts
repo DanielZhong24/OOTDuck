@@ -150,7 +150,6 @@ const getSuggestedOutfit = async (
 
   const randomTop: any[] = await db.any(topQuery, paramsTop);
   const randomBottom: any[] = await db.any(bottomQuery, paramsBottom);
-  console.log(paramsTop,paramsBottom);
   return {
     randomTop: randomTop.length ? randomTop : [],
     randomBottom: randomBottom.length ? randomBottom : [],

@@ -24,13 +24,10 @@ function Photo() {
 
   const handleDelete = async (id: number) => {
     try {
-      axios.delete(`${port}api/clothes/delete/${id}`).then((res) => {
-        console.log("clothes deleted succesfully", res.status);
-      });
+      axios.delete(`${port}api/clothes/delete/${id}`);
 
       setClothes((prevClothes: any) => prevClothes.filter((item: any) => item.id !== id));
     } catch (error) {
-      console.log("error", error);
     }
   };
 

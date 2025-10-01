@@ -24,7 +24,6 @@ const listAllClothes = async (req: Request, res: Response): Promise<void> => {
     const clothes = await getAllClothes();
     res.status(200).json(clothes);
   } catch (error) {
-    console.log('Error fetching clothes:', error);
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 };
@@ -42,7 +41,6 @@ export const addClothes = async (req: Request, res: Response) => {
 
 
     const numberOfClothes = await getNumberOfClothes(userId);
-    console.log(numberOfClothes);
     if(numberOfClothes.count > 30){
       return res.status(403).json({error:`Exceed closet limit ${numberOfClothes.count}/30`});
     }
@@ -115,7 +113,6 @@ const listClothesByUser = async (
     let userClothes = clothes.filter((x) => x['user_id'] == req.params.id);
     res.status(200).json(userClothes);
   } catch (error) {
-    console.log('Error fetching clothes:', error);
     res.status(500).json({ error: 'Failed to fetch data' });
   }
 };
@@ -158,7 +155,6 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
           randomBottom = outfit.randomBottom[0];
           break;
         case 'complementary':
-          console.log('complementary');
           const complementaryOutfit = await getComplementaryOutfit(userId);
           if (!complementaryOutfit) {
             return res
@@ -190,7 +186,6 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
       const outfit: { randomTop: any[]; randomBottom: any[] } =
         await colourAndSeasonOutfit(userId, colors, seasons);
 
-      console.log(outfit);
       if (!outfit.randomTop.length || !outfit.randomBottom.length) {
         return res
           .status(400)
@@ -255,7 +250,6 @@ const removeClothesById = async (req: Request, res: Response) => {
 
     res.status(204).json({ message: '204 No Content success deletion' });
   } catch (error) {
-    console.log('Error deleting clohes:', error);
     res.status(500).json({ error: 'Failed to delete data' });
   }
 };

@@ -38,7 +38,7 @@ function Navbar() {
     if (e.target.files) {
       bodyData.append("image", e.target.files[0]);
     } else {
-      console.log("error, image is not supported or wrong file");
+      ("error, image is not supported or wrong file");
       setLoading("idle");
       return;
     }
@@ -47,7 +47,7 @@ function Navbar() {
 
     try {
       const response = await axios.post(`${port}api/clothes`, bodyData);
-      console.log(response);
+      (response);
       setLoading("success");
     } catch (e: any) {
       if (axios.isAxiosError(e) && e.response) {
