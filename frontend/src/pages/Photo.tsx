@@ -4,21 +4,23 @@ import { Funnel } from "lucide-react";
 import axios, { type AxiosResponse } from "axios";
 import ClothingCard from "../components/ClothingCard";
 import FilterSidebar from "@/components/FilterSidebar";
+import { useAuth } from "@/context/AuthContext";
+import type { User } from "@supabase/supabase-js";
 
 function Photo() {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clothes, setClothes] = useState<any>([]);
+  const { session } = useAuth();
   const port = import.meta.env.VITE_BACKEND_ROUTE;
 
+  const user: User | undefined = session?.user;
   useEffect(() => {
-    axios
-      .get(`${port}api/clothes/user/6bf87d16-ffca-4f6e-bff3-b2a654616acd`)
-      .then((response: AxiosResponse) => {
-        setClothes(response.data);
-        setIsLoading(false);
-      });
-  }, [port]);
+    axios.get(`${port}api/clothes/user/${user?.id}`).then((response: AxiosResponse) => {
+      setClothes(response.data);
+      setIsLoading(false);
+    });
+  }, [port, user?.id]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -118,21 +120,4 @@ function Photo() {
   );
 }
 
-/*
-function tempHolder({ isOpen }: { isOpen: boolean }) {
-  return (
-    <div
-      className={`flex flex-col items-center gap-5 overflow-hidden rounded-full bg-gray-700 transition-all duration-300 ${isOpen ? "h-50 opacity-100" : "h-0 opacity-0"}`}
-    >
-      {isOpen && (
-        <>
-          <PlusIcon className="text-3xl" color="white" />
-          <InboxIcon className="text-3xl" color="white" />
-          <PencilIcon className="text-3xl" color="white" />
-        </>
-      )}
-    </div>
-  );
-}
-*/
 export default Photo;

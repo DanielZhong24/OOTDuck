@@ -26,28 +26,24 @@ processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip",use_fast
 CLOTHING_CLASSES = [
     {"name": "t-shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
     {"name": "sweat pants", "category": "bottom", "height_ratio": 0.85, "season": "all seasons"},
-    {"name": "shirt", "category": "top", "height_ratio": 0.7, "season": "spring/summer"},
+    {"name": "shirt", "category": "top", "height_ratio": 0.7, "season": "all seasons"},
     {"name": "crop top", "category": "top", "height_ratio": 0.65, "season": "spring/summer"},
     {"name": "hoodie", "category": "top", "height_ratio": 0.75, "season": "fall/winter"},
     {"name": "sweater", "category": "top", "height_ratio": 0.75, "season": "fall/winter"},
     {"name": "cardigan", "category": "top", "height_ratio": 0.7, "season": "fall/winter"},
     {"name": "tank top", "category": "top", "height_ratio": 0.6, "season": "spring/summer"},
-    {"name": "jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "jacket", "category": "top", "height_ratio": 0.8, "season": "fall/winter"},
     {"name": "jeans", "category": "bottom", "height_ratio": 0.85, "season": "all seasons"},
     {"name": "trousers", "category": "bottom", "height_ratio": 0.8, "season": "all seasons"},
     {"name": "skirt", "category": "bottom", "height_ratio": 0.5, "season": "spring/summer"},
     {"name": "shorts", "category": "bottom", "height_ratio": 0.6, "season": "spring/summer"},
     {"name": "leggings", "category": "bottom", "height_ratio": 0.8, "season": "all seasons"},
-    {"name": "dress", "category": "onepiece", "height_ratio": 0.9, "season": "spring/summer"},
-    {"name": "coat", "category": "outerwear", "height_ratio": 0.85, "season": "fall/winter"},
-    {"name": "leather jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
-    {"name": "denim jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
-    {"name": "puffer jacket", "category": "outerwear", "height_ratio": 0.85, "season": "fall/winter"},
-    {"name": "bomber jacket", "category": "outerwear", "height_ratio": 0.8, "season": "fall/winter"},
-    {"name": "jumpsuit", "category": "onepiece", "height_ratio": 0.9, "season": "spring/summer"},
-    {"name": "romper", "category": "onepiece", "height_ratio": 0.7, "season": "spring/summer"},
-    {"name": "suit", "category": "onepiece", "height_ratio": 0.9, "season": "all seasons"},
-    {"name": "activewear", "category": "activewear", "height_ratio": 0.75, "season": "spring/summer"}
+    {"name": "coat", "category": "top", "height_ratio": 0.85, "season": "fall/winter"},
+    {"name": "leather jacket", "category": "top", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "denim jacket", "category": "top", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "puffer jacket", "category": "top", "height_ratio": 0.85, "season": "fall/winter"},
+    {"name": "bomber jacket", "category": "top", "height_ratio": 0.8, "season": "fall/winter"},
+    {"name": "suit", "category": "top", "height_ratio": 0.9, "season": "all seasons"},
 ]
 
 
@@ -61,7 +57,7 @@ def resize_clothing(img: Image.Image, pred_type: str) -> Image.Image:
     if metadata is None:
         metadata = {"category": "top", "height_ratio": 0.7}  # default
 
-    if metadata["category"] in ["bottom", "activewear"]:
+    if metadata["category"] in ["bottom"]:
         canvas_w, canvas_h = 400, 500
     else:  
         canvas_w, canvas_h = 400, 400

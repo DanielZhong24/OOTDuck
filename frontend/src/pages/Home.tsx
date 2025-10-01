@@ -4,7 +4,10 @@ import axios from "axios";
 import RefreshIcon from "~icons/mdi-light/refresh";
 import FilterComponent from "@/components/FilterComponent";
 import type { FilterState } from "@/components/FilterComponent";
-import {motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
+import type { User } from "@supabase/supabase-js";
+
 interface ClothingItem {
   id: string;
   color: string;
@@ -34,6 +37,8 @@ export default function Home() {
     colorMode: null,
     colorHarmony: null,
   });
+  const { session } = useAuth();
+  const user: User | undefined = session?.user;
 
   const touchStartRef = useRef(0);
   const port = import.meta.env.VITE_BACKEND_ROUTE;
@@ -72,7 +77,7 @@ export default function Home() {
       }
 
       const response = await axios.get<OutfitData>(
-        `${port}api/clothes/random/6bf87d16-ffca-4f6e-bff3-b2a654616acd`,
+        `${port}api/clothes/random/${user?.id}`,
         { params },
       );
 
@@ -188,27 +193,22 @@ export default function Home() {
       </div>
 
       {!outfitData?.randomTop || !outfitData?.randomBottom ? (
-        <div className="flex h-screen flex-col items-center justify-center p-4 text-center text-lg text-gray-700">
+        <div className="flex h-screen flex-col items-center justify-center gap-6 p-4 text-center text-lg text-gray-700">
           <h1>No outfit combo found. Try again or change the filter! </h1>
 
-         <motion.div
-              animate={{
-                rotate: [-3, 3, -3]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <motion.img
-                src="./src/assets/fail1.png"
-                className="w-32"
-                alt="Mascot"
-              />
-            </motion.div>
-            <h1>or add more clothes😒 </h1>
-
+          <motion.div
+            animate={{
+              rotate: [-3, 3, -3],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <motion.img src="./src/assets/fail1.png" className="w-32" alt="Mascot" />
+          </motion.div>
+          <h1>or add more clothes 😒 </h1>
         </div>
       ) : (
         <>

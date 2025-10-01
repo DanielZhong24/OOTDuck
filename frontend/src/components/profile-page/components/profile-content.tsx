@@ -21,7 +21,6 @@ export default function ProfileContent() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -102,17 +101,6 @@ export default function ProfileContent() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setEmail(e.target.value)
-                  }
-                  id="email"
-                  type="email"
-                  placeholder="john.doe@example.com"
-                />
-              </div>
               {error && <FormMsg className="text-red-500" message={error} />}
               {success && <FormMsg className="text-green-500" message={success} />}
               <Button type="submit" variant="default">

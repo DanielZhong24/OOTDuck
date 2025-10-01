@@ -11,6 +11,7 @@ import {
 import { Input } from "./ui/input";
 import { X } from "lucide-react";
 import axios, { type AxiosResponse } from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 type FilterSidebarProps = {
   onClick?: () => void;
@@ -50,8 +51,10 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
     Colour: [],
     Season: [],
   });
-  const [, setSearchParams] = useSearchParams(); // not sure if we should keep using this but its there just to update the url lmao
+  const [, setSearchParams] = useSearchParams();
   const PORT = import.meta.env.VITE_BACKEND_ROUTE;
+  const { session } = useAuth();
+  const user = session?.user;
 
   const clearAll: () => void = () => {
     setSelectedFilters({
@@ -103,7 +106,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
     }
 
     setSearchParams(params);
-    const newUrl = `${PORT}api/clothes/user/5/filter?${params.toString()}`;
+    const newUrl = `${PORT}api/clothes/user/${user?.id}/filter?${params.toString()}`;
     await fetchFilteredClothes(newUrl);
     toggleOpen();
   };
@@ -162,7 +165,6 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
   const seasons: string[] = ["SPRING/SUMMER", "FALL/WINTER", "ALL SEASONS"];
 
   return (
-
     <aside
       className={`fixed top-0 right-0 z-50 flex h-screen w-full flex-col justify-between bg-white p-4 transition-transform duration-300 sm:w-[45%] lg:w-[30%] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
@@ -198,7 +200,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
       <div className="mb-4 flex w-full items-center justify-evenly gap-4">
         <Button
           onClick={submitFilters}
-          className=" bg-amber-500 w-[45%] cursor-pointer rounded-lg text-sm md:p-5 md:text-base hover:bg-amber-700"
+          className="w-[45%] cursor-pointer rounded-lg bg-amber-500 text-sm hover:bg-amber-700 md:p-5 md:text-base"
         >
           Confirm
         </Button>
