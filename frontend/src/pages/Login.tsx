@@ -56,6 +56,7 @@ function LoginInputs({ setEmail, setPassword, errorMsg }: LoginInputProps) {
         id="email"
         type="email"
         placeholder="m@example.com"
+        className="placeholder:text-sm md:placeholder:text-base"
         required
       />
       <Label htmlFor="password">Password</Label>
@@ -64,6 +65,7 @@ function LoginInputs({ setEmail, setPassword, errorMsg }: LoginInputProps) {
         id="password"
         type="password"
         placeholder="Enter your password"
+        className="placeholder:text-sm md:placeholder:text-base"
         required
       />
       {errorMsg && <FormMsg className="text-red-500" message={errorMsg} />}

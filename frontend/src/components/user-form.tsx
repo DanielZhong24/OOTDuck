@@ -18,7 +18,13 @@ export function UserForm({
   const { signInWithGoogle } = useAuth();
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div
+      className={cn(
+        "flex w-[65%] flex-col gap-6 sm:w-[50%] md:w-[45%] lg:w-[40%] xl:w-[30%]",
+        className,
+      )}
+      {...props}
+    >
       <form onSubmit={onSubmit}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
@@ -28,7 +34,7 @@ export function UserForm({
               </div>
               <span className="sr-only">Dressify</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to Dressify</h1>
+            <h1 className="text-center text-xl font-bold">Welcome to Dressify</h1>
             <div className="text-center text-sm">
               {url === "/login" ? (
                 <>
@@ -59,7 +65,7 @@ export function UserForm({
               </Button>
             )}
           </div>
-          <div className="mt-4 w-full">
+          <div className="w-full">
             <div className="after:border-border relative my-4 text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="relative z-10 bg-gray-50 px-2 text-gray-500">Or</span>
             </div>
@@ -84,10 +90,6 @@ export function UserForm({
           </div>
         </div>
       </form>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 }

@@ -75,6 +75,7 @@ function SignupInputs({
         id="fullName"
         type="text"
         placeholder="John Doe"
+        className="placeholder:text-sm md:placeholder:text-base"
         required
       />
       <Label htmlFor="newEmail">Email</Label>
@@ -83,6 +84,7 @@ function SignupInputs({
         id="newEmail"
         type="email"
         placeholder="m@example.com"
+        className="placeholder:text-sm md:placeholder:text-base"
         required
       />
       <Label htmlFor="newPassword">Password</Label>
@@ -91,6 +93,7 @@ function SignupInputs({
         id="new-password"
         type="password"
         placeholder="Enter your password"
+        className="placeholder:text-sm md:placeholder:text-base"
         required
       />
       <Label htmlFor="confirmPassword">Confirm Password</Label>
@@ -101,6 +104,7 @@ function SignupInputs({
         id="confirmPassword"
         type="password"
         placeholder="Confirm your password"
+        className="placeholder:text-sm md:placeholder:text-base"
       />
       {errorMsg && <FormMsg className="text-red-500" message={errorMsg} />}
     </>
