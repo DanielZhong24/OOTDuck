@@ -7,9 +7,9 @@ function Protected({ children }: { children: React.ReactNode }) {
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
-    if (!loading && !session) {
-      navigate("/login");
-    }
+      if (location.pathname !== "/login" && location.pathname !== "/signup") {
+        navigate("/login");
+      }
   }, [session, loading, navigate]);
 
   if (loading || session === null) {
