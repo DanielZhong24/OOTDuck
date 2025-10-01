@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Key, LogOut } from "lucide-react";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,10 +13,53 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/context/supabaseClient";
+import FormMsg from "@/components/FormMsg";
+import { useEffect } from "react";
 
 export default function ProfileContent() {
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const { handleLogout } = useAuth();
+
+  useEffect(() => {
+    setTimeout(() => setSuccess(null), 3000);
+  }, [success]);
+
+  useEffect(() => {
+    setTimeout(() => setError(null), 3000);
+  }, [error]);
+
+  const updateName = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      if (!firstName || !lastName) {
+        setError("First and last name are required");
+        return { pass: false };
+      }
+
+      const { data, error } = await supabase.auth.updateUser({
+        data: { display_name: `${firstName} ${lastName}` },
+      });
+
+      if (error) {
+        setError(error.message);
+        return { pass: false, message: error.message };
+      }
+
+      setSuccess("Profile updated successfully");
+      return { pass: true, data };
+    } catch (error: any) {
+      setError(error.message);
+      return { pass: false };
+    }
+  };
 
   return (
     <Tabs defaultValue="personal" className="space-y-6">
@@ -33,24 +77,49 @@ export default function ProfileContent() {
               Update your personal details and profile information.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input id="firstName" defaultValue="John" />
+          <form onSubmit={updateName}>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setFirstName(e.target.value)
+                    }
+                    id="firstName"
+                    placeholder="John"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setLastName(e.target.value)
+                    }
+                    id="lastName"
+                    placeholder="Doe"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input id="lastName" defaultValue="Doe" />
-              </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" defaultValue="john.doe@example.com" />
-            </div>
-            <Button variant="default">Save Changes</Button>
-          </CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
+                  id="email"
+                  type="email"
+                  placeholder="john.doe@example.com"
+                />
+              </div>
+              {error && <FormMsg className="text-red-500" message={error} />}
+              {success && <FormMsg className="text-green-500" message={success} />}
+              <Button type="submit" variant="default">
+                Save Changes
+              </Button>
+            </CardContent>
+          </form>
         </Card>
       </TabsContent>
 

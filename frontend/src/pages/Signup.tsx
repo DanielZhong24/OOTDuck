@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useState, type ChangeEvent } from "react";
-import FormError from "../components/FormError";
+import FormMsg from "../components/FormMsg";
 
 type SignupInputsProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -83,7 +83,7 @@ function SignupInputs({
         type="password"
         placeholder="Confirm your password"
       />
-      {errorMsg && <FormError message={errorMsg} />}
+      {errorMsg && <FormMsg className="text-red-500" message={errorMsg} />}
     </>
   );
 }

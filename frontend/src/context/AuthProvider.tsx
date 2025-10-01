@@ -21,10 +21,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       if (_event === "SIGNED_OUT") {
         setSession(null);
         setLoading(false);
-      } else if (_event === "SIGNED_IN") {
-        setSession(session);
-        setLoading(false);
-      } else if (session) {
+      } else {
         setSession(session);
         setLoading(false);
       }
