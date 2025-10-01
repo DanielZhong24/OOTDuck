@@ -189,7 +189,8 @@ export default function Home() {
 
       {!outfitData?.randomTop || !outfitData?.randomBottom ? (
         <div className="flex h-screen flex-col items-center justify-center p-4 text-center text-lg text-gray-700">
-          <h1>No outfit combo found. Try again or change the filter!</h1>
+          <h1>No outfit combo found. Try again or change the filter! </h1>
+
          <motion.div
               animate={{
                 rotate: [-3, 3, -3]
@@ -206,6 +207,8 @@ export default function Home() {
                 alt="Mascot"
               />
             </motion.div>
+            <h1>or add more clothes😒 </h1>
+
         </div>
       ) : (
         <>

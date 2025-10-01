@@ -12,14 +12,14 @@ export default function ProfileHeader() {
   const user: User | undefined = session?.user;
   const displayName: string = user?.user_metadata.display_name;
   const creationDate: Date = new Date(user?.created_at || "");
-
+  const avatar = user?.user_metadata.avatar_url;
   return (
     <Card>
       <CardContent className="p-6">
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
           <div className="relative">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="src\assets\neutral.png" alt="Profile" />
+              <AvatarImage src={avatar? avatar: `src/assets/neutral.png`} alt="Profile" />
               <AvatarFallback className="text-2xl">USERNAME</AvatarFallback>
             </Avatar>
           </div>
