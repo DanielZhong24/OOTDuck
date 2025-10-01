@@ -12,6 +12,7 @@ import { Input } from "./ui/input";
 import { X } from "lucide-react";
 import axios, { type AxiosResponse } from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { type User } from "@supabase/supabase-js";
 
 type FilterSidebarProps = {
   onClick?: () => void;
@@ -54,7 +55,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
   const [, setSearchParams] = useSearchParams();
   const PORT = import.meta.env.VITE_BACKEND_ROUTE;
   const { session } = useAuth();
-  const user = session?.user;
+  const user: User | undefined = session?.user;
 
   const clearAll: () => void = () => {
     setSelectedFilters({
