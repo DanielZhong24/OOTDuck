@@ -1,0 +1,69 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import Icons from 'unplugin-icons/vite';
+import {VitePWA} from 'vite-plugin-pwa';
+import path from 'path';
+
+// https://vite.dev/config/
+export default defineConfig({
+
+  plugins: [
+    react(), 
+    tailwindcss(),
+    Icons({compiler:"jsx"}),
+    VitePWA({
+      registerType: "autoUpdate",
+      devOptions:{
+        enabled:true
+      },
+      manifest: {
+        name: "Dressify",
+        short_name: "Dressify",
+        start_url: "/",
+        id:"/",
+        display: "standalone",
+        background_color: "#f3f4f6", // Tailwind gray-100
+        theme_color: "#f3f4f6",    
+        icons: [
+          {
+            src: "src/assets/logo.png",
+            sizes: "1024x1024",
+            type: "image/png",
+          },          
+        ],
+        "screenshots": [
+          {
+            "src": "src/assets/sc.png",
+            "sizes": "1400x900",
+            "type": "image/png",
+            "form_factor": "wide",
+          },         {
+            "src": "src/assets/sc2.png",
+            "sizes": "1400x900",
+            "type": "image/png",
+            "form_factor": "wide",
+          },         {
+            "src": "src/assets/sc3.png",
+            "sizes": "1400x900",
+            "type": "image/png",
+            "form_factor": "wide",
+          },
+ 
+        ]
+      },
+    }),
+  ],
+  server: {
+    allowedHosts:true
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  
+
+
+});
+

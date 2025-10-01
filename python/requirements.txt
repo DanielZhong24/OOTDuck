@@ -1,0 +1,11 @@
+torch
+torchvision
+opencv-python
+numpy
+Pillow
+fastapi
+uvicorn
+gdown
+python-multipart
+transformers
+scikit-image

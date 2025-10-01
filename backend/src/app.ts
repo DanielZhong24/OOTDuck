@@ -1,20 +1,28 @@
-import express from "express";
-import type { Application, Request, Response } from "express";
-import clothesRoutes from "./routes/cloth.route.js";
-import usersRoutes from "./routes/user.route.js";
-import path from "path";
+import express from 'express';
+import type { Application, Request, Response } from 'express';
+import clothesRoutes from './routes/clothes.route.js';
+import usersRoutes from './routes/user.route.js';
+import path from 'path';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
 const app: Application = express();
 
-app.use("/img", express.static(path.join(process.cwd(), "src","img")));
-
-app.use("/api/clothes", clothesRoutes);
-
+app.use(cors<Request>());
 
 app.use(express.json());
-app.use("/api/users", usersRoutes);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to the!");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/img', express.static(path.join(__dirname, 'img')));
+
+app.use('/api/clothes', clothesRoutes);
+
+app.use('/api/users', usersRoutes);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Welcome to the!');
 });
 
 export default app;
