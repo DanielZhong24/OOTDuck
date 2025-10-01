@@ -204,11 +204,6 @@ export default function Home() {
                 src="./src/assets/fail1.png"
                 className="w-32"
                 alt="Mascot"
-                whileHover={{ 
-                  scale: 1.1,
-                  rotate: 0,
-                  transition: { duration: 0.3 }
-                }}
               />
             </motion.div>
         </div>
