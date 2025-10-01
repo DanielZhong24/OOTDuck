@@ -16,13 +16,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (_event === "SIGNED_OUT") {
-        setSession(null);
-        setLoading(false);
-      } else {
-        setSession(session);
-        setLoading(false);
-      }
+      setSession(session);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
