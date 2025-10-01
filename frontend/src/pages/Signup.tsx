@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useState, type ChangeEvent } from "react";
 import FormMsg from "../components/FormMsg";
-
+import { useNavigate } from "react-router-dom";
 type SignupInputsProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +22,7 @@ function Signup() {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { handleSignup } = useAuth();
-
+  const nav = useNavigate();
   const registerUser: (e: React.FormEvent) => Promise<void> = async (
     e: React.FormEvent,
   ) => {
@@ -42,6 +42,7 @@ function Signup() {
       const signup = await handleSignup(email, password, fullName);
       if (signup.pass) {
         setErrorMsg("");
+        nav("/");
       } else {
         setErrorMsg(signup.error);
       }
