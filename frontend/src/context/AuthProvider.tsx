@@ -78,10 +78,26 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return { pass: true };
   };
+  const signInWithGoogle = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin, 
+    },
+  });
+
+  if (error) {
+    console.error("Google sign-in error:", error.message);
+    return { pass: false, error: error.message };
+  }
+
+  return { pass: true };
+};
+
 
   return (
     <AuthContext.Provider
-      value={{ session, setSession, handleSignup, handleLogout, handleLogin, loading }}
+      value={{ session, setSession, handleSignup, handleLogout, handleLogin,signInWithGoogle, loading }}
     >
       {children}
     </AuthContext.Provider>
