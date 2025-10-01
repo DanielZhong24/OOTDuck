@@ -14,6 +14,8 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
+import type { User } from "@supabase/supabase-js";
 
 function Navbar() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
@@ -22,6 +24,8 @@ function Navbar() {
 
   const [loading, setLoading] = useState<"idle" | "loading" | "success" | "fail">("idle");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { session } = useAuth();
+  const user: User = session?.user as User;
 
   const handleFileClick = () => {
     fileInputReferance.current?.click();
@@ -39,7 +43,7 @@ function Navbar() {
       return;
     }
 
-    bodyData.append("userId", "6bf87d16-ffca-4f6e-bff3-b2a654616acd");
+    bodyData.append("userId", user.id);
 
     try {
       const response = await axios.post(`${port}api/clothes`, bodyData);
