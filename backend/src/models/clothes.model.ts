@@ -119,38 +119,45 @@ const getSuggestedOutfit = async (
   colour?: string[] | null,
   season?: string | null
 ) => {
-  let topQuery: string = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top'`;
-  let bottomQuery: string = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom'`;
-  const params: any[] = [userId];
-  let paramIndex: number = 2;
+  const paramsTop: any[] = [userId];
+  const paramsBottom: any[] = [userId];
+  let paramIndexTop = 2;
+  let paramIndexBottom = 2;
+
+  let topQuery = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'top'`;
+  let bottomQuery = `SELECT id, color, type, img_path FROM cloth WHERE user_id = $1 AND category = 'bottom'`;
 
   if (colour && colour.length > 0) {
-    topQuery += ` AND color = ANY($${paramIndex})`;
-    bottomQuery += ` AND color = ANY($${paramIndex})`;
-    params.push(colour);
-    paramIndex++;
+    topQuery += ` AND color = ANY($${paramIndexTop})`;
+    bottomQuery += ` AND color = ANY($${paramIndexBottom})`;
+    paramsTop.push(colour);
+    paramsBottom.push(colour);
+    paramIndexTop++;
+    paramIndexBottom++;
   }
 
   if (season) {
-    topQuery += ` AND season = $${paramIndex}`;
-    bottomQuery += ` AND season = $${paramIndex}`;
-    params.push(season);
-    paramIndex++;
+    topQuery += ` AND (LOWER(season) = LOWER($${paramIndexTop}) OR LOWER(season) = 'all seasons')`;
+    bottomQuery += ` AND (LOWER(season) = LOWER($${paramIndexBottom}) OR LOWER(season) = 'all seasons')`;
+    paramsTop.push(season);
+    paramsBottom.push(season);
+    paramIndexTop++;
+    paramIndexBottom++;
   }
 
   topQuery += ` ORDER BY RANDOM() LIMIT 1`;
   bottomQuery += ` ORDER BY RANDOM() LIMIT 1`;
 
-  const randomTop: any[] = await db.any(topQuery, params);
-
-  const randomBottom: any[] = await db.any(bottomQuery, params);
-
-  if (!randomTop.length || !randomBottom.length) {
-    return { randomTop: [], randomBottom: [] };
-  }
-
-  return { randomTop, randomBottom };
+  const randomTop: any[] = await db.any(topQuery, paramsTop);
+  const randomBottom: any[] = await db.any(bottomQuery, paramsBottom);
+  console.log(paramsTop,paramsBottom);
+  return {
+    randomTop: randomTop.length ? randomTop : [],
+    randomBottom: randomBottom.length ? randomBottom : [],
+  };
 };
+
+
 
 export const getNeutralOutfit = async (userId: string) => {
   const neutrals = ['black', 'white', 'gray', 'brown'];

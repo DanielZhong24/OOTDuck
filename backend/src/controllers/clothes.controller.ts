@@ -139,7 +139,7 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
     const userId: string = userIdParam; 
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
-
+    const seasons = req.query.seasons as string | undefined;
     let randomTop: any;
     let randomBottom: any;
 
@@ -182,13 +182,15 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
         default:
           return res.status(400).json({ error: 'Invalid color harmony' });
       }
-    } else if (req.query.colorMode === 'specific') {
+    } else if (req.query.colorMode === 'specific' || seasons) {
       const seasons = req.query.seasons as string;
       const colorQuery = req.query.colors as string;
       const colors: string[] = colorQuery ? colorQuery.split(',') : [];
 
       const outfit: { randomTop: any[]; randomBottom: any[] } =
         await colourAndSeasonOutfit(userId, colors, seasons);
+
+      console.log(outfit);
       if (!outfit.randomTop.length || !outfit.randomBottom.length) {
         return res
           .status(400)
