@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.ts --omit=dev"
+    "start": "node dist/server.js --omit=dev"
   },
   "keywords": [],
   "author": "",
