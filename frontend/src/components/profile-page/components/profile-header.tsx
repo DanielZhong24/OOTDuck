@@ -6,7 +6,6 @@ import { Calendar, Mail } from "lucide-react";
 
 import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
-import neutralImg from '../assets/neutral.png';
 export default function ProfileHeader() {
   const { session } = useAuth();
   const user: User | undefined = session?.user;
@@ -19,7 +18,7 @@ export default function ProfileHeader() {
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
           <div className="relative">
             <Avatar className="h-24 w-24">
-              <AvatarImage src={avatar? avatar: neutralImg} alt="Profile" />
+              <AvatarImage src={avatar? avatar: '/images/neutral.png'} alt="Profile" />
               <AvatarFallback className="text-2xl">USERNAME</AvatarFallback>
             </Avatar>
           </div>
