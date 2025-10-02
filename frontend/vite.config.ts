@@ -27,24 +27,24 @@ export default defineConfig({
         theme_color: "#f3f4f6",    
         icons: [
           {
-            src: "src/assets/logo.png",
+            src: "/images/logo.png",
             sizes: "1024x1024",
             type: "image/png",
           },          
         ],
         "screenshots": [
           {
-            "src": "src/assets/sc.png",
+            "src": "/images/sc.png",
             "sizes": "1400x900",
             "type": "image/png",
             "form_factor": "wide",
           },         {
-            "src": "src/assets/sc2.png",
+            "src": "/images/sc2.png",
             "sizes": "1400x900",
             "type": "image/png",
             "form_factor": "wide",
           },         {
-            "src": "src/assets/sc3.png",
+            "src": "/images/sc3.png",
             "sizes": "1400x900",
             "type": "image/png",
             "form_factor": "wide",

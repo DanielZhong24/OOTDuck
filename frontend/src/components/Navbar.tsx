@@ -16,6 +16,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
+import failImg from "../assets/fail1.png";
+import successImg from "../assets/success.png";
+
 function Navbar() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
   const fileInputReferance = useRef<HTMLInputElement>(null);
@@ -117,7 +120,7 @@ function Navbar() {
                       }}
                     >
                       <motion.img
-                        src="/images/success-removebg-preview.png"
+                        src={successImg}
                         className="mx-auto w-48 md:w-64"
                         alt="Success Mascot"
                         whileHover={{
@@ -187,7 +190,7 @@ function Navbar() {
                       }}
                     >
                       <motion.img
-                        src="../src/assets/fail1.png"
+                        src={failImg}
                         className="mx-auto w-48 md:w-64"
                         alt="Fail Mascot"
                         whileHover={{
