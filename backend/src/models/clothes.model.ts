@@ -11,11 +11,14 @@ export const getAllTops = (userId: string) => {
   );
 };
 
-export const getClohtesBydUserId = (userId: string) => {};
+export const getClothesByUserId = (userId: string) => {
+  return db.any('SELECT * FROM cloth WHERE user_id = $1', [userId]);
+};
 
 export const getClothesById = (id: number) => {
-  return db.one('SELECT * FROM cloth where id = $1', [id]);
+  return db.one('SELECT *, cloudinary_public_id FROM cloth WHERE id = $1', [id]);
 };
+
 
 export const getAllBottoms = (userId: string) => {
   return db.any(
@@ -36,12 +39,14 @@ export const createClothes = (
   color: string,
   season: string,
   userId: string,
-  imagePath: string,
+  imageUrl: string,      
   category: string,
+  publicId: string       
 ): Promise<null> => {
   return db.none(
-    `INSERT INTO cloth (type,color,season,user_id,img_path,category, name) VALUES ($1,$2,$3,$4,$5,$6, $7)`,
-    [type, color.toLowerCase(), season, userId, imagePath, category, `${color} ${type}`]
+    `INSERT INTO cloth (type, color, season, user_id, img_path, category, name, cloudinary_public_id) 
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [type, color.toLowerCase(), season, userId, imageUrl, category, `${color} ${type}`, publicId]
   );
 };
 
@@ -223,6 +228,10 @@ export const colourAndSeasonOutfit = async (
   return outfit;
 };
 
-export const getNumberOfClothes = async(userId:number)=>{
-  return db.one(`SELECT COUNT(*) FROM cloth WHERE user_id = $1;`,[userId]);
+export const getNumberOfClothes = async (userId: string) => {
+  const result = await db.one<{ count: string }>(
+    `SELECT COUNT(*) FROM cloth WHERE user_id = $1;`,
+    [userId]
+  );
+  return { count: Number(result.count) };
 };

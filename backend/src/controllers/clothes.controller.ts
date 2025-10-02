@@ -15,10 +15,10 @@ import {
   getNumberOfClothes
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
-import path from 'path';
-import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
+import cloudinary, { type CloudinaryUploadResponse } from '../config/cloudinary.js';
+
 const listAllClothes = async (req: Request, res: Response): Promise<void> => {
   try {
     const clothes = await getAllClothes();
@@ -33,81 +33,78 @@ export const addClothes = async (req: Request, res: Response) => {
     if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
     const { userId } = req.body;
-    if (!userId) {
-      return res.status(400).json({ error: 'Missing user id' });
-    }
+    if (!userId) return res.status(400).json({ error: 'Missing user id' });
 
-    const userIdNum :string = userId;
+    const userIdNum: string = userId;
 
-
+    // Check user closet limit
     const numberOfClothes = await getNumberOfClothes(userId);
-    if(numberOfClothes.count > 30){
-      return res.status(403).json({error:`Exceed closet limit ${numberOfClothes.count}/30`});
+    if (numberOfClothes.count > 30) {
+      return res.status(403).json({ error: `Exceed closet limit ${numberOfClothes.count}/30` });
     }
 
-
-
-    // --- Call AI server ---
+    // Call AI server
     const formData = new FormData();
     formData.append('file', req.file.buffer, 'input.png');
 
     const apiCall = process.env.MODEL_CONNECTION;
-    console.log(apiCall);
-    if(apiCall==null){
-      return res.status(403).json({error:`API NOT FOUND`});
-    }
-    const aiResponse = await axios.post(
-      apiCall,
-      formData,
-      {
-        responseType: 'arraybuffer',
-        headers: formData.getHeaders ? formData.getHeaders() : {},
-      }
-    );
+    if (!apiCall) return res.status(403).json({ error: `API NOT FOUND` });
+
+    const aiResponse = await axios.post(apiCall, formData, {
+      responseType: 'arraybuffer',
+      headers: formData.getHeaders ? formData.getHeaders() : {},
+    });
 
     const processedBuffer = Buffer.from(aiResponse.data);
     const headers = aiResponse.headers;
-    // --- Prepare file info but do NOT save yet ---
-    const filename = `DA${Date.now()}-${Math.round(Math.random() * 10000)}.png`;
-    const savePath = path.join(process.cwd(), 'src', 'img', filename);
-    const relPath = path.posix.join('img', filename);
+
     const color = headers['clothing-color'].toLowerCase();
     const type = headers['clothing-type'];
     const season = headers['clothing-season'];
     const category = headers['clothing-category'];
-    // --- Save record in DB first ---
+
+    // Upload to Cloudinary
+    const uploadResult: CloudinaryUploadResponse = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: 'user_clothes' },
+        (error, result) => {
+          if (error || !result) return reject(error);
+          resolve(result);
+        }
+      );
+      uploadStream.end(processedBuffer);
+    });
+
+    // Save record in DB
     const clothes = await createClothes(
       type,
       color,
       season,
       userIdNum,
-      relPath,
+      uploadResult.secure_url,
       category,
+      uploadResult.public_id
     );
-
-    // --- Only save image if DB insert succeeded ---
-    fs.writeFileSync(savePath, processedBuffer);
 
     res.status(201).json({
       message: 'Successfully added new cloth!',
-      clothes: clothes,
+      clothes,
       file: {
-        savedAs: filename,
-        path: relPath,
+        url: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
       },
     });
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (error.response) {
-        return res.status(error.response.status).json({
-          error:
-            error.response.data?.error || "AI counldn't recongize clothing",
-        });
-      }
+    if (axios.isAxiosError(error) && error.response) {
+      return res.status(error.response.status).json({
+        error: error.response.data?.error || "AI couldn't recognize clothing",
+      });
     }
-    return res.status(500).json({ error: 'Failed to add new clothes' });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to add new clothes' });
   }
 };
+
 const listClothesByUser = async (
   req: Request,
   res: Response
@@ -238,25 +235,33 @@ const updateClothesById = async (req: Request, res: Response) => {
     return res.status(500).json({ error: error });
   }
 };
-
 const removeClothesById = async (req: Request, res: Response) => {
   try {
     if (!req.params.id || isNaN(+req.params.id)) {
-      return { error: 'Id not valid' };
+      return res.status(400).json({ error: 'Id not valid' });
     }
 
     const id = Number(req.params.id);
-    const fetchData = await getClothesById(id);
-    const relpath = fetchData['img_path'];
-    const response = await deleteClothes(id);
-    const deletePath = path.join(process.cwd(), 'src', relpath);
-    fs.unlinkSync(deletePath);
 
-    res.status(204).json({ message: '204 No Content success deletion' });
+    const fetchData = await getClothesById(id);
+    if (!fetchData) return res.status(404).json({ error: 'Cloth not found' });
+
+    const publicId = fetchData['cloudinary_public_id'];
+
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    await deleteClothes(id);
+
+    res.status(204).json({ message: 'Successfully deleted clothing' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete data' });
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete clothing' });
   }
 };
+
+
 
 function toArray(query: string | string[] | undefined) {
   if (query === undefined) return [];
