@@ -1,4 +1,4 @@
-import app from './src/app.js';
+import app from './app.js';
 import cors from 'cors';
 const port: number = 6767; //so we dont interefere local testing with front end at the port 3000
 
