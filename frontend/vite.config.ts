@@ -18,8 +18,8 @@ export default defineConfig({
         enabled:true
       },
       manifest: {
-        name: "Dressify",
-        short_name: "Dressify",
+        name: "OOTDuck",
+        short_name: "OOTDuck",
         start_url: "/",
         id:"/",
         display: "standalone",

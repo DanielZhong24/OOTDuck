@@ -51,8 +51,13 @@ export const addClothes = async (req: Request, res: Response) => {
     const formData = new FormData();
     formData.append('file', req.file.buffer, 'input.png');
 
+    const apiCall = process.env.MODEL_CONNECTION;
+    console.log(apiCall);
+    if(apiCall==null){
+      return res.status(403).json({error:`API NOT FOUND`});
+    }
     const aiResponse = await axios.post(
-      'http://localhost:8000/predict',
+      apiCall,
       formData,
       {
         responseType: 'arraybuffer',
