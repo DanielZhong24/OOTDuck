@@ -33,9 +33,9 @@ export function UserForm({
               <div className="flex size-36 items-center justify-center rounded-md">
                 <img src={failImg} alt="" />
               </div>
-              <span className="sr-only">Dressify</span>
+              <span className="sr-only">OOTDuck</span>
             </a>
-            <h1 className="text-center text-xl font-bold">Welcome to Dressify</h1>
+            <h1 className="text-center text-xl font-bold">Welcome to OOTDuck</h1>
             <div className="text-center text-sm">
               {url === "/login" ? (
                 <>
