@@ -38,11 +38,10 @@ export const createClothes = (
   userId: string,
   imagePath: string,
   category: string,
-  name: string
 ): Promise<null> => {
   return db.none(
     `INSERT INTO cloth (type,color,season,user_id,img_path,category, name) VALUES ($1,$2,$3,$4,$5,$6, $7)`,
-    [type, color, season, userId, imagePath, category, `${color} ${type}`]
+    [type, color.toLowerCase(), season, userId, imagePath, category, `${color} ${type}`]
   );
 };
 

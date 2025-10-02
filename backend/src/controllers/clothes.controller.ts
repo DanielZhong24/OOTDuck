@@ -78,7 +78,6 @@ export const addClothes = async (req: Request, res: Response) => {
       userIdNum,
       relPath,
       category,
-      `${color} ${type}`
     );
 
     // --- Only save image if DB insert succeeded ---
