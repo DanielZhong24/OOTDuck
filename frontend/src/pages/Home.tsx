@@ -7,6 +7,7 @@ import type { FilterState } from "@/components/FilterComponent";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
+import failImg from "../assets/fail1.png";
 
 interface ClothingItem {
   id: string;
@@ -206,7 +207,7 @@ export default function Home() {
               ease: "easeInOut",
             }}
           >
-            <motion.img src="./src/assets/fail1.png" className="w-32" alt="Mascot" />
+            <motion.img src={failImg} className="w-32" alt="Mascot" />
           </motion.div>
           <h1>or add more clothes 😒 </h1>
         </div>
