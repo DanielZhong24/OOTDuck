@@ -12,7 +12,7 @@ import {
   getNeutralOutfit,
   colourAndSeasonOutfit,
   getComplementaryOutfit,
-  getNumberOfClothes
+  getNumberOfClothes,
 } from '../models/clothes.model.js';
 import type { Request, Response } from 'express';
 import path from 'path';
@@ -37,15 +37,14 @@ export const addClothes = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Missing user id' });
     }
 
-    const userIdNum :string = userId;
-
+    const userIdNum: string = userId;
 
     const numberOfClothes = await getNumberOfClothes(userId);
-    if(numberOfClothes.count > 30){
-      return res.status(403).json({error:`Exceed closet limit ${numberOfClothes.count}/30`});
+    if (numberOfClothes.count > 30) {
+      return res
+        .status(403)
+        .json({ error: `Exceed closet limit ${numberOfClothes.count}/30` });
     }
-
-
 
     // --- Call AI server ---
     const formData = new FormData();
@@ -53,17 +52,13 @@ export const addClothes = async (req: Request, res: Response) => {
 
     const apiCall = process.env.MODEL_CONNECTION;
     console.log(apiCall);
-    if(apiCall==null){
-      return res.status(403).json({error:`API NOT FOUND`});
+    if (apiCall == null) {
+      return res.status(403).json({ error: `API NOT FOUND` });
     }
-    const aiResponse = await axios.post(
-      apiCall,
-      formData,
-      {
-        responseType: 'arraybuffer',
-        headers: formData.getHeaders ? formData.getHeaders() : {},
-      }
-    );
+    const aiResponse = await axios.post(apiCall, formData, {
+      responseType: 'arraybuffer',
+      headers: formData.getHeaders ? formData.getHeaders() : {},
+    });
 
     const processedBuffer = Buffer.from(aiResponse.data);
     const headers = aiResponse.headers;
@@ -82,7 +77,7 @@ export const addClothes = async (req: Request, res: Response) => {
       season,
       userIdNum,
       relPath,
-      category,
+      category
     );
 
     // --- Only save image if DB insert succeeded ---
@@ -134,10 +129,10 @@ export const getRandomSlotOutfit = async (req: Request, res: Response) => {
   try {
     const userIdParam = req.params.id;
     if (!userIdParam) {
-    return res.status(400).json({ error: "Missing user ID" });
+      return res.status(400).json({ error: 'Missing user ID' });
     }
 
-    const userId: string = userIdParam; 
+    const userId: string = userIdParam;
     const tops = await getAllTops(userId);
     const bottoms = await getAllBottoms(userId);
     const seasons = req.query.seasons as string | undefined;

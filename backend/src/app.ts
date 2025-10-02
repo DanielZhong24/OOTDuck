@@ -9,8 +9,19 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const app: Application = express();
+const frontEnd = process.env.FRONT_END_URL as string;
+const aiConnection = process.env.AI_CONNECTION as string;
 
-app.use(cors<Request>());
+const allowedOrigins = [frontEnd, aiConnection];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
