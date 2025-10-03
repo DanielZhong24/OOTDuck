@@ -101,7 +101,7 @@ def load_checkpoint(model, checkpoint_path):
     if not os.path.exists(checkpoint_path):
         print("----No checkpoints at given path----")
         return
-    model_state_dict = torch.load(checkpoint_path, map_location=torch.device("cpu"))
+    model_state_dict = torch.load(checkpoint_path, map_location=torch.device("cpu"), weights_only=False)
     new_state_dict = OrderedDict()
     for k, v in model_state_dict.items():
         name = k[7:]  # remove `module.`
@@ -273,14 +273,21 @@ def rgb_to_color_name(rgb):
 
 
 def check_or_download_model(file_path):
-    if not os.path.exists(file_path):
+    """
+    Ensures the model file exists and is non-empty.
+    Downloads it from Google Drive if missing or empty.
+    """
+    # Check if file exists and is non-empty
+    if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+        # Ensure the parent directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        url = "https://drive.google.com/uc?id=11xTBALOeUkyuaK3l60CpkYHLTmv7k3dY"
+
+        url = "https://drive.google.com/uc?export=download&id=1Djcu-4nQagbQYmntQcMs0zzvVGwxZ81M"
+        print(f"Downloading model to {file_path}...")
         gdown.download(url, file_path, quiet=False)
         print("Model downloaded successfully.")
     else:
-        print("Model already exists.")
-
+        print(f"Model already exists and is non-empty: {file_path}")
 
 def load_seg_model(checkpoint_path, device='cpu'):
     net = U2NET(in_ch=3, out_ch=4)
@@ -288,7 +295,6 @@ def load_seg_model(checkpoint_path, device='cpu'):
     net = load_checkpoint(net, checkpoint_path)
     net = net.to(device)
     net = net.eval()
-
     return net
 
 

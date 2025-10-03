@@ -14,7 +14,7 @@ from process import (load_seg_model,
 app = FastAPI()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-net = load_seg_model("model/cloth_segm.pth", device=device)
+net = load_seg_model("model/cloth_segm.pth", device='cpu')
 palette = get_palette(4)
 @app.get('/')
 async def root():

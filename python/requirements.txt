@@ -1,10 +1,8 @@
-torch
-torchvision
+fastapi
+uvicorn
 opencv-python
 numpy
 Pillow
-fastapi
-uvicorn
 gdown
 python-multipart
 transformers
