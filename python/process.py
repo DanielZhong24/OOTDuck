@@ -291,9 +291,6 @@ def load_seg_model(checkpoint_path, device='cpu'):
     return net
 
 
-    return net
-
-
 def main(args):
 
     device = 'cuda:0' if args.cuda else 'cpu'
