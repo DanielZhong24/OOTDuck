@@ -28,8 +28,7 @@ function Photo() {
       axios.delete(`${port}api/clothes/delete/${id}`);
 
       setClothes((prevClothes: any) => prevClothes.filter((item: any) => item.id !== id));
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const handleEdit = async (id: number, name: string): Promise<void> => {
@@ -61,7 +60,7 @@ function Photo() {
 
   if (clothes.length === 0 && isLoading === false) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
+      <div className="flex h-screen flex-col items-center justify-center">
         <h1 className="text-xl font-bold lg:text-2xl xl:text-3xl">No clothes found</h1>
         <div>
           <motion.div
@@ -78,8 +77,8 @@ function Photo() {
           </motion.div>
         </div>
 
-        <div className="fixed right-10 bottom-30 rounded-full bg-amber-500 p-1">
-          <Funnel 
+        <div className="fixed right-10 bottom-28 rounded-full bg-amber-500 p-1 transition-colors duration-200 hover:bg-amber-700">
+          <Funnel
             onClick={toggleOpen}
             className="box-content size-6 cursor-pointer p-2.5 text-white"
           />
@@ -97,7 +96,7 @@ function Photo() {
   }
 
   return (
-    <div className="mb-20 bg-white">
+    <div className="mb-20 h-screen bg-white">
       <ul className="grid grid-cols-2 gap-7 p-8 sm:grid-cols-2 sm:gap-10 md:grid-cols-4 md:gap-15">
         {clothes.map((item: any) => (
           <li className="w-full" key={item.id}>
@@ -114,7 +113,7 @@ function Photo() {
           </li>
         ))}
       </ul>
-      <div className="fixed right-10 bottom-30 rounded-full bg-amber-500 p-1 transition-colors duration-200 hover:bg-amber-700">
+      <div className="fixed right-10 bottom-28 rounded-full bg-amber-500 p-1 transition-colors duration-200 hover:bg-amber-700">
         <Funnel
           onClick={toggleOpen}
           className="box-content size-6 cursor-pointer p-2.5 text-white"

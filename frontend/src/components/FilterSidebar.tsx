@@ -167,7 +167,7 @@ function FilterSidebar({ onClick, isOpen, toggleOpen, setClothes }: FilterSideba
 
   return (
     <aside
-      className={`fixed top-0 right-0 z-50 flex h-screen w-full flex-col justify-between bg-white p-4 transition-transform duration-300 sm:w-[45%] lg:w-[30%] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+      className={`fixed top-0 right-0 bottom-0 z-50 flex h-screen w-full flex-col justify-between bg-white p-4 transition-transform duration-300 sm:w-[45%] lg:w-[30%] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
       <div>
         <div className="flex items-center justify-between border-b-1 pb-4">

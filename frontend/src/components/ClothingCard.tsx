@@ -23,7 +23,7 @@ function ClothingCard({
   onDelete,
   onEdit,
 }: ClothingCardProps) {
-  const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [showBottomSheet, setShowBottomSheet] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const capitalizeLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
