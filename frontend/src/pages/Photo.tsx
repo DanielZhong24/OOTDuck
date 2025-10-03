@@ -7,7 +7,6 @@ import FilterSidebar from "@/components/FilterSidebar";
 import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
-import failImg from "../assets/fail1.png";
 
 function Photo() {
   const [isOpen, setOpen] = useState<boolean>(false);
