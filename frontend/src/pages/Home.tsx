@@ -238,7 +238,7 @@ export default function Home() {
                     className="w-full flex-shrink-0"
                   >
                     <img
-                      src={`${port}${item.img_path}`}
+                      src={`${item.img_path}`}
                       alt="Top"
                       className="slot-image h-full w-full object-contain"
                     />
@@ -273,7 +273,7 @@ export default function Home() {
                     className="w-full flex-shrink-0"
                   >
                     <img
-                      src={`${port}${item.img_path}`}
+                      src={`${item.img_path}`}
                       alt="Bottom"
                       className="slot-image h-full w-full object-contain"
                     />

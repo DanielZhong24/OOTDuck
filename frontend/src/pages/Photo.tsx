@@ -108,7 +108,7 @@ function Photo() {
               color={item.color}
               season={item.season}
               name={item.name}
-              imageUrl={port + item.img_path}
+              imageUrl={item.img_path}
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
