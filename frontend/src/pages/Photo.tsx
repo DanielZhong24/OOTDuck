@@ -75,7 +75,7 @@ function Photo() {
               ease: "easeInOut",
             }}
           >
-            <motion.img src={failImg} className="w-32" alt="Mascot" />
+            <motion.img src="/images/fail1.png" className="w-32" alt="Mascot" />
           </motion.div>
         </div>
 

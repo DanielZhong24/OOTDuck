@@ -10,8 +10,12 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     wget \
     git \
+    git-lfs \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
+
+# Initialize Git LFS
+RUN git lfs install
 
 # Copy requirements first for caching
 COPY requirements.txt .
@@ -21,6 +25,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the app
 COPY . .
+
+# Pull LFS files (important: run this *after* copying code so model gets pulled)
+RUN git lfs pull
 
 # Expose port (Railway uses $PORT)
 ENV PORT=8080
