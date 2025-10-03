@@ -14,6 +14,23 @@ export default defineConfig({
     Icons({compiler:"jsx"}),
     VitePWA({
       registerType: "autoUpdate",
+
+      workbox: {
+        cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/images/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'image-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 24 * 60 * 60,
+              },
+            },
+          },
+        ],
+      },
       devOptions:{
         enabled:true
       },
@@ -27,7 +44,7 @@ export default defineConfig({
         theme_color: "#f3f4f6",    
         icons: [
           {
-            src: "/images/logo.png",
+            src: "/images/logo2.png",
             sizes: "1024x1024",
             type: "image/png",
           },          

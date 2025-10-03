@@ -1,37 +1,32 @@
-# Use a lightweight Python image
+# Use a lightweight Python base
 FROM python:3.13-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for OpenCV and general builds
+# Install system dependencies for OpenCV and builds
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     wget \
-    git \
-    git-lfs \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Initialize Git LFS
-RUN git lfs install
+# Install CPU-only PyTorch + torchvision directly
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
-# Copy requirements first for caching
+# Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install other Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the app
+# Copy the rest of the application (including your model folder)
 COPY . .
 
-# Pull LFS files (important: run this *after* copying code so model gets pulled)
-RUN git lfs pull
-
-# Expose port (Railway uses $PORT)
+# Railway uses PORT env automatically
 ENV PORT=8080
 EXPOSE 8080
 
-# Command to run the app
+# Start the app with Uvicorn
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
