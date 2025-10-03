@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { AuthContext, type AuthContextType } from "./AuthContext";
 import { supabase } from "./supabaseClient";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<AuthContextType["session"]>(null);
@@ -22,6 +23,22 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const authInterceptor = axios.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        config.withCredentials = true;
+        if (session?.access_token) {
+          config.headers.Authorization = `Bearer ${session?.access_token}`;
+        }
+        return config;
+      },
+    );
+
+    return () => {
+      axios.interceptors.request.eject(authInterceptor);
+    };
+  }, [session?.access_token]);
 
   const handleSignup: (
     email: string,
@@ -64,7 +81,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleLogout: () => Promise<any> = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error("Error signing out:", error.name);
       return { pass: false, error: error.name };
     }
 
