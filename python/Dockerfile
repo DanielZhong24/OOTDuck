@@ -1,5 +1,4 @@
-FROM python:3.13-slim
-
+FROM python:3.13
 WORKDIR /app
 
 # Set UTF-8 locale
