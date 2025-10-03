@@ -272,21 +272,24 @@ def rgb_to_color_name(rgb):
 
 
 
-# def check_or_download_model(file_path):
-#     if not os.path.exists(file_path):
-#         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-#         url = "https://drive.google.com/uc?id=11xTBALOeUkyuaK3l60CpkYHLTmv7k3dY"
-#         gdown.download(url, file_path, quiet=False)
-#         print("Model downloaded successfully.")
-#     else:
-#         print("Model already exists.")
+def check_or_download_model(file_path):
+    if not os.path.exists(file_path):
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        url = "https://drive.google.com/uc?export=download&id=1Djcu-4nQagbQYmntQcMs0zzvVGwxZ81M"
+        gdown.download(url, file_path, quiet=False)
+        print("Model downloaded successfully.")
+    else:
+        print("Model already exists.")
 
 
 def load_seg_model(checkpoint_path, device='cpu'):
     net = U2NET(in_ch=3, out_ch=4)
+    check_or_download_model(checkpoint_path)
     net = load_checkpoint(net, checkpoint_path)
     net = net.to(device)
     net = net.eval()
+    return net
+
 
     return net
 
