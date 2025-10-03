@@ -273,14 +273,21 @@ def rgb_to_color_name(rgb):
 
 
 def check_or_download_model(file_path):
-    if not os.path.exists(file_path):
+    """
+    Ensures the model file exists and is non-empty.
+    Downloads it from Google Drive if missing or empty.
+    """
+    # Check if file exists and is non-empty
+    if not os.path.isfile(file_path) or os.path.getsize(file_path) == 0:
+        # Ensure the parent directory exists
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
         url = "https://drive.google.com/uc?export=download&id=1Djcu-4nQagbQYmntQcMs0zzvVGwxZ81M"
+        print(f"Downloading model to {file_path}...")
         gdown.download(url, file_path, quiet=False)
         print("Model downloaded successfully.")
     else:
-        print("Model already exists.")
-
+        print(f"Model already exists and is non-empty: {file_path}")
 
 def load_seg_model(checkpoint_path, device='cpu'):
     net = U2NET(in_ch=3, out_ch=4)
