@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 const app: Application = express();
 const frontEnd = process.env.FRONT_END_URL as string;
-const aiConnection = process.env.AI_CONNECTION as string;
+const aiConnection = process.env.MODEL_CONNECTION as string;
 
 const allowedOrigins = [frontEnd, aiConnection];
 
