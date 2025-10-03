@@ -101,7 +101,7 @@ def load_checkpoint(model, checkpoint_path):
     if not os.path.exists(checkpoint_path):
         print("----No checkpoints at given path----")
         return
-    model_state_dict = torch.load(checkpoint_path, map_location=torch.device("cpu"))
+    model_state_dict = torch.load(checkpoint_path, map_location=torch.device("cpu"), weights_only=False)
     new_state_dict = OrderedDict()
     for k, v in model_state_dict.items():
         name = k[7:]  # remove `module.`
