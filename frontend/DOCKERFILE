@@ -1,0 +1,26 @@
+# Dockerfile snippet
+FROM node:20
+
+# install wget & unzip if needed
+RUN apt-get update && apt-get install -y wget
+
+# set workdir
+WORKDIR /app
+
+# copy package.json etc
+COPY package*.json ./
+RUN npm install
+
+# copy your code
+COPY . .
+
+# download ONNX model from Google Drive
+# replace FILE_ID with your actual Google Drive file ID
+RUN wget --no-check-certificate \
+     'https://docs.google.com/uc?export=download&id=FILE_ID' \
+     -O public/cloth_segm.onnx
+
+# build app
+RUN npm run build
+
+CMD ["npm", "run","start"]
