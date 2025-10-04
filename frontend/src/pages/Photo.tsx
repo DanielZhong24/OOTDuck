@@ -119,14 +119,13 @@ function Photo() {
           className="box-content size-6 cursor-pointer p-2.5 text-white"
         />
       </div>
-      {
-        <FilterSidebar
-          isOpen={isOpen}
-          onClick={toggleOpen}
-          toggleOpen={toggleOpen}
-          setClothes={setClothes}
-        />
-      }
+
+      <FilterSidebar
+        isOpen={isOpen}
+        onClick={toggleOpen}
+        toggleOpen={toggleOpen}
+        setClothes={setClothes}
+      />
     </div>
   );
 }

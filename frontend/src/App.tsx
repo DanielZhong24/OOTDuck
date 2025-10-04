@@ -10,10 +10,10 @@ import type { Transition } from "framer-motion";
 import AuthProvider from "./context/AuthProvider";
 import Protected from "./components/Protected";
 import Error from "./pages/Error";
-import {useAuth} from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 function AnimatedRoutes() {
   const location = useLocation();
-  const{session} = useAuth();
+  const { session } = useAuth();
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -39,12 +39,59 @@ function AnimatedRoutes() {
 
   return (
     <>
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <Protected>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/"
+            element={
+              <Protected>
+                <motion.div
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={pageTransition}
+                >
+                  <Home />
+                </motion.div>
+              </Protected>
+            }
+          />
+          <Route
+            path="/photo"
+            element={
+              <Protected>
+                <motion.div
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={pageTransition}
+                >
+                  <Photo />
+                </motion.div>
+              </Protected>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <Protected>
+                <motion.div
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={pageTransition}
+                >
+                  <Setting />
+                </motion.div>
+              </Protected>
+            }
+          />
+          <Route
+            path="/login"
+            element={
               <motion.div
                 variants={pageVariants}
                 initial="initial"
@@ -52,15 +99,13 @@ function AnimatedRoutes() {
                 exit="exit"
                 transition={pageTransition}
               >
-                <Home />
+                <Login />
               </motion.div>
-            </Protected>
-          }
-        />
-        <Route
-          path="/photo"
-          element={
-            <Protected>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
               <motion.div
                 variants={pageVariants}
                 initial="initial"
@@ -68,15 +113,13 @@ function AnimatedRoutes() {
                 exit="exit"
                 transition={pageTransition}
               >
-                <Photo />
+                <Signup />
               </motion.div>
-            </Protected>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <Protected>
+            }
+          />
+          <Route
+            path="*"
+            element={
               <motion.div
                 variants={pageVariants}
                 initial="initial"
@@ -84,56 +127,13 @@ function AnimatedRoutes() {
                 exit="exit"
                 transition={pageTransition}
               >
-                <Setting />
+                <Error />
               </motion.div>
-            </Protected>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Login />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Signup />
-            </motion.div>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
-            >
-              <Error />
-            </motion.div>
-          }
-        />
-      </Routes>
-    </AnimatePresence>
-    {showNav && <Navbar/>}
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+      {showNav && <Navbar />}
     </>
   );
 }
