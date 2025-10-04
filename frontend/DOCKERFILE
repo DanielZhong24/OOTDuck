@@ -25,5 +25,6 @@ RUN ls -lh /app/public/cloth_segm.onnx
 # Build app
 RUN npm run build
 
+
 # Start the app
 CMD ["npm", "run", "start"]
