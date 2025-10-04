@@ -6,7 +6,7 @@ export async function segmentClothingAndCrop(imageSrc: string): Promise<string> 
   if (!session) {
     console.log("Loading ONNX session...");
     session = await ort.InferenceSession.create("/cloth_segm.onnx", {
-      executionProviders: ["webgl"],
+      executionProviders: ["webgpu"],
     });
     console.log("ONNX session loaded.");
   }
