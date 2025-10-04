@@ -15,7 +15,7 @@ COPY . .
 # Download ONNX model from Google Drive using gdown
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    pip3 install --no-cache-dir gdown && \
+    pip3 install --break-system-packages --no-cache-dir gdown && \
     gdown "https://drive.google.com/uc?id=1SZx185XDtS6MyHYwRTc5KssF7ijQj3h4" -O public/cloth_segm.onnx
 
 
