@@ -1,16 +1,30 @@
 import * as ort from "onnxruntime-web/webgpu";
 // undebugable, literally cant even understand this, the only reason why it works is because it got parsed from python to ts.
 let session: ort.InferenceSession | null = null;
+let sessionLoading: Promise<ort.InferenceSession> | null = null;
+
+
+async function getSession() {
+  if (session) return session;
+  if (sessionLoading) return sessionLoading; 
+
+  console.log("Loading ONNX session...");
+
+  sessionLoading = ort.InferenceSession.create("/cloth_segm.onnx", {
+    executionProviders: ["webgpu"], 
+  }).then(s => {
+    console.log("ONNX session loaded.");
+    session = s;
+    return s;
+  });
+
+  return sessionLoading;
+}
 
 export async function segmentClothingAndCrop(imageSrc: string): Promise<string> {
-  if (!session) {
-    console.log("Loading ONNX session...");
-    session = await ort.InferenceSession.create("/cloth_segm.onnx", {
-      executionProviders: ["webgpu"],
-    });
-    console.log("ONNX session loaded.");
-  }
 
+  const session = await getSession();
+  
   // Load image
   const img = await new Promise<HTMLImageElement>((resolve) => {
     const i = new Image();
