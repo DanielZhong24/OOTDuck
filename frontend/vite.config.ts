@@ -16,6 +16,7 @@ export default defineConfig({
       registerType: "autoUpdate",
 
       workbox: {
+        maximumFileSizeToCacheInBytes:30*1024*1024,
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
