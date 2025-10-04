@@ -20,6 +20,8 @@ RUN wget --no-check-certificate \
      'https://docs.google.com/uc?export=download&id=FILE_ID' \
      -O public/cloth_segm.onnx
 
+RUN ls -lh /app/public/model.onnx
+
 # build app
 RUN npm run build
 
