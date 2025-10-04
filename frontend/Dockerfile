@@ -1,0 +1,30 @@
+# Use Node.js base image
+FROM node:20
+
+# Install wget, unzip, python & pip (for gdown)
+RUN apt-get update && \
+    apt-get install -y wget unzip python3 python3-pip && \
+    pip3 install --no-cache-dir gdown
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json first for caching
+COPY package*.json ./
+RUN npm install
+
+# Copy rest of the code
+COPY . .
+
+# Download ONNX model from Google Drive using gdown
+RUN gdown https://drive.google.com/uc?id=1SZx185XDtS6MyHYwRTc5KssF7ijQj3h4 -O public/cloth_segm.onnx
+
+# Verify file exists and size
+RUN ls -lh /app/public/cloth_segm.onnx
+
+# Build app
+RUN npm run build
+
+
+# Start the app
+CMD ["npm", "run", "start"]
