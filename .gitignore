@@ -2,3 +2,5 @@ backend/node_modules
 backend/.env
 backend/src/img
 *.zip
+frontend/public/cloth_segm.onnx
+*.onnx

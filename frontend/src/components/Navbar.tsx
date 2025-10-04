@@ -18,6 +18,7 @@ import { useAuth } from "@/context/AuthContext";
 import type { User } from "@supabase/supabase-js";
 import failImg from "../assets/fail1.png";
 import successImg from "../assets/success.png";
+import { segmentClothingAndCrop } from "./util/segmentClothing";
 
 function Navbar() {
   const port = import.meta.env.VITE_BACKEND_ROUTE;
@@ -36,38 +37,50 @@ function Navbar() {
   const submitImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading("loading");
     setAlertMessage(null);
-    let bodyData = new FormData();
-    if (e.target.files) {
-      bodyData.append("image", e.target.files[0]);
-    } else {
-      ("error, image is not supported or wrong file");
+
+    if (!e.target.files || e.target.files.length === 0) {
+      setAlertMessage("No image selected");
       setLoading("idle");
       return;
     }
 
-    bodyData.append("userId", user.id);
-
     try {
+      const file = e.target.files[0];
+
+      let croppedDataUrl: string;
+      try {
+        // Attempt segmentation
+        croppedDataUrl = await segmentClothingAndCrop(URL.createObjectURL(file));
+      } catch (gpuError: any) {
+        console.error("Segmentation error:", gpuError);
+        setAlertMessage("GPU/WebGPU error: " + gpuError.message);
+        setLoading("fail");
+        return; // exit early
+      }
+
+      const res = await fetch(croppedDataUrl);
+      const blob = await res.blob();
+      console.log("Cropped blob size:", blob.size);
+
+      const bodyData = new FormData();
+      bodyData.append("file", blob, "clothing.png");
+      bodyData.append("userId", user.id);
+
       const response = await axios.post(`${port}api/clothes`, bodyData);
-      (response);
+      console.log(response.data);
       setLoading("success");
     } catch (e: any) {
       if (axios.isAxiosError(e) && e.response) {
-        if (e.response.status === 403) {
-          setAlertMessage(e.response.data.error || "Closet limit reached");
-          setLoading("fail");
-        } else {
-          setAlertMessage(e.response.data.error || "Failed to add clothing");
-          setLoading("fail");
-        }
+        setAlertMessage(e.response.data?.error || "Failed to add clothing");
       } else {
-        setAlertMessage("Unknown error occurred");
-        setLoading("fail");
+        setAlertMessage("Unknown error occurred: " + e.message);
       }
+      setLoading("fail");
     } finally {
       setTimeout(() => setLoading("idle"), 2000);
     }
   };
+
 
   return (
     <div>
@@ -249,6 +262,7 @@ function Navbar() {
                 onChange={submitImage}
                 ref={fileInputReferance}
                 capture="environment"
+                data-max-size="5242880"
               />
             </div>
           </div>

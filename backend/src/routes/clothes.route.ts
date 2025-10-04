@@ -28,7 +28,7 @@ router.get('/', clothesController.listAllClothes);
 
 router.post(
   '/',
-  upload.single('image'),
+  upload.single('file'),
   checkFileSize,
   clothesController.addClothes
 );

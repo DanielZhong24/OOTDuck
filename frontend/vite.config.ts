@@ -79,7 +79,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  
+  optimizeDeps: {
+    exclude: ['onnxruntime-web']
+  },
+    worker: {
+    format: 'es'
+  }
 
 
 });

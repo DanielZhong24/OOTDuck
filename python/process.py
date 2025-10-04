@@ -19,6 +19,7 @@ from skimage import color
 import math
 
 
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = CLIPModel.from_pretrained("patrickjohncyh/fashion-clip").to(device)
 processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip",use_fast=False)
@@ -48,33 +49,43 @@ CLOTHING_CLASSES = [
 
 
 #casual, streetwear, minimalistic, formal
+from PIL import Image
+
 def resize_clothing(img: Image.Image, pred_type: str) -> Image.Image:
+    # Crop to bounding box
     bbox = img.getbbox()
     if bbox:
         img = img.crop(bbox)
 
+    # Get metadata
     metadata = next((c for c in CLOTHING_CLASSES if c["name"] == pred_type), None)
     if metadata is None:
         metadata = {"category": "top", "height_ratio": 0.7}  # default
 
+    # Canvas size based on category
     if metadata["category"] in ["bottom"]:
         canvas_w, canvas_h = 400, 500
-    else:  
+    else:
         canvas_w, canvas_h = 400, 400
 
+    # Compute target height
     target_h = int(canvas_h * metadata["height_ratio"])
-
     w, h = img.size
     ratio = target_h / h
     new_w = int(w * ratio)
-    img = img.resize((new_w, target_h))
+    img = img.resize((new_w, target_h), resample=Image.LANCZOS)
 
-    canvas = Image.new("RGBA", (canvas_w, canvas_h), (255, 255, 255, 0))
+    # Create transparent canvas
+    canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
     x = (canvas_w - new_w) // 2
     y = (canvas_h - target_h) // 2
-    canvas.paste(img, (x, y), img)
+
+    # Paste clothing onto transparent canvas
+    canvas.paste(img.convert("RGBA"), (x, y), mask=img.convert("RGBA"))
 
     return canvas
+
+
 #too lazy to train a new model, this api allows us to get a percentage of likelyhood base on text prompt
 def predict_clothing_type_fashionclip(cropped_img: Image.Image):
     inputs = processor(
@@ -264,7 +275,7 @@ def rgb_to_color_name(rgb):
             min_dist = dist
             best_match = name
 
-    if best_match in ["GRAY", "BLACK"]:
+    if best_match in ["BLACK"]:
         if B > max(R, G):
             best_match = "BLUE"
 

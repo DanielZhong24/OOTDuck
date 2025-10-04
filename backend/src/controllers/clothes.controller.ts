@@ -32,82 +32,76 @@ const listAllClothes = async (req: Request, res: Response): Promise<void> => {
 
 export const addClothes = async (req: Request, res: Response) => {
   try {
-    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+    if (!req.file) return res.status(400).json({ error: "No image uploaded" });
 
     const { userId } = req.body;
-    if (!userId) return res.status(400).json({ error: 'Missing user id' });
-
-    const userIdNum: string = userId;
+    if (!userId) return res.status(400).json({ error: "Missing user id" });
 
     // Check user closet limit
     const numberOfClothes = await getNumberOfClothes(userId);
-    if (numberOfClothes.count > 30) {
-      return res
-        .status(403)
-        .json({ error: `Exceed closet limit ${numberOfClothes.count}/30` });
+    if (numberOfClothes.count >= 30) {
+      return res.status(403).json({ error: `Exceed closet limit ${numberOfClothes.count}/30` });
     }
 
-    // Call AI server
+    // Send image to AI server
     const formData = new FormData();
-    formData.append('file', req.file.buffer, 'input.png');
+    formData.append("file", req.file.buffer, "input.png");
 
-    const apiCall = process.env.MODEL_CONNECTION;
-    if (!apiCall) return res.status(403).json({ error: `API NOT FOUND` });
+    const aiApi = process.env.MODEL_CONNECTION;
+    if (!aiApi) return res.status(500).json({ error: "AI API not configured" });
 
-    const aiResponse = await axios.post(apiCall, formData, {
-      responseType: 'arraybuffer',
-      headers: formData.getHeaders ? formData.getHeaders() : {},
+    const aiResponse = await axios.post(aiApi, formData, {
+      responseType: "arraybuffer", // image comes back as binary
+      headers: formData.getHeaders(),
     });
 
-    const processedBuffer = Buffer.from(aiResponse.data);
+    const aiBuffer = Buffer.from(aiResponse.data);
     const headers = aiResponse.headers;
 
-    const color = headers['clothing-color'].toLowerCase();
-    const type = headers['clothing-type'];
-    const season = headers['clothing-season'];
-    const category = headers['clothing-category'];
+    const type = headers["clothing-type"];
+    const color = headers["clothing-color"].toLowerCase();
+    const season = headers["clothing-season"];
+    const category = headers["clothing-category"];
 
     // Upload to Cloudinary
-    const uploadResult: CloudinaryUploadResponse = await new Promise(
-      (resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { folder: 'user_clothes' },
-          (error, result) => {
-            if (error || !result) return reject(error);
-            resolve(result);
-          }
-        );
-        uploadStream.end(processedBuffer);
-      }
-    );
+    const uploadResult = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "user_clothes" },
+        (err, result) => {
+          if (err || !result) reject(err);
+          else resolve(result);
+        }
+      );
+      stream.end(aiBuffer);
+    });
 
-    // Save record in DB
+    // Save to DB
     const clothes = await createClothes(
       type,
       color,
       season,
-      userIdNum,
-      uploadResult.secure_url,
+      userId,
+      (uploadResult as any).secure_url,
       category,
-      uploadResult.public_id
+      (uploadResult as any).public_id
     );
 
     res.status(201).json({
-      message: 'Successfully added new cloth!',
+      message: "Clothing added successfully",
       clothes,
       file: {
-        url: uploadResult.secure_url,
-        publicId: uploadResult.public_id,
+        url: (uploadResult as any).secure_url,
+        publicId: (uploadResult as any).public_id,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error in addClothes:", error);
     if (axios.isAxiosError(error) && error.response) {
       return res.status(error.response.status).json({
-        error: error.response.data?.error || "AI couldn't recognize clothing",
+        error: error.response.data?.error || "AI could not recognize clothing",
       });
     }
-    console.error(error);
-    res.status(500).json({ error: 'Failed to add new clothes' });
+    res.status(500).json({ error: "Failed to add new clothes" });
   }
 };
 
