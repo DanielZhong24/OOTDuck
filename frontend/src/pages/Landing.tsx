@@ -1,5 +1,6 @@
 import Header from "@/landing/Header";
 import Hero from "@/landing/Hero";
+import Slider from "@/landing/Slider";
 
 function Landing() {
   return (
@@ -7,6 +8,7 @@ function Landing() {
       <Header />
       <main className="flex h-full flex-col">
         <Hero />
+        <Slider />
       </main>
     </>
   );

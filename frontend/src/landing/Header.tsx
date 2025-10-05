@@ -1,6 +1,5 @@
 import logo from "../assets/192x192.png";
 import { Button } from "@/components/ui/button";
-
 function Header() {
   const headerLinks = [
     { name: "Home", href: "/" },
