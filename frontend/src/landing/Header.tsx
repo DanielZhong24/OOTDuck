@@ -1,5 +1,6 @@
 import logo from "../assets/192x192.png";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 function Header() {
   const headerLinks = [
     { name: "Home", href: "/" },
@@ -24,12 +25,14 @@ function Header() {
           ))}
         </ul>
       </div>
-      <Button
-        className="cursor-pointer border-0 bg-amber-500 text-white hover:bg-amber-700 hover:text-white"
-        variant="outline"
-      >
-        Sign in
-      </Button>
+      <Link to="/login">
+        <Button
+          className="cursor-pointer border-0 bg-amber-500 text-white hover:bg-amber-700 hover:text-white"
+          variant="outline"
+        >
+          Sign in
+        </Button>
+      </Link>
     </header>
   );
 }

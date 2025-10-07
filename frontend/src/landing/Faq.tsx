@@ -52,7 +52,7 @@ const Faq = ({
   ],
 }: FaqProps) => {
   return (
-    <section className="mx-auto py-32">
+    <section id="faqs" className="mx-auto py-32">
       <div className="max-w-3xl">
         <h1 className="mb-4 text-center text-3xl font-semibold md:mb-11 md:text-4xl xl:text-5xl">
           {heading}

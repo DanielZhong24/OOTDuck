@@ -43,9 +43,22 @@ function AnimatedRoutes() {
     <>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/landing" element={<Landing />} />
           <Route
             path="/"
+            element={
+              <motion.div
+                variants={pageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={pageTransition}
+              >
+                <Landing />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/home"
             element={
               <Protected>
                 <motion.div
