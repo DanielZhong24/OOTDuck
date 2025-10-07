@@ -2,6 +2,7 @@ import Header from "@/landing/Header";
 import Hero from "@/landing/Hero";
 import Slider from "@/landing/Slider";
 import Features from "@/landing/Features";
+import Faq from "@/landing/Faq";
 
 function Landing() {
   return (
@@ -11,6 +12,7 @@ function Landing() {
         <Hero />
         <Slider />
         <Features />
+        <Faq />
       </main>
     </>
   );

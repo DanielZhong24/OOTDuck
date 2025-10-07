@@ -4,7 +4,10 @@ import { Check } from "lucide-react";
 
 function Features() {
   return (
-    <section className="mx-auto my-12 lg:max-w-[55rem] xl:max-w-[75rem] 2xl:max-w-[90rem]">
+    <section
+      id="features"
+      className="mx-auto my-12 lg:max-w-[55rem] xl:max-w-[75rem] 2xl:max-w-[90rem]"
+    >
       <div className="flex items-center justify-between pb-12">
         <div className="max-w-[40%]">
           <div className="flex h-full flex-col space-y-6">
