@@ -1,7 +1,9 @@
 import logo from "../../assets/192x192.png";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 function Header() {
+  const { session } = useAuth();
   const headerLinks = [
     { name: "Home", href: "/" },
     { name: "Features", href: "/#features" },
@@ -25,15 +27,25 @@ function Header() {
           ))}
         </ul>
       </div>
-      <Link to="/login">
-        <Button
-          className="cursor-pointer border-0 bg-amber-500 text-white hover:bg-amber-700 hover:text-white"
-          variant="outline"
-        >
-          Sign in
-        </Button>
-      </Link>
+      {session ? (
+        <HeaderButton link="/home" text="Dashboard" />
+      ) : (
+        <HeaderButton link="/login" text="Sign in" />
+      )}
     </header>
+  );
+}
+
+function HeaderButton({ link, text }: { link: string; text: string }) {
+  return (
+    <Link to={link}>
+      <Button
+        className="cursor-pointer border-0 bg-amber-500 text-white hover:bg-amber-700 hover:text-white"
+        variant="outline"
+      >
+        {text}
+      </Button>
+    </Link>
   );
 }
 

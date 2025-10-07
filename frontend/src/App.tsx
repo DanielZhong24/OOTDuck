@@ -149,7 +149,7 @@ function AnimatedRoutes() {
           />
         </Routes>
       </AnimatePresence>
-      {showNav && <Navbar />}
+      {showNav && window.location.pathname === "/" ? null : showNav && <Navbar />}
     </>
   );
 }

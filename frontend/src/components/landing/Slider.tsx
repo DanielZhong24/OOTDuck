@@ -20,7 +20,7 @@ function Slider() {
   ];
   return (
     <>
-      <div className="mt-15 mb-5 flex w-full justify-center">
+      <div className="mt-8 mb-5 flex w-full justify-center xl:mt-15">
         <h2 className="text-base text-gray-600">
           Used by students across several different universities in Canada
         </h2>

@@ -59,7 +59,7 @@ const Faq = ({
         </h1>
         <Accordion className="w-full" type="single" collapsible>
           {items.map((item, index) => (
-            <AccordionItem className="xl:w-[50vw]" key={index} value={`item-${index}`}>
+            <AccordionItem className="w-[50vw]" key={index} value={`item-${index}`}>
               <AccordionTrigger className="hover:no-underline lg:text-base">
                 {item.question}
               </AccordionTrigger>
