@@ -52,18 +52,22 @@ const Faq = ({
   ],
 }: FaqProps) => {
   return (
-    <section id="faqs" className="mx-auto py-32">
+    <section id="faqs" className="mx-auto pt-10 pb-16 md:pt-20 md:pb-32">
       <div className="flex max-w-3xl flex-col items-center justify-center">
         <h1 className="mb-4 text-center font-semibold sm:text-3xl md:mb-11 md:text-3xl xl:text-5xl">
           {heading}
         </h1>
         <Accordion type="single" collapsible>
           {items.map((item, index) => (
-            <AccordionItem className="w-[50vw]" key={index} value={`item-${index}`}>
+            <AccordionItem
+              className="sm:w-[60vw] md:w-[50vw]"
+              key={index}
+              value={`item-${index}`}
+            >
               <AccordionTrigger className="hover:no-underline lg:text-base">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground text-base">
+              <AccordionContent className="text-muted-foreground sm:text-sm lg:text-base">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

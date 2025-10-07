@@ -11,12 +11,12 @@ function Footer() {
   return (
     <div className="relative h-[50vh]">
       <div className="flex items-center justify-between p-8">
-        <p className="text-white">&copy; 2025 OOTDUCK.</p>
+        <p className="text-xs text-white sm:text-sm">&copy; 2025 OOTDUCK.</p>
         <ul className="flex items-center justify-end gap-8">
           {headerLinks.map((link, index) => (
             <li key={index}>
               <a
-                className="text-lg font-medium text-white hover:underline lg:text-xl xl:text-2xl"
+                className="font-medium text-white hover:underline sm:text-base md:text-lg lg:text-xl xl:text-2xl"
                 href={link.href}
               >
                 {link.name}
