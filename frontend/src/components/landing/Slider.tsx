@@ -1,11 +1,11 @@
-import yorku from "../assets/slider-imgs/Logo_York_University.svg.png";
-import queens from "../assets/slider-imgs/QueensU_Crest.svg.png";
-import tmu from "../assets/slider-imgs/TMU_logo.svg.png";
-import waterloo from "../assets/slider-imgs/University_of_Waterloo_seal.svg.png";
-import uoft from "../assets/slider-imgs/University_of_Toronto-Logo.png";
-import mac from "../assets/slider-imgs/McMaster_University_logo.svg.png";
-import laurier from "../assets/slider-imgs/laurier.png";
-import western from "../assets/slider-imgs/Western_ontario_univ_textlogo.svg.png";
+import yorku from "../../assets/slider-imgs/Logo_York_University.svg.png";
+import queens from "../../assets/slider-imgs/QueensU_Crest.svg.png";
+import tmu from "../../assets/slider-imgs/TMU_logo.svg.png";
+import waterloo from "../../assets/slider-imgs/University_of_Waterloo_seal.svg.png";
+import uoft from "../../assets/slider-imgs/University_of_Toronto-Logo.png";
+import mac from "../../assets/slider-imgs/McMaster_University_logo.svg.png";
+import laurier from "../../assets/slider-imgs/laurier.png";
+import western from "../../assets/slider-imgs/Western_ontario_univ_textlogo.svg.png";
 
 function Slider() {
   const images = [

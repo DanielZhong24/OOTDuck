@@ -1,5 +1,5 @@
-import feature1 from "../assets/feature1.jpg";
-import feature2 from "../assets/feature2.jpg";
+import feature1 from "../../assets/feature1.jpg";
+import feature2 from "../../assets/feature2.jpg";
 import { Check } from "lucide-react";
 
 function Features() {

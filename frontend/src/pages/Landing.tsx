@@ -1,9 +1,9 @@
-import Header from "@/landing/Header";
-import Hero from "@/landing/Hero";
-import Slider from "@/landing/Slider";
-import Features from "@/landing/Features";
-import Faq from "@/landing/Faq";
-import Footer from "@/landing/Footer";
+import Header from "@/components/landing/Header";
+import Hero from "@/components/landing/Hero";
+import Slider from "@/components/landing/Slider";
+import Features from "@/components/landing/Features";
+import Faq from "@/components/landing/Faq";
+import Footer from "@/components/landing/Footer";
 
 function Landing() {
   return (

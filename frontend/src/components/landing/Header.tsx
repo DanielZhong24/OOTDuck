@@ -1,4 +1,4 @@
-import logo from "../assets/192x192.png";
+import logo from "../../assets/192x192.png";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 function Header() {

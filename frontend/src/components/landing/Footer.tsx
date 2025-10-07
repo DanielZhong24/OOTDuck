@@ -1,4 +1,4 @@
-import ootduck from "../assets/OOTDUCK.COM.png";
+import ootduck from "../../assets/OOTDUCK.COM.png";
 
 function Footer() {
   const headerLinks = [
