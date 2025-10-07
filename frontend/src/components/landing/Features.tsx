@@ -9,9 +9,9 @@ function Features() {
       className="mx-auto my-12 lg:max-w-[55rem] xl:max-w-[75rem] 2xl:max-w-[90rem]"
     >
       <div className="flex items-center justify-between pb-12">
-        <div className="max-w-[40%]">
+        <div className="md:max-w-[40%] lg:max-w-[45%] xl:max-w-[40%]">
           <div className="flex h-full flex-col space-y-6">
-            <h3 className="text-2xl md:text-3xl lg:leading-12 xl:text-5xl xl:leading-14">
+            <h3 className="md:text-2xl lg:text-3xl lg:leading-12 xl:text-5xl xl:leading-14">
               A Digital Closet made for you on any of your devices
             </h3>
             <p className="text-md mb-14 lg:text-base xl:text-lg">
@@ -36,15 +36,15 @@ function Features() {
             </div>
           </div>
         </div>
-        <div className="h-[75vh] object-cover xl:h-[85vh] xl:w-[35rem]">
+        <div className="h-[75vh] w-[20rem] object-cover lg:w-[25rem] xl:h-[85vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
           <img src={feature1} className="size-full object-cover" />
         </div>
       </div>
       <div className="flex items-center justify-between pt-12">
-        <div className="h-[75vh] object-cover xl:h-[85vh] xl:w-[35rem]">
+        <div className="h-[75vh] object-cover lg:w-[25rem] xl:h-[90vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
           <img src={feature2} className="size-full object-cover" />
         </div>
-        <div className="max-w-[40%]">
+        <div className="lg:max-w-[45%] xl:max-w-[40%]">
           <div className="flex h-full flex-col space-y-6">
             <h3 className="text-2xl md:text-4xl lg:leading-12 xl:text-5xl xl:leading-14">
               Have complete control to your closet

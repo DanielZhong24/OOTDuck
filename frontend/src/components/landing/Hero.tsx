@@ -6,7 +6,7 @@ function Hero() {
   return (
     <section
       style={{ height: "calc(100vh - 80px)" }}
-      className="flex items-center justify-center pt-3 pb-6"
+      className="flex items-center justify-center pb-6"
     >
       <div className="relative size-full px-7 text-center">
         <img className="size-full rounded-3xl object-cover" src={heroImg} />
