@@ -96,7 +96,7 @@ function Photo() {
   }
 
   return (
-    <div className="mb-20 h-screen bg-white">
+    <div className="mb-20 bg-white">
       <ul className="grid grid-cols-2 gap-7 p-8 sm:grid-cols-2 sm:gap-10 md:grid-cols-4 md:gap-15">
         {clothes.map((item: any) => (
           <li className="w-full" key={item.id}>
