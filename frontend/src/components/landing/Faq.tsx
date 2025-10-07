@@ -54,10 +54,10 @@ const Faq = ({
   return (
     <section id="faqs" className="mx-auto py-32">
       <div className="flex max-w-3xl flex-col items-center justify-center">
-        <h1 className="mb-4 text-center text-3xl font-semibold md:mb-11 md:text-4xl xl:text-5xl">
+        <h1 className="mb-4 text-center font-semibold sm:text-3xl md:mb-11 md:text-3xl xl:text-5xl">
           {heading}
         </h1>
-        <Accordion className="w-full" type="single" collapsible>
+        <Accordion type="single" collapsible>
           {items.map((item, index) => (
             <AccordionItem className="w-[50vw]" key={index} value={`item-${index}`}>
               <AccordionTrigger className="hover:no-underline lg:text-base">

@@ -13,8 +13,12 @@ function Header() {
   return (
     <header className="relative flex h-[80px] items-center justify-between p-4">
       <div className="flex shrink-0 items-center space-x-4">
-        <img src={logo} alt="Logo" width={56} height={56} />
-        <span className="text-xl font-medium">OOTDuck</span>
+        <img
+          src={logo}
+          alt="Logo"
+          className="h-[48px] w-[48px] lg:h-[56px] lg:w-[56px]"
+        />
+        <span className="text-lg font-medium lg:text-xl">OOTDuck</span>
       </div>
       <div className="absolute left-1/2 -translate-x-1/2">
         <ul className="m-0 flex list-none p-0">

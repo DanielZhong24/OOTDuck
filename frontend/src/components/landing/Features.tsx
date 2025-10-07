@@ -6,9 +6,9 @@ function Features() {
   return (
     <section
       id="features"
-      className="mx-auto my-12 lg:max-w-[55rem] xl:max-w-[75rem] 2xl:max-w-[90rem]"
+      className="mx-auto my-12 md:max-w-[60rem] lg:max-w-[75rem] 2xl:max-w-[90rem]"
     >
-      <div className="flex items-center justify-between pb-12">
+      <div className="flex items-center pb-12 md:justify-evenly lg:justify-between">
         <div className="md:max-w-[40%] lg:max-w-[45%] xl:max-w-[40%]">
           <div className="flex h-full flex-col space-y-6">
             <h3 className="md:text-2xl lg:text-3xl lg:leading-12 xl:text-5xl xl:leading-14">
@@ -36,17 +36,17 @@ function Features() {
             </div>
           </div>
         </div>
-        <div className="h-[75vh] w-[20rem] object-cover lg:w-[25rem] xl:h-[85vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
+        <div className="h-[75vh] object-cover lg:w-[25rem] xl:h-[85vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
           <img src={feature1} className="size-full object-cover" />
         </div>
       </div>
-      <div className="flex items-center justify-between pt-12">
-        <div className="h-[75vh] object-cover lg:w-[25rem] xl:h-[90vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
+      <div className="flex items-center pb-12 md:justify-evenly lg:justify-between">
+        <div className="h-[75vh] object-cover lg:w-[25rem] xl:h-[85vh] xl:w-[35rem] 2xl:h-[85vh] 2xl:w-[45rem]">
           <img src={feature2} className="size-full object-cover" />
         </div>
-        <div className="lg:max-w-[45%] xl:max-w-[40%]">
+        <div className="md:max-w-[40%] lg:max-w-[45%] xl:max-w-[40%]">
           <div className="flex h-full flex-col space-y-6">
-            <h3 className="text-2xl md:text-4xl lg:leading-12 xl:text-5xl xl:leading-14">
+            <h3 className="md:text-2xl lg:text-3xl lg:leading-12 xl:text-5xl xl:leading-14">
               Have complete control to your closet
             </h3>
             <p className="text-md mb-14 lg:text-base xl:text-lg">
@@ -54,7 +54,7 @@ function Features() {
               clothing that you have uploaded, with the ability to filter, edit, and
               delete them.
             </p>
-            <div className="">
+            <div>
               <ul className="space-y-6">
                 <li className="flex items-center gap-2 text-sm xl:text-base">
                   <Check className="h-5 w-5" />
