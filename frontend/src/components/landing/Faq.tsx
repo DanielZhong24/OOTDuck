@@ -17,7 +17,7 @@ interface FaqProps {
 }
 
 const Faq = ({
-  heading = "Frequently asked questions",
+  heading = "Frequently Asked Questions",
   items = [
     {
       id: "faq-1",
@@ -53,8 +53,8 @@ const Faq = ({
 }: FaqProps) => {
   return (
     <section id="faqs" className="mx-auto pt-10 pb-16 md:pt-20 md:pb-32">
-      <div className="flex max-w-3xl flex-col items-center justify-center">
-        <h1 className="mb-4 text-center font-semibold sm:text-3xl md:mb-11 md:text-3xl xl:text-5xl">
+      <div className="flex max-w-3xl flex-col items-center justify-center p-4 sm:p-0">
+        <h1 className="mb-4 text-center text-2xl font-semibold sm:text-3xl md:mb-11 md:text-3xl xl:text-5xl">
           {heading}
         </h1>
         <Accordion type="single" collapsible>

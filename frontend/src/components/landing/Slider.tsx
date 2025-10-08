@@ -21,17 +21,17 @@ function Slider() {
   return (
     <>
       <div className="mt-5 mb-5 flex w-full justify-center lg:mt-8 xl:mt-15">
-        <h2 className="text-base text-gray-600">
+        <h2 className="text-center text-sm text-gray-600 sm:text-base">
           Used by students across several different universities in Canada
         </h2>
       </div>
-      <div className="mt-8 mb-10 inline-flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)] sm:[mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] lg:mt-10 lg:mb-15">
-        <ul className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none sm:[&_li]:mx-8 md:[&_li]:mx-12">
+      <div className="mt-8 mb-10 inline-flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] md:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)] lg:mt-10 lg:mb-15">
+        <ul className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-4 sm:[&_li]:mx-8 md:[&_li]:mx-12">
           <SlideImg images={images} />
         </ul>
         <ul
           aria-hidden="true"
-          className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-12 sm:[&_li]:mx-8"
+          className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-4 sm:[&_li]:mx-8 md:[&_li]:mx-12"
         >
           <SlideImg images={images} />
         </ul>
@@ -46,7 +46,7 @@ function SlideImg({ images }: { images: { img: string; alt: string }[] }) {
       {images.map((image, index) => (
         <li key={index}>
           <img
-            className="sm:h-[45px] md:h-[50px] lg:h-[55px] xl:h-[70px]"
+            className="h-[40px] sm:h-[45px] md:h-[50px] lg:h-[55px] xl:h-[70px]"
             src={image.img}
             alt={image.alt}
           ></img>
