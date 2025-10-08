@@ -218,12 +218,12 @@ function Navbar() {
       <div className="fixed bottom-0 left-0 w-full rounded-2xl border-black bg-gray-100 p-1 pt-5 pb-5 shadow-2xl">
         <div className="flex">
           <div className="group flex-1">
-            <Link to="/" className="flex items-end justify-center text-center">
+            <Link to="/home" className="flex items-end justify-center text-center">
               <span className="block border-b-2 border-transparent px-1 hover:border-amber-500">
                 <House
                   strokeWidth="1"
-                  color={location.pathname === "/" ? "oklch(76.9% 0.188 70.08)" : "black"}
-                  fill={location.pathname === "/" ? "oklch(76.9% 0.188 70.08)" : "none"}
+                  color={location.pathname === "/home" ? "oklch(76.9% 0.188 70.08)" : "black"}
+                  fill={location.pathname === "/home" ? "oklch(76.9% 0.188 70.08)" : "none"}
                   size={32}
                   className="mb-1 block transform transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105"
                 />

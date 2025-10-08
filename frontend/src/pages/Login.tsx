@@ -29,7 +29,7 @@ function Login() {
 
       if (login.pass) {
         setErrorMsg("");
-        navigate("/");
+        navigate("/home");
       } else {
         setErrorMsg(login.error);
       }

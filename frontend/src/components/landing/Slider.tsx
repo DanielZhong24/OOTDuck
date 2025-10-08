@@ -1,0 +1,59 @@
+import yorku from "../../assets/slider-imgs/Logo_York_University.svg.png";
+import queens from "../../assets/slider-imgs/QueensU_Crest.svg.png";
+import tmu from "../../assets/slider-imgs/TMU_logo.svg.png";
+import waterloo from "../../assets/slider-imgs/University_of_Waterloo_seal.svg.png";
+import uoft from "../../assets/slider-imgs/University_of_Toronto-Logo.png";
+import mac from "../../assets/slider-imgs/McMaster_University_logo.svg.png";
+import laurier from "../../assets/slider-imgs/laurier.png";
+import western from "../../assets/slider-imgs/Western_ontario_univ_textlogo.svg.png";
+
+function Slider() {
+  const images = [
+    { img: yorku, alt: "York university Logo" },
+    { img: queens, alt: "Queens university Logo" },
+    { img: tmu, alt: "TMU Logo" },
+    { img: waterloo, alt: "Waterloo university Logo" },
+    { img: uoft, alt: "UofT Logo" },
+    { img: mac, alt: "McMaster univeristy logo" },
+    { img: laurier, alt: "Wilfrid Laurier University Logo" },
+    { img: western, alt: "Western University Logo" },
+  ];
+  return (
+    <>
+      <div className="mt-5 mb-5 flex w-full justify-center lg:mt-8 xl:mt-15">
+        <h2 className="text-center text-sm text-gray-600 sm:text-base">
+          Used by students across several different universities in Canada
+        </h2>
+      </div>
+      <div className="mt-8 mb-10 inline-flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] md:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)] lg:mt-10 lg:mb-15">
+        <ul className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-4 sm:[&_li]:mx-8 md:[&_li]:mx-12">
+          <SlideImg images={images} />
+        </ul>
+        <ul
+          aria-hidden="true"
+          className="animate animate-infinite-scroll flex items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-4 sm:[&_li]:mx-8 md:[&_li]:mx-12"
+        >
+          <SlideImg images={images} />
+        </ul>
+      </div>
+    </>
+  );
+}
+
+function SlideImg({ images }: { images: { img: string; alt: string }[] }) {
+  return (
+    <>
+      {images.map((image, index) => (
+        <li key={index}>
+          <img
+            className="h-[40px] sm:h-[45px] md:h-[50px] lg:h-[55px] xl:h-[70px]"
+            src={image.img}
+            alt={image.alt}
+          ></img>
+        </li>
+      ))}
+    </>
+  );
+}
+
+export default Slider;
