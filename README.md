@@ -12,11 +12,15 @@ This project was built from the ground up, encompassing frontend and backend dev
 
 ## Key Features
 
-- **Clothing Upload:** Users can easily add items to their digital wardrobe.
-  ![IMG_4331](https://github.com/user-attachments/assets/9c9741c0-1db2-4ddc-a40f-b3cbdc4947e1)
-- **AI-Powered Recommendations:** Segmentation and classification models analyze clothing images and generate outfit suggestions.
-  ![IMG_4330](https://github.com/user-attachments/assets/72a188ef-cbc8-44d8-bf76-6f332e116bf7)
+- **Clothing Upload:** Users can easily add items to their digital wardrobe.  
+- **AI-Powered Recommendations:** Segmentation and classification models analyze clothing images and generate outfit suggestions.  
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9c9741c0-1db2-4ddc-a40f-b3cbdc4947e1" width="400" style="border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.3);" />
+  <img src="https://github.com/user-attachments/assets/72a188ef-cbc8-44d8-bf76-6f332e116bf7" width="400" style="border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.3);" />
+</p>
+
 - **Responsive Design:** Optimized for seamless use across desktop and mobile devices.
+
 ## Technical Highlights
 
 - **Frontend:** React, TypeScript, CSS
