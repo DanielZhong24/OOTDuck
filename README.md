@@ -8,6 +8,8 @@ OOTDuck addresses the challenge of outfit selection by providing users with rand
 
 This project was built from the ground up, encompassing frontend and backend development, AI integration, and deployment considerations.
 
+<img width="1912" height="942" alt="Screenshot 2025-10-12 232402" src="https://github.com/user-attachments/assets/ea425b8e-4a1c-4fe3-b21b-3e4b86210cb3" />
+
 ## Key Features
 
 - **Clothing Upload:** Users can easily add items to their digital wardrobe.
