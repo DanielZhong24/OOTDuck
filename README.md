@@ -13,10 +13,10 @@ This project was built from the ground up, encompassing frontend and backend dev
 ## Key Features
 
 - **Clothing Upload:** Users can easily add items to their digital wardrobe.
+  ![IMG_4331](https://github.com/user-attachments/assets/9c9741c0-1db2-4ddc-a40f-b3cbdc4947e1)
 - **AI-Powered Recommendations:** Segmentation and classification models analyze clothing images and generate outfit suggestions.
+  ![IMG_4330](https://github.com/user-attachments/assets/72a188ef-cbc8-44d8-bf76-6f332e116bf7)
 - **Responsive Design:** Optimized for seamless use across desktop and mobile devices.
-- **Offline Access:** As a PWA, OOTDuck allows access even without an active internet connection.
-
 ## Technical Highlights
 
 - **Frontend:** React, TypeScript, CSS
